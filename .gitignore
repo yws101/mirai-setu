@@ -1,0 +1,13 @@
+# Project exclude paths
+/.gradle/
+/build/
+/.idea/
+/test/
+/out/
+/run/
+/plugins/
+/data/
+/config/
+/logs/
+/device.json
+/src/test/kotlin/myRrnMirai.kt
