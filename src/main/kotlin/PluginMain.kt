@@ -49,7 +49,7 @@ object PluginMain : KotlinPlugin(
                 }
             }*/
             //获取色图的触发词
-            case("色图时间"){
+            case(MySetting.command_get){
                 sender.group.sendMessage("正在获取图片，请稍后")
                 //json解析到result
                 val result = Klaxon()
@@ -74,7 +74,6 @@ object PluginMain : KotlinPlugin(
                             .url(result.data[0].url)
                             .build()
                         val call = client.newCall(request)
-
                         val a: InputStream? = call.execute().body?.byteStream()
                         //发送图片，可能会被腾讯吞掉
                         if (a != null) {
@@ -86,12 +85,12 @@ object PluginMain : KotlinPlugin(
                 }
             }
             //启用R18模式
-            case("青壮年模式"){
+            case(MySetting.command_R18on){
                 reply("警告，R18限制已解除")
                 R18g.add(group.id)
             }
             //关闭R18模式
-            case("青少年模式")    {
+            case(MySetting.command_R18off)    {
                 reply("R18已关闭")
                 R18g.del(group.id)
             }
@@ -129,6 +128,9 @@ class R18Group{
 object MySetting : AutoSavePluginConfig("setu-config"){
     val name by value("setu")
     val APIKEY by value("")
+    val command_get by value("色图时间")
+    val command_R18off by value("青少年模式")
+    val command_R18on by value("青壮年模式")
 }
 //配置数据存储
 object Mydata : AutoSavePluginData("setu-data"){

@@ -20,6 +20,20 @@
 
 开启R18
 
+## 配置文件
+config/com.blrabbit.mirai-setu/setu-config.yml
+
+    # 插件名称
+    name: setu       
+    # lolicon的APIKEY          
+    APIKEY:   
+    # 获取图片的指令         
+    command_get: 色图时间
+    # 关闭R18的指令
+    command_R18off: 青少年模式
+    # 开启R18的指令
+    command_R18on: 青壮年模式
+
 ## TO DO
 增加缓存区，提高请求速度
 
@@ -27,4 +41,5 @@
 
 增加搜图
 
+    
 
