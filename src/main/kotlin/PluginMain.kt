@@ -95,10 +95,48 @@ object PluginMain : KotlinPlugin(
                 R18g.del(group.id)
             }
 
+            startsWith(MySetting.command_search){
+                logger.warning("输出消息${message.contentToString().removePrefix(MySetting.command_search).removePrefix(" ")}")
+                sender.group.sendMessage("正在获取图片，请稍后")
+                //json解析到result
+                val result = Klaxon()
+                    .parse<Image>(Getsetu(R18g.check(group.id), message.contentToString().removePrefix(MySetting.command_search).removePrefix(" ")))
+                if (result != null) {
+                    if (result.code == 0) {
+                        Mydata.quota = result.quota
+                        //向群内发送信息
+                        sender.group.sendMessage("pid：${result.data[0].pid}\n" +
+                            "title: ${result.data[0].title}\n" +
+                            "author: ${result.data[0].author}\n" +
+                            "url: ${result.data[0].url}\n" +
+                            "tags: ${result.data[0].tags}")
+
+                        logger.info("剩余调用次数 ${result.quota}")
+
+                        //使用okhttp下载图片到流中
+
+                        val client = OkHttpClient()
+                        val request = Request.Builder().get()
+                            .url(result.data[0].url)
+                            .build()
+                        val call = client.newCall(request)
+                        val a: InputStream? = call.execute().body?.byteStream()
+                        //发送图片，可能会被腾讯吞掉
+                        if (a != null) {
+                            sendImage(a)
+                        }
+                    }else{
+                        reply("超出调用次数")
+                    }
+                }
+            }
+
             case("setu状态检查"){
                 sender.group.sendMessage("剩余调用次数：${Mydata.quota}\n" +
                     "当前R18模式 ${R18g.check(group.id)}")
             }
+
+
         }
     }
 }
@@ -131,6 +169,7 @@ object MySetting : AutoSavePluginConfig("setu-config"){
     val command_get by value("色图时间")
     val command_R18off by value("青少年模式")
     val command_R18on by value("青壮年模式")
+    val command_search by value("搜色图")
 }
 //配置数据存储
 object Mydata : AutoSavePluginData("setu-data"){

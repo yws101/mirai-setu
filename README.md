@@ -19,6 +19,9 @@
 * 青壮年模式
 
 开启R18
+* 搜色图 [关键词]
+
+搜索图片
 
 ## 配置文件
 config/com.blrabbit.mirai-setu/setu-config.yml
@@ -33,6 +36,8 @@ config/com.blrabbit.mirai-setu/setu-config.yml
     command_R18off: 青少年模式
     # 开启R18的指令
     command_R18on: 青壮年模式
+    # 搜图指令
+    command_search: 搜色图
 
 ## TO DO
 增加缓存区，提高请求速度

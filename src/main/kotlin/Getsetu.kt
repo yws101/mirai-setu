@@ -19,6 +19,19 @@ fun Getsetu(R18:Int): String {
 
     return call.execute().body?.string().toString()
 }
+
+
+fun Getsetu(R18:Int, keyword:String): String {
+    val client = OkHttpClient()
+
+    val request = Request.Builder().get()
+        .url("https://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=$R18&keyword=$keyword")
+        .build()
+
+    val call = client.newCall(request)
+
+    return call.execute().body?.string().toString()
+}
 /*{
 	"code": 0, 返回码
 	"msg": "", 错误提示
