@@ -44,7 +44,7 @@ config/com.blrabbit.mirai-setu/setu-config.yml
 
 增加本地库
 
-增加搜图
+增加搜图h'j'j'g
 
     
 

@@ -15,6 +15,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
 import java.io.InputStream
+import java.util.*
+import kotlin.collections.ArrayList
 
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
@@ -25,6 +27,13 @@ object PluginMain : KotlinPlugin(
     override fun onEnable() {
         MySetting.reload()//初始化配置数据
         Mydata.reload()//初始化插件数据
+        //缓存区队列
+        /*var num = 0
+        val queue: Queue<Image> = LinkedList()
+        val queueimage: Queue<InputStream> = LinkedList()*/
+
+
+
         var R18g = R18Group()
         logger.info { "提示：${MySetting.name}加载完成" }
         if(MySetting.APIKEY.isEmpty()){
@@ -52,9 +61,7 @@ object PluginMain : KotlinPlugin(
             case(MySetting.command_get){
                 sender.group.sendMessage("正在获取图片，请稍后")
                 //json解析到result
-                val result = Klaxon()
-                    .parse<Image>(Getsetu(R18g.check(group.id)))
-
+                val result = Klaxon().parse<Image>(Getsetu(R18g.check(group.id)))
                 if (result != null) {
                     if (result.code == 0) {
                         Mydata.quota = result.quota
@@ -64,17 +71,9 @@ object PluginMain : KotlinPlugin(
                             "author: ${result.data[0].author}\n" +
                             "url: ${result.data[0].url}\n" +
                             "tags: ${result.data[0].tags}")
-
                         logger.info("剩余调用次数 ${result.quota}")
 
-                        //使用okhttp下载图片到流中
-
-                        val client = OkHttpClient()
-                        val request = Request.Builder().get()
-                            .url(result.data[0].url)
-                            .build()
-                        val call = client.newCall(request)
-                        val a: InputStream? = call.execute().body?.byteStream()
+                        val a: InputStream? = Downsetu(result.data[0].url)
                         //发送图片，可能会被腾讯吞掉
                         if (a != null) {
                             sendImage(a)
@@ -110,18 +109,9 @@ object PluginMain : KotlinPlugin(
                             "author: ${result.data[0].author}\n" +
                             "url: ${result.data[0].url}\n" +
                             "tags: ${result.data[0].tags}")
-
                         logger.info("剩余调用次数 ${result.quota}")
 
-                        //使用okhttp下载图片到流中
-
-                        val client = OkHttpClient()
-                        val request = Request.Builder().get()
-                            .url(result.data[0].url)
-                            .build()
-                        val call = client.newCall(request)
-                        val a: InputStream? = call.execute().body?.byteStream()
-                        //发送图片，可能会被腾讯吞掉
+                        val a: InputStream? = Downsetu(result.data[0].url)
                         if (a != null) {
                             sendImage(a)
                         }
@@ -163,7 +153,7 @@ class R18Group{
 }
 
 //配置文件存储
-object MySetting : AutoSavePluginConfig("setu-config"){
+object MySetting : AutoSavePluginConfig(){
     val name by value("setu")
     val APIKEY by value("")
     val command_get by value("色图时间")
@@ -172,6 +162,6 @@ object MySetting : AutoSavePluginConfig("setu-config"){
     val command_search by value("搜色图")
 }
 //配置数据存储
-object Mydata : AutoSavePluginData("setu-data"){
+object Mydata : AutoSavePluginData(){
     var quota by value(-1)
 }
