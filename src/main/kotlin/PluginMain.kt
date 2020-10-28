@@ -27,14 +27,7 @@ object PluginMain : KotlinPlugin(
     override fun onEnable() {
         MySetting.reload()//初始化配置数据
         Mydata.reload()//初始化插件数据
-        //缓存区队列
-        /*var num = 0
-        val queue: Queue<Image> = LinkedList()
-        val queueimage: Queue<InputStream> = LinkedList()*/
-
-
-
-        var R18g = R18Group()
+        val R18g = R18Group()
         logger.info { "提示：${MySetting.name}加载完成" }
         if(MySetting.APIKEY.isEmpty()){
             logger.warning{ "未设置lolicon的APIKEY，可能会遇到调用上限的问题" }
@@ -76,7 +69,7 @@ object PluginMain : KotlinPlugin(
                         val a: InputStream? = Downsetu(result.data[0].url)
                         //发送图片，可能会被腾讯吞掉
                         if (a != null) {
-                            sendImage(a)
+                            group.sendImage(a)
                         }
                     }else{
                         reply("超出调用次数")
@@ -113,7 +106,7 @@ object PluginMain : KotlinPlugin(
 
                         val a: InputStream? = Downsetu(result.data[0].url)
                         if (a != null) {
-                            sendImage(a)
+                            group.sendImage(a)
                         }
                     }else{
                         reply("超出调用次数")

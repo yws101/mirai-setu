@@ -56,8 +56,8 @@ fun Getsetu(R18: Int, keyword: String): String {
         .build()
 
     val call = client.newCall(request)
-
     return call.execute().body?.string().toString()
+
 }
 
 
