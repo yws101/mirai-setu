@@ -22,6 +22,7 @@ Mirai 是一个在全平台下运行，提供 QQ 协议支持的高效率机器�
 本插件遵循mirai软件AGPLv3协议开源，不参与一切商业活动。
 
 由于作者学业压力较大，不能保证插件的及时更新以及bug修复。
+
 ##使用说明
 这是一个运行在[mirai-console](https://github.com/mamoe/mirai-console) 下的插件,需要自行下载安装。
 
