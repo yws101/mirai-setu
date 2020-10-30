@@ -21,7 +21,7 @@ import kotlin.collections.ArrayList
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "com.blrabbit.mirai-setu",
-        version = "0.1.0"
+        version = "0.1.1"
     )
 ) {
     override fun onEnable() {
@@ -123,7 +123,7 @@ object PluginMain : KotlinPlugin(
         }
     }
 }
-
+// 记录开启R18的群
 class R18Group{
     var people = ArrayList<Long>()
 
@@ -146,7 +146,7 @@ class R18Group{
 }
 
 //配置文件存储
-object MySetting : AutoSavePluginConfig(){
+object MySetting : AutoSavePluginConfig("setu-config"){
     val name by value("setu")
     val APIKEY by value("")
     val command_get by value("色图时间")
@@ -155,6 +155,6 @@ object MySetting : AutoSavePluginConfig(){
     val command_search by value("搜色图")
 }
 //配置数据存储
-object Mydata : AutoSavePluginData(){
+object Mydata : AutoSavePluginData("setu-data"){
     var quota by value(-1)
 }
