@@ -23,7 +23,7 @@ Mirai 是一个在全平台下运行，提供 QQ 协议支持的高效率机器�
 
 由于作者学业压力较大，不能保证插件的及时更新以及bug修复。
 
-##使用说明
+## 使用说明
 这是一个运行在[mirai-console](https://github.com/mamoe/mirai-console) 下的插件,需要自行下载安装。
 
 如果您对mirai-console不熟悉可以使用我自己打包的mirai-console，[下载链接](https://pan.baidu.com/s/15HLgK2jjHTd6y3UBcAdozg) 提取码 setu
