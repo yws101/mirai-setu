@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.blrabbit.mirai"
-version = "0.1.0"
+version = "0.1.2"
 
 repositories {
     mavenLocal()
@@ -15,9 +15,6 @@ repositories {
     jcenter()
     maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
-
-val miraiCoreVersion = "1.3.2"
-val miraiConsoleVersion = "1.0-M4"
 
 dependencies{
 

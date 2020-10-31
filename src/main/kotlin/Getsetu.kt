@@ -7,6 +7,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.net.SocketTimeoutException
 
 
 //获取一个lolicon返回的json文件
@@ -70,4 +71,14 @@ fun Downsetu(url: String): InputStream? {
     val call = client.newCall(request)
 
     return call.execute().body?.byteStream()
+}
+
+
+fun main() {
+    try {
+        Downsetu("http://www.youtube.com")
+    }catch (e: SocketTimeoutException){
+        println(e)
+        print("请求超时")
+    }
 }

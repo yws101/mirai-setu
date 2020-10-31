@@ -8,6 +8,7 @@ import net.mamoe.mirai.console.plugin.PluginManager.INSTANCE.load
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.subscribeGroupMessages
+import net.mamoe.mirai.message.code.parseMiraiCode
 import net.mamoe.mirai.message.sendImage
 import net.mamoe.mirai.utils.info
 import net.mamoe.mirai.utils.warning
@@ -15,13 +16,14 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
 import java.io.InputStream
+import java.net.SocketTimeoutException
 import java.util.*
 import kotlin.collections.ArrayList
 
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "com.blrabbit.mirai-setu",
-        version = "0.1.1"
+        version = "0.1.2"
     )
 ) {
     override fun onEnable() {
@@ -51,31 +53,35 @@ object PluginMain : KotlinPlugin(
                 }
             }*/
             //获取色图的触发词
-            case(MySetting.command_get){
+            case(MySetting.command_get) {
                 sender.group.sendMessage("正在获取图片，请稍后")
                 //json解析到result
-                val result = Klaxon().parse<Image>(Getsetu(R18g.check(group.id)))
-                if (result != null) {
-                    if (result.code == 0) {
-                        Mydata.quota = result.quota
-                        //向群内发送信息
-                        sender.group.sendMessage("pid：${result.data[0].pid}\n" +
-                            "title: ${result.data[0].title}\n" +
-                            "author: ${result.data[0].author}\n" +
-                            "url: ${result.data[0].url}\n" +
-                            "tags: ${result.data[0].tags}")
-                        logger.info("剩余调用次数 ${result.quota}")
+                try {
+                    val result = Klaxon().parse<Image>(Getsetu(R18g.check(group.id)))
+                    if (result != null) {
+                        if (result.code == 0) {
+                            Mydata.quota = result.quota
+                            //向群内发送信息
+                            sender.group.sendMessage("pid：${result.data[0].pid}\n" +
+                                "title: ${result.data[0].title}\n" +
+                                "author: ${result.data[0].author}\n" +
+                                "url: ${result.data[0].url}\n" +
+                                "tags: ${result.data[0].tags}")
+                            logger.info("剩余调用次数 ${result.quota}")
 
-                        val a: InputStream? = Downsetu(result.data[0].url)
-                        //发送图片，可能会被腾讯吞掉
-                        if (a != null) {
-                            group.sendImage(a)
+                            val a: InputStream? = Downsetu(result.data[0].url)
+                            //发送图片，可能会被腾讯吞掉
+                            if (a != null) {
+                                group.sendImage(a)
+                            }
+                        } else {
+                            reply("超出调用次数")
                         }
-                    }else{
-                        reply("超出调用次数")
                     }
+                } catch (e:SocketTimeoutException){
+                    reply(("[mirai:at:${sender.id},@${sender.nameCard}]").parseMiraiCode() + " 出现了意外的错误\n$e")
                 }
-            }
+                }
             //启用R18模式
             case(MySetting.command_R18on){
                 reply("警告，R18限制已解除")
@@ -88,7 +94,7 @@ object PluginMain : KotlinPlugin(
             }
 
             startsWith(MySetting.command_search){
-                logger.warning("输出消息${message.contentToString().removePrefix(MySetting.command_search).removePrefix(" ")}")
+                //logger.warning("输出消息${message.contentToString().removePrefix(MySetting.command_search).removePrefix(" ")}")
                 sender.group.sendMessage("正在获取图片，请稍后")
                 //json解析到result
                 val result = Klaxon()
@@ -108,7 +114,11 @@ object PluginMain : KotlinPlugin(
                         if (a != null) {
                             group.sendImage(a)
                         }
-                    }else{
+                    }else if(result.code == 404)
+                    {
+                        reply("没有符合条件的色图desu~")
+                    }
+                    else{
                         reply("超出调用次数")
                     }
                 }
