@@ -45,7 +45,13 @@ Mirai 是一个在全平台下运行，提供 QQ 协议支持的高效率机器�
 * 青壮年模式
 
 开启R18
-* 搜色图 [关键词]
+* 搜色图 \[关键词\]
+
+封印解除
+* 在此群开启本插件功能
+
+封印
+* 在此群关闭本插件
 
 搜索图片
 
@@ -54,6 +60,8 @@ config/com.blrabbit.mirai-setu/setu-config.yml
 
     # 插件名称
     name: setu       
+    # 主人id
+    masterid: 0
     # lolicon的APIKEY          
     APIKEY:   
     # 获取图片的指令         

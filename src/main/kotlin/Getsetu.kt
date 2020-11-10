@@ -5,16 +5,25 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.io.InputStream
-import java.net.SocketTimeoutException
 
 
 //获取一个lolicon返回的json文件
 
-class Data(val pid: Int, val title: String, val author: String, val url: String, val tags: List<String>)
-class Image(val code: Int, val quota: Int, val data: List<Data>)
-
+class Data(
+    val pid: Int,
+    val uid: Int,
+    val title: String,
+    val author: String,
+    val url: String,
+    val r18: Boolean,
+    val width: Int,
+    val height: Int,
+    val tags: List<String>)
+class Image(
+    val code: Int,
+    val quota: Int,
+    val data: List<Data>)
 /* json示例
 {
 	"code": 0, 返回码
@@ -25,7 +34,7 @@ class Image(val code: Int, val quota: Int, val data: List<Data>)
 	"data": [{
 		"pid": 78020086, pixiv的编码
 		"p": 0, 不知道干啥的
-		"uid": 221597, 貌似是他的数据库的编码
+		"uid": 221597, 用户编码
 		"title": "うさちゃん", 题目
 		"author": "はみこ", 作者
 		"url": "https:\/\/i.pixiv.cat\/img-original\/img\/2019\/11\/27\/18\/42\/45\/78020086_p0.png", 图片链接
@@ -36,11 +45,11 @@ class Image(val code: Int, val quota: Int, val data: List<Data>)
 	}]
 }*/
 
-fun Getsetu(R18: Int): String {
+fun Getsetu(R18: Short): String {
     val client = OkHttpClient()
 
     val request = Request.Builder().get()
-        .url("https://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=$R18")
+        .url("https://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=${R18}")
         .build()
 
     val call = client.newCall(request)
@@ -49,7 +58,7 @@ fun Getsetu(R18: Int): String {
 }
 
 
-fun Getsetu(R18: Int, keyword: String): String {
+fun Getsetu(R18: Short, keyword: String): String {
     val client = OkHttpClient()
 
     val request = Request.Builder().get()
@@ -61,7 +70,7 @@ fun Getsetu(R18: Int, keyword: String): String {
 
 }
 
-
+// 获取图片的输入流
 fun Downsetu(url: String): InputStream? {
     val client = OkHttpClient()
 
@@ -73,12 +82,34 @@ fun Downsetu(url: String): InputStream? {
     return call.execute().body?.byteStream()
 }
 
-
+//下载图片
 fun main() {
-    try {
-        Downsetu("http://www.youtube.com")
-    }catch (e: SocketTimeoutException){
-        println(e)
-        print("请求超时")
+    val client = OkHttpClient()
+
+    val request = Request.Builder().get()
+        .url("https://i.pixiv.cat/img-original/img/2019/11/27/18/42/45/78020086_p0.png")
+        .build()
+    val call = client.newCall(request)
+
+    println("Done")
+
+    val ii = call.execute().body?.byteStream()
+
+    var len = 0
+    val file: File = File("data/n.png")
+    val fos = FileOutputStream(file)
+    val buf = ByteArray(1024)
+
+    if (ii != null) {
+        while (ii.read(buf).also { len = it } != -1) {
+            fos.write(buf, 0, len)
+        }
     }
+
+    fos.flush()
+    //关闭流
+    //关闭流
+    fos.close()
+    ii?.close()
+
 }

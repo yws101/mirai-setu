@@ -4,60 +4,52 @@ import com.beust.klaxon.Klaxon
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.AutoSavePluginData
 import net.mamoe.mirai.console.data.value
-import net.mamoe.mirai.console.plugin.PluginManager.INSTANCE.load
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.subscribeGroupMessages
 import net.mamoe.mirai.message.code.parseMiraiCode
 import net.mamoe.mirai.message.sendImage
+import net.mamoe.mirai.utils.error
 import net.mamoe.mirai.utils.info
 import net.mamoe.mirai.utils.warning
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.io.File
 import java.io.InputStream
 import java.net.SocketTimeoutException
-import java.util.*
-import kotlin.collections.ArrayList
 
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "com.blrabbit.mirai-setu",
-        version = "0.1.2"
+        version = "0.1.3"
     )
 ) {
     override fun onEnable() {
         MySetting.reload()//初始化配置数据
         Mydata.reload()//初始化插件数据
-        val R18g = R18Group()
         logger.info { "提示：${MySetting.name}加载完成" }
         if(MySetting.APIKEY.isEmpty()){
             logger.warning{ "未设置lolicon的APIKEY，可能会遇到调用上限的问题" }
             logger.warning{ "申请地址: https://api.lolicon.app/#/setu" }
             logger.warning{ "请到 config/com.blrabbit.mirai-setu/setu-config.yml 添加APIKEY" }
         }
+        if (MySetting.masterid.equals(0)){
+            logger.error{ "未设置主人ID，插件可能会无法使用" }
+            logger.error{ "请到 config/com.blrabbit.mirai-setu/setu-config.yml 添加masterid" }
+        }
 
         subscribeGroupMessages{
-
-            /*case("测试发图"){
-                val client = OkHttpClient()
-                val request = Request.Builder().get()
-                    .url("https://i.pixiv.cat/img-original/img/2018/03/26/20/53/37/67928421_p0.png")
-                    .build()
-
-                var call = client.newCall(request)
-
-                val a: InputStream? = call.execute().body?.byteStream()
-                if (a != null) {
-                    sendImage(a)
-                }
-            }*/
             //获取色图的触发词
             case(MySetting.command_get) {
-                sender.group.sendMessage("正在获取图片，请稍后")
+                if (!Mydata.groups.contains(group.id)){
+                    reply("对不起暂时此群没有权限，请联系的主人启用")
+                    return@case
+                }
+                if (Mydata.R18.contains(group.id))
+                {
+                    group.sendMessage("正在获取图片中，请稍后\n[R18模式已启用]")
+                }else
+                    group.sendMessage("正在获取图片，请稍后")
                 //json解析到result
                 try {
-                    val result = Klaxon().parse<Image>(Getsetu(R18g.check(group.id)))
+                    val result = Klaxon().parse<Image>(Getsetu(Mydata.R18.contains(group.id).toShort()))
                     if (result != null) {
                         if (result.code == 0) {
                             Mydata.quota = result.quota
@@ -84,21 +76,33 @@ object PluginMain : KotlinPlugin(
                 }
             //启用R18模式
             case(MySetting.command_R18on){
+                if (!Mydata.groups.contains(group.id)){
+                    reply("对不起暂时此群没有权限，请联系的主人启用")
+                    return@case
+                }
                 reply("警告，R18限制已解除")
-                R18g.add(group.id)
+                Mydata.R18.add(group.id)
             }
             //关闭R18模式
             case(MySetting.command_R18off)    {
+                if (!Mydata.groups.contains(group.id)){
+                    reply("对不起暂时此群没有权限，请联系的主人启用")
+                    return@case
+                }
                 reply("R18已关闭")
-                R18g.del(group.id)
+                Mydata.R18.remove(group.id)
             }
 
             startsWith(MySetting.command_search){
+                if (!Mydata.groups.contains(group.id)){
+                    reply("对不起暂时此群没有权限，请联系的主人启用")
+                    return@startsWith
+                }
                 //logger.warning("输出消息${message.contentToString().removePrefix(MySetting.command_search).removePrefix(" ")}")
                 sender.group.sendMessage("正在获取图片，请稍后")
                 //json解析到result
                 val result = Klaxon()
-                    .parse<Image>(Getsetu(R18g.check(group.id), message.contentToString().removePrefix(MySetting.command_search).removePrefix(" ")))
+                    .parse<Image>(Getsetu(Mydata.R18.contains(group.id).toShort(), message.contentToString().removePrefix(MySetting.command_search).removePrefix(" ")))
                 if (result != null) {
                     if (result.code == 0) {
                         Mydata.quota = result.quota
@@ -126,38 +130,40 @@ object PluginMain : KotlinPlugin(
 
             case("setu状态检查"){
                 sender.group.sendMessage("剩余调用次数：${Mydata.quota}\n" +
-                    "当前R18模式 ${R18g.check(group.id)}")
+                    "当前R18模式 ${Mydata.R18.contains(group.id)}\n" +
+                    "此群是否开启此插件${Mydata.groups.contains(group.id)}")
             }
 
+            case("封印解除") {
+                if (sender.id == MySetting.masterid) {
+                    reply("启用该群色图功能")
+                    if (!Mydata.groups.contains(group.id))
+                        Mydata.groups.add(group.id)
+                }
+                else
+                    reply("你不是我的主人，我不能听从你的命令")
+            }
 
+            case("封印"){
+                    reply("以禁用该群色图功能")
+                    Mydata.groups.remove(group.id)
+            }
+
+            }
         }
     }
-}
-// 记录开启R18的群
-class R18Group{
-    var people = ArrayList<Long>()
 
-    fun add(qq: Long){
-        people.add(qq)
-    }
-
-    fun del(qq: Long){
-        people.remove(qq)
-    }
-
-    fun check(qq:Long): Int {
-        for (i in 0 until people.size)
-            if (people[i] == qq)
-                return 1
-        return 0
-    }
-
-
+private fun Boolean.toShort(): Short {
+    return if (this){
+        1
+    }else
+        0
 }
 
 //配置文件存储
 object MySetting : AutoSavePluginConfig("setu-config"){
     val name by value("setu")
+    val masterid:Long by value()
     val APIKEY by value("")
     val command_get by value("色图时间")
     val command_R18off by value("青少年模式")
@@ -167,4 +173,7 @@ object MySetting : AutoSavePluginConfig("setu-config"){
 //配置数据存储
 object Mydata : AutoSavePluginData("setu-data"){
     var quota by value(-1)
+    var R18:MutableList<Long> by value()
+    var groups:MutableList<Long> by value()
+
 }
