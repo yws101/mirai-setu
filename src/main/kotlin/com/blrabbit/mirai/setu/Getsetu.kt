@@ -46,8 +46,6 @@ class Image(
 }*/
 
 fun Getsetu(R18: Short): String {
-    val client = OkHttpClient()
-
     val request = Request.Builder().get()
         .url("https://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=${R18}")
         .build()
@@ -59,8 +57,6 @@ fun Getsetu(R18: Short): String {
 
 
 fun Getsetu(R18: Short, keyword: String): String {
-    val client = OkHttpClient()
-
     val request = Request.Builder().get()
         .url("https://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=$R18&keyword=$keyword")
         .build()
@@ -72,8 +68,6 @@ fun Getsetu(R18: Short, keyword: String): String {
 
 // 获取图片的输入流
 fun Downsetu(url: String): InputStream? {
-    val client = OkHttpClient()
-
     val request = Request.Builder().get()
         .url(url)
         .build()
@@ -84,8 +78,6 @@ fun Downsetu(url: String): InputStream? {
 
 //下载图片
 fun main() {
-    val client = OkHttpClient()
-
     val request = Request.Builder().get()
         .url("https://i.pixiv.cat/img-original/img/2019/11/27/18/42/45/78020086_p0.png")
         .build()
