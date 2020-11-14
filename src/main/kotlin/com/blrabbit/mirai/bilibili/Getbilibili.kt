@@ -47,9 +47,9 @@ fun GetBiliTimeline(s: String, i: Int): String {
 
     val result = Klaxon().parse<BiliData>(bilidata)
 
-    var msg: String = "今日番剧\n"
+    var msg = "$s\n"
     if (result != null) {
-        for (index in result.result[6].seasons) {
+        for (index in result.result[i].seasons) {
             msg += "---------------\n"
             msg += "${index.title} ${index.pub_index}\n更新时间:${index.pub_time}"
             msg += if (index.delay == 0) {

@@ -1,7 +1,6 @@
 package com.blrabbit.mirai.setu
 //用来从lolicon获取链接
 
-import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
 import java.io.FileOutputStream
@@ -51,7 +50,6 @@ fun Getsetu(R18: Short): String {
         .build()
 
     val call = client.newCall(request)
-
     return call.execute().body?.string().toString()
 }
 
@@ -88,7 +86,7 @@ fun main() {
     val ii = call.execute().body?.byteStream()
 
     var len = 0
-    val file: File = File("data/n.png")
+    val file = File("data/n.png")
     val fos = FileOutputStream(file)
     val buf = ByteArray(1024)
 

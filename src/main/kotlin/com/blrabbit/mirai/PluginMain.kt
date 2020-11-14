@@ -28,6 +28,7 @@ object PluginMain : KotlinPlugin(
         MySetting.reload()//初始化配置数据
         Mydata.reload()//初始化插件数据
         logger.info { "提示：${MySetting.name}加载完成" }
+
         if (MySetting.APIKEY.isEmpty()) {
             logger.warning { "未设置lolicon的APIKEY，可能会遇到调用上限的问题" }
             logger.warning { "申请地址: https://api.lolicon.app/#/setu" }
@@ -37,10 +38,10 @@ object PluginMain : KotlinPlugin(
             logger.error { "未设置主人ID，插件可能会无法使用" }
             logger.error { "请到 config/com.blrabbit.mirai-setu/setu-config.yml 添加masterid" }
         }
-
         subscribeGroupMessages {
+
             case("昨日番剧") {
-                reply(GetBiliTimeline("昨日番剧",6))
+                reply(GetBiliTimeline("昨日番剧",5))
             }
 
             case("今日番剧") {
@@ -48,8 +49,10 @@ object PluginMain : KotlinPlugin(
             }
 
             case("明日番剧") {
-                reply(GetBiliTimeline("明日番剧", 6))
+                reply(GetBiliTimeline("明日番剧", 7))
             }
+
+
             //获取色图的触发词
             case(MySetting.command_get) {
                 if (!Mydata.groups.contains(group.id)) {
@@ -107,15 +110,16 @@ object PluginMain : KotlinPlugin(
             }
 
             startsWith(MySetting.command_search) {
+
                 if (!Mydata.groups.contains(group.id)) {
                     reply("对不起暂时此群没有权限，请联系的主人启用")
                     return@startsWith
                 }
-                //logger.warning("输出消息${message.contentToString().removePrefix(MySetting.command_search).removePrefix(" ")}")
+
                 sender.group.sendMessage("正在获取图片，请稍后")
                 //json解析到result
                 val result = Klaxon()
-                    .parse<Image>(Getsetu(Mydata.R18.contains(group.id).toShort(), message.contentToString().removePrefix(MySetting.command_search).removePrefix(" ")))
+                    .parse<Image>(Getsetu(Mydata.R18.contains(group.id).toShort(), it))
                 if (result != null) {
                     if (result.code == 0) {
                         Mydata.quota = result.quota
