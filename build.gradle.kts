@@ -2,12 +2,12 @@ plugins {
     val kotlinVersion = "1.4.10"
     kotlin("jvm") version kotlinVersion
 
-    id("net.mamoe.mirai-console") version "1.0-RC-1"
+    id("net.mamoe.mirai-console") version "1.0.0"
 
 }
 
 group = "com.blrabbit.mirai"
-version = "1.0.0"
+version = "0.2.0"
 
 repositories {
     mavenLocal()
@@ -17,9 +17,6 @@ repositories {
 }
 
 dependencies{
-
-    //http请求用
-    implementation("com.squareup.okhttp3:okhttp:4.9.0")
     //json解析用
     implementation ("com.beust:klaxon:5.0.1")
     //sql

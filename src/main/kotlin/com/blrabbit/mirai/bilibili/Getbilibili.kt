@@ -1,9 +1,10 @@
 package com.blrabbit.mirai.setu
 
 import com.beust.klaxon.Klaxon
-import okhttp3.OkHttpClient
-import okhttp3.Request
-
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
+import io.ktor.util.*
 
 class BiliData(
     val code: Int,
@@ -34,20 +35,18 @@ class Seasons(
     val title: String,
     //val url: String
 )
-
-fun GetBiliTimeline(s: String, i: Int): String {
-
-    val request = Request.Builder().get()
-        .url("https://bangumi.bilibili.com/web_api/timeline_global")
-        .build()
-
-    val call = client.newCall(request)
-
-    val bilidata: String = call.execute().body?.string().toString()
-
-    val result = Klaxon().parse<BiliData>(bilidata)
-
-    var msg = "$s\n"
+@KtorExperimentalAPI
+suspend fun bangumi_timeline(title: String, i :Int): String {
+    var json = ""
+    try {
+        json = HttpClient(CIO).use { client ->
+            client.get<String>("https://bangumi.bilibili.com/web_api/timeline_global")
+        }
+    }catch (e:Exception){
+        return e.toString()
+    }
+    val result = Klaxon().parse<BiliData>(json)
+    var msg = "$title\n"
     if (result != null) {
         for (index in result.result[i].seasons) {
             msg += "---------------\n"
@@ -65,10 +64,4 @@ fun GetBiliTimeline(s: String, i: Int): String {
     return msg
 }
 
-fun main() {
-    /*val formatter = SimpleDateFormat("MM-dd")
-    val date = Date(System.currentTimeMillis())
-    println(formatter.format(date))
-    println(date)*/
-    print(GetBiliTimeline("昨日番剧", 6))
-}
+

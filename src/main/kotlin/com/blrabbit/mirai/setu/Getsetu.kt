@@ -1,13 +1,15 @@
 package com.blrabbit.mirai.setu
 //用来从lolicon获取链接
 
-import okhttp3.Request
-import java.io.File
-import java.io.FileOutputStream
+import com.beust.klaxon.Klaxon
+import com.blrabbit.mirai.MiraiSetuMain
+import com.blrabbit.mirai.Util.MySetting
+import com.blrabbit.mirai.Util.Mydata
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
+import io.ktor.util.*
 import java.io.InputStream
-
-
-//获取一个lolicon返回的json文件
 
 class Data(
     val pid: Int,
@@ -23,83 +25,85 @@ class Image(
     val code: Int,
     val quota: Int,
     val data: List<Data>)
-/* json示例
-{
-	"code": 0, 返回码
-	"msg": "", 错误提示
-	"quota": 9, 调用剩余次数
-	"quota_min_ttl": 7200, 不知道干啥的
-	"count": 1, 数量
-	"data": [{
-		"pid": 78020086, pixiv的编码
-		"p": 0, 不知道干啥的
-		"uid": 221597, 用户编码
-		"title": "うさちゃん", 题目
-		"author": "はみこ", 作者
-		"url": "https:\/\/i.pixiv.cat\/img-original\/img\/2019\/11\/27\/18\/42\/45\/78020086_p0.png", 图片链接
-		"r18": false, 你懂的
-		"width": 900, 图片大小
-		"height": 1273,
-		"tags": ["オリジナル", "原创", "女の子", "女孩子", "けもみみ", "兽耳", "下着", "内衣", "ツインテール", "双马尾", "うさみみ", "bunny ears", "ピンク髪", "粉色头发", "尻神様", "尻神样"]
-	}]
-}*/
 
-fun Getsetu(R18: Short): String {
-    val request = Request.Builder().get()
-        .url("https://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=${R18}")
-        .build()
+data class setu(val sinfo:String,val simage:InputStream)
 
-    val call = client.newCall(request)
-    return call.execute().body?.string().toString()
-}
-
-
-fun Getsetu(R18: Short, keyword: String): String {
-    val request = Request.Builder().get()
-        .url("https://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=$R18&keyword=$keyword")
-        .build()
-
-    val call = client.newCall(request)
-    return call.execute().body?.string().toString()
-
-}
-
-// 获取图片的输入流
-fun Downsetu(url: String): InputStream? {
-    val request = Request.Builder().get()
-        .url(url)
-        .build()
-    val call = client.newCall(request)
-
-    return call.execute().body?.byteStream()
-}
-
-//下载图片
-fun main() {
-    val request = Request.Builder().get()
-        .url("https://i.pixiv.cat/img-original/img/2019/11/27/18/42/45/78020086_p0.png")
-        .build()
-    val call = client.newCall(request)
-
-    println("Done")
-
-    val ii = call.execute().body?.byteStream()
-
-    var len = 0
-    val file = File("data/n.png")
-    val fos = FileOutputStream(file)
-    val buf = ByteArray(1024)
-
-    if (ii != null) {
-        while (ii.read(buf).also { len = it } != -1) {
-            fos.write(buf, 0, len)
-        }
+@KtorExperimentalAPI
+suspend fun Getsetu(R18: Short): String {
+    return HttpClient(CIO).use {
+        client -> client.get("http://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=${R18}")
     }
-
-    fos.flush()
-    //关闭流
-    //关闭流
-    fos.close()
-    ii?.close()
-
 }
+
+@KtorExperimentalAPI
+suspend fun Getsetu(R18: Short, keyword: String): String {
+    return HttpClient(CIO).use {
+        client -> client.get("http://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=$R18&keyword=$keyword")
+    }
+}
+
+@KtorExperimentalAPI
+suspend fun Downsetu(url: String): InputStream {
+    return  HttpClient(CIO).use {
+        client -> client.get(url)
+    }
+}
+
+fun parseSetu(result: Image): String {
+        if (result.code == 0) {
+            Mydata.quota = result.quota
+            if (result.data[0].tags.contains("R-18") && !MySetting.R18){
+                return "检测到敏感资源拒绝发送"
+            }
+            MiraiSetuMain.logger.info("剩余调用次数 ${result.quota}")
+            return "pid：${result.data[0].pid}\n" +
+                "title: ${result.data[0].title}\n" +
+                "author: ${result.data[0].author}\n" +
+                "url: ${result.data[0].url}\n" +
+                "tags: ${result.data[0].tags}"
+        }
+    else return result.code.toString()
+}
+
+/*
+fun Getsetu0(): String {
+    val request = Request.Builder().get()
+        .url("https://www.fantasyzone.cc/api/tu/?type=r18")
+        .build()
+
+    val call = client.newCall(request)
+    return call.execute().body?.string().toString().drop(30).dropLast(29)
+}
+*/
+
+//fun main() {
+//val request = Request.Builder().get()
+//        .url("https://i.pixiv.cat/img-original/img/2019/11/27/18/42/45/78020086_p0.png")
+//        .build()
+//    val call = client.newCall(request)
+//
+//    println("Done")
+//
+//    val ii = call.execute().body?.byteStream()
+//
+//    var len = 0
+//    val file = File("data/n.png")
+//    val fos = FileOutputStream(file)
+//    val buf = ByteArray(1024)
+//
+//    if (ii != null) {
+//        while (ii.read(buf).also { len = it } != -1) {
+//            fos.write(buf, 0, len)
+//        }
+//    }
+//
+//    fos.flush()
+//    //关闭流
+//    //关闭流
+//    fos.close()
+//    ii?.close()*//*
+//
+//
+//    print(Getsetu0())
+//
+//}
