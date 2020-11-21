@@ -35,9 +35,10 @@ object MiraiSetuMain : KotlinPlugin(
 
         logger.info{ "色图插件加载完成，版本：$VERSION" }
 
-        if (MySetting.APIKEY.isEmpty()){
+        if (MySetting.APIKEY.equals(0)){
             logger.warning { "未设置lolicon的APIKEY，可能会遇到调用上限的问题。\n请到(https://api.lolicon.app/#/setu)申请APIKEY并写入配置文件中。" }
         }
+        if (MySetting.masterid.equals(0))
 
 
         subscribeGroupMessages{
@@ -59,8 +60,8 @@ object MiraiSetuMain : KotlinPlugin(
                     reply("此群没有色图权限")
                     return@case
                 }
-                if (Mydata.R18.contains(group.id)) group.sendMessage("正在获取图片中，请稍后\n[R18模式已启用]")
-                else group.sendMessage("正在获取图片，请稍后")
+               /* if (Mydata.R18.contains(group.id)) group.sendMessage("正在获取图片中，请稍后\n[R18模式已启用]")
+                else group.sendMessage("正在获取图片，请稍后")*/
                 try {
                     val setu = Klaxon().parse<Image>(Getsetu(Mydata.R18.contains(group.id).toShort()))
                     if (setu != null) {
@@ -77,21 +78,21 @@ object MiraiSetuMain : KotlinPlugin(
                     reply("此群没有色图权限")
                     return@startsWith
                 }
-                if (Mydata.R18.contains(group.id)) group.sendMessage("正在获取图片中，请稍后\n[R18模式已启用]")
-                else group.sendMessage("正在获取图片，请稍后")
+               /* if (Mydata.R18.contains(group.id)) group.sendMessage("正在获取图片中，请稍后\n[R18模式已启用]")
+                else group.sendMessage("正在获取图片，请稍后")*/
                 try {
                     val setu = Klaxon().parse<Image>(Getsetu(Mydata.R18.contains(group.id).toShort(),it))
                     if (setu != null) {
                         reply(parseSetu(setu))
-                        if (!setu.data[0].tags.contains("R-18"))
-                            sendImage(Downsetu(setu.data[0].url))
+                        sendImage(Downsetu(setu.data[0].url))
                     }
                 }catch (e:Exception){
                     reply(e.toString())
                 }
             }
-
+            //开启R18模式增加的模式
             if(MySetting.R18){
+                //关闭R18搜索条件
                 case(Command.command_R18off){
                     if (!Mydata.groups.contains(group.id)) {
                         reply("此群没有色图权限")
@@ -100,6 +101,7 @@ object MiraiSetuMain : KotlinPlugin(
                     reply("R18已关闭")
                     Mydata.R18.remove(group.id)
                 }
+                //开启R18搜索条件
                 case(Command.command_R18on){
                     if (!Mydata.groups.contains(group.id)) {
                         reply("此群没有色图权限")
@@ -109,11 +111,11 @@ object MiraiSetuMain : KotlinPlugin(
                     Mydata.R18.add(group.id)
                 }
             }
-            case("状态检查") {
+            /*case("状态检查") {
                 sender.group.sendMessage("剩余调用次数：${Mydata.quota}\n" +
                     "当前R18模式 ${Mydata.R18.contains(group.id)}\n" +
                     "此群是否开启此插件${Mydata.groups.contains(group.id)}")
-            }
+            }*/
             //封印解除
             case(Command.command_on) {
                 if (sender.id == MySetting.masterid) {
@@ -131,13 +133,11 @@ object MiraiSetuMain : KotlinPlugin(
                 } else
                     reply("你不是我的主人，我不能听从你的命令")
             }
-
-
         }
     }
 }
 
-
+//布尔型转short星自定义
 private fun Boolean.toShort(): Short {
     return if (this) 1 else 0
 

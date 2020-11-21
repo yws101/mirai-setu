@@ -24,51 +24,31 @@ Mirai 是一个在全平台下运行，提供 QQ 协议支持的高效率机器�
 由于作者学业压力较大，不能保证插件的及时更新以及bug修复。
 
 ## 使用说明
-这是一个运行在[mirai-console](https://github.com/mamoe/mirai-console) 下的插件,需要自行下载安装。
-
-如果您对mirai-console不熟悉可以使用我自己打包的mirai-console，[下载链接](https://pan.baidu.com/s/15HLgK2jjHTd6y3UBcAdozg) 提取码 setu
-
-自行编译打包jar放入plugins文件夹，或者前往release下载最新版本
-
-请使用"1.0-RC"或者以上版本加载使用，建议使用JDK11版本运行
-
-在机器人加入的群发送指令使用
-
-如果有问题和建议欢迎提出
+1. 环境配置
+    - 插件开发环境为mirai-console-1.0.0版本，其他版本的[mirai-console](https://github.com/mamoe/mirai-console) 不保证能100%兼容。如果使用其他版本的请自行尝试是否兼容。
+    如果你不清楚mirai-console如何运行，可以使用我自己打包的mirai-console-1.0.0的包。链接：https://pan.baidu.com/s/1WjwsjX1kSMCom2_aJSZBtQ 提取码：setu
+    - mirai-console需要java环境，建议使用java11以及以上的版本运行。
+2. 插件下载
+    - 前往本项目的[releases](https://github.com/meaningtree/mirai-setu/releases)下载插件
+3. 插件运行
+    - 将本放入mirai-console的plugins的文件夹然后运行mirai-console。
+4. 插件配置
+    - 运行一次mirai-console关闭（记得一定要关闭mirai-console，否则修改的数值很可能会被mirai-console覆盖掉），进入./config/Mirai-setu文件夹参考注释修改配置文件。
+5. 关于lollicon的注意事项
+    - lolicon是一个公开的setu库的APi，此API不属于本人，如果此API出现问题，恕我无力解决。图片获取是从i.pixiv.cat反向代理得到的，可以不使用科学上网获取，但是国内网络获取比较慢，获取卡顿和失败是正常情况。如果有条件的话可以使用科学上网进行加速，或者部署到没有限制的服务器上。
+    - lolicon的APIKEy申请需要到Telegram上申请，需要使用科学上网，请自备工具。
 ## 指令
-* 色图时间
+指令可以在配置文件自由修改
 
-获取一张图片
-* 青少年模式
-
-关闭R18，发送正常的瑟图
-* 青壮年模式
-
-开启R18
-* 搜色图 \[关键词\]
-
-封印解除
-* 在此群开启本插件功能
-
-封印
-* 在此群关闭本插件
-
-搜索图片
+    色图时间 //获取随机色图
+    搜色图 [关键词]  //根据关键词搜索色图
+    封印解除 //开启本群的色图功能（仅限插件主人使用）
+    封印    //关闭本群的色图功能
+    青少年模式 //普通模式，不主动搜索R18图片（在配置文件中开启R18才能使用）
+    青壮年模式 //R18模式，主动搜索R18图片（在配置文件中开启R18才能使用）
+    今日番剧 //顾名思义，来自bilibili
+    昨日番剧 //顾名思义，来自bilibili
+    明日番剧 //顾名思义，来自bilibili
 
 ## 配置文件
-config/com.blrabbit.mirai-setu/setu-config.yml
-
-    # 插件名称
-    name: setu       
-    # 主人id
-    masterid: 0
-    # lolicon的APIKEY          
-    APIKEY:   
-    # 获取图片的指令         
-    command_get: 色图时间
-    # 关闭R18的指令
-    command_R18off: 青少年模式
-    # 开启R18的指令
-    command_R18on: 青壮年模式
-    # 搜图指令
-    command_search: 搜色图
+参考配置文件的注释

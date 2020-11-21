@@ -23,6 +23,7 @@ class Data(
     val tags: List<String>)
 class Image(
     val code: Int,
+    val msg:String ="",
     val quota: Int,
     val data: List<Data>)
 
@@ -53,7 +54,7 @@ fun parseSetu(result: Image): String {
         if (result.code == 0) {
             Mydata.quota = result.quota
             if (result.data[0].tags.contains("R-18") && !MySetting.R18){
-                return "检测到敏感资源拒绝发送"
+                throw Exception("检测到敏感资源拒绝发送")
             }
             MiraiSetuMain.logger.info("剩余调用次数 ${result.quota}")
             return "pid：${result.data[0].pid}\n" +
@@ -62,7 +63,9 @@ fun parseSetu(result: Image): String {
                 "url: ${result.data[0].url}\n" +
                 "tags: ${result.data[0].tags}"
         }
-    else return result.code.toString()
+    else
+            throw Exception("${result.msg}")
+        /*return result.code.toString()*/
 }
 
 /*
