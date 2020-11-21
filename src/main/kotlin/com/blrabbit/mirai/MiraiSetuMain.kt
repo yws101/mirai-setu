@@ -39,8 +39,7 @@ object MiraiSetuMain : KotlinPlugin(
             logger.warning { "未设置lolicon的APIKEY，可能会遇到调用上限的问题。\n请到(https://api.lolicon.app/#/setu)申请APIKEY并写入配置文件中。" }
         }
         if (MySetting.masterid.equals(0))
-
-
+            logger.warning { "没有设置主人id" }
         subscribeGroupMessages{
             //昨日番剧
             case(Command.command_bangumiyesterday) {
