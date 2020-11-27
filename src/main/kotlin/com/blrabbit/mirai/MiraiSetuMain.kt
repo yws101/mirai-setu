@@ -11,11 +11,12 @@ import kotlinx.serialization.json.Json
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.subscribeGroupMessages
+import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.utils.info
 import net.mamoe.mirai.utils.warning
 
 const val ID = "com.blrabbit.mirai-setu"
-const val VERSION = "0.2.0"
+const val VERSION = "0.2.1"
 const val NAME = "Mirai-setu"
 const val AUTHOR = "blrabbit"
 const val INFO = "一个简简单单的色图插件"
@@ -37,6 +38,7 @@ object MiraiSetuMain : KotlinPlugin(
         MySetting.reload() //初始化设置数据
         Mydata.reload()    //初始化配置数据
         Command.reload()   //初始化插件指令
+        Language.reload()
         logger.info { "色图插件加载完成，版本：$VERSION" }
         logger.info(MySetting.APIKEY)
         if (MySetting.APIKEY == "0") {
@@ -50,7 +52,7 @@ object MiraiSetuMain : KotlinPlugin(
                 reply(Getillust(it))
 
             }*/
-            /*case("舔我") {
+            case("舔我") {
                 val msg: String = HttpClient(CIO).use { client ->
                     client.get("https://chp.shadiao.app/api.php")
                 }
@@ -65,7 +67,7 @@ object MiraiSetuMain : KotlinPlugin(
                 if (!Language.zuan.contains(msg))
                     Language.zuan.add(msg)
                 reply(At(sender) + " " + msg)
-            }*/
+            }
             //昨日番剧
             case(Command.command_bangumiyesterday) {
                 reply(bangumi_timeline(Command.command_bangumiyesterday, 5))

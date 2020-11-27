@@ -19,27 +19,20 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/master" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e789c92b-0d9b-4c1f-a6f1-aaf6b483bdae" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="e789c92b-0d9b-4c1f-a6f1-aaf6b483bdae" name="Default Changelist" comment="优化反序列化，缩小体积">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/blrabbit/mirai/MiraiSetuMain.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/blrabbit/mirai/MiraiSetuMain.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/blrabbit/mirai/Util/DbUtil.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/blrabbit/mirai/bilibili/Getbilibili.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/blrabbit/mirai/bilibili/Getbilibili.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/blrabbit/mirai/bilibili/bilibili.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/blrabbit/mirai/pixiv/GetPixiv.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/blrabbit/mirai/setu/Getsetu.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/blrabbit/mirai/setu/Getsetu.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/kotlin/RunMirai.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/RunMirai.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -123,19 +116,18 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\openplugins\mirai-setu\src\main\kotlin\com\blrabbit\mirai\pixiv" />
       <recent name="F:\openplugins\mirai-setu\src\test\kotlin" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.mirai-setu [buildPlugin]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -178,6 +170,19 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="GetPixivKt" type="JetRunConfigurationType" nameIsGenerated="true">
+      <module name="mirai-setu.test" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.blrabbit.mirai.pixiv.GetPixivKt" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="KtorclientKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <module name="mirai-setu.test" />
       <option name="VM_PARAMETERS" />
@@ -207,15 +212,16 @@
     <list>
       <item itemvalue="Gradle.mirai-setu [assemble]" />
       <item itemvalue="Gradle.mirai-setu [buildPlugin]" />
+      <item itemvalue="Application.GetPixivKt" />
       <item itemvalue="Application.KtorclientKt" />
       <item itemvalue="Application.RunMiraiKt" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.mirai-setu [buildPlugin]" />
-        <item itemvalue="Gradle.mirai-setu [assemble]" />
-        <item itemvalue="Application.RunMiraiKt" />
-        <item itemvalue="Application.KtorclientKt" />
+        <item itemvalue="Application.GetPixivKt" />
+        <item itemvalue="Application.GetPixivKt" />
+        <item itemvalue="Application.GetPixivKt" />
       </list>
     </recent_temporary>
   </component>
@@ -233,8 +239,18 @@
       <workItem from="1606439192228" duration="2323000" />
       <workItem from="1606441578662" duration="2930000" />
       <workItem from="1606444939805" duration="2322000" />
-      <workItem from="1606450981789" duration="183000" />
+      <workItem from="1606450981789" duration="633000" />
+      <workItem from="1606451634214" duration="3121000" />
+      <workItem from="1606455956201" duration="472000" />
     </task>
+    <task id="LOCAL-00001" summary="优化反序列化，缩小体积">
+      <created>1606451191386</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1606451191386</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -245,42 +261,62 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="优化反序列化，缩小体积" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化反序列化，缩小体积" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606450662212">
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606452390798">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606450662212" />
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606452390798" />
     <state x="740" y="224" key="#com.intellij.ide.macro.MacrosDialog" timestamp="1606439387918">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="224" key="#com.intellij.ide.macro.MacrosDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606439387918" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1606450948244">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1606455630479">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606450948244" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1606450948244">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606455630479" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1606455630479">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606450948244" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1606450948244">
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606455630479" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1606455630479">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606450948244" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1606450948244">
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606455630479" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1606455630479">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606450948244" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606455630479" />
     <state x="461" y="164" key="SettingsEditor" timestamp="1606365841088">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1606365841088" />
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1606451208361">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606451208361" />
     <state x="143" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1606440062623">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

@@ -19,7 +19,7 @@ dependencies{
     //json解析用(明明mirai自带的开发环境却不让用被迫加上，打包的时候还得去掉)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     //sql
-    //implementation("org.xerial:sqlite-jdbc:3.32.3.2")
+    implementation("org.xerial:sqlite-jdbc:3.32.3.2")
 }
 
 mirai{
