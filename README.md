@@ -33,7 +33,8 @@ Mirai 是一个在全平台下运行，提供 QQ 协议支持的高效率机器�
 3. 插件运行
     - 将本放入mirai-console的plugins的文件夹然后运行mirai-console。
 4. 插件配置
-    - 运行一次mirai-console关闭（记得一定要关闭mirai-console，否则修改的数值很可能会被mirai-console覆盖掉），进入./config/Mirai-setu文件夹参考注释修改配置文件。
+    - 方法一：运行mirai输入控制台/serkey /setmaster对插件配置（/help可以查看帮助）
+    - 方法二：运行一次mirai-console关闭（记得一定要关闭mirai-console，否则修改的数值很可能会被mirai-console覆盖掉），进入./config/Mirai-setu文件夹参考注释修改配置文件。
 5. 关于lollicon的注意事项
     - lolicon是一个公开的setu库的APi，此API不属于本人，如果此API出现问题，恕我无力解决。图片获取是从i.pixiv.cat反向代理得到的，可以不使用科学上网获取，但是国内网络获取比较慢，获取卡顿和失败是正常情况。如果有条件的话可以使用科学上网进行加速，或者部署到没有限制的服务器上。
     - lolicon的APIKEy申请需要到Telegram上申请，需要使用科学上网，请自备工具。

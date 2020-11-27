@@ -14,7 +14,7 @@ object Command: AutoSavePluginConfig("command") {
     @ValueDescription("下面两条命令只有在启用R18的时候才会使用")
     val command_R18off by value("青少年模式")
     val command_R18on by value("青壮年模式")
-
+    @ValueDescription("Bilibili番剧的指令设置")
     val command_bangumitoday by value("今日番剧")
     val command_bangumiyesterday by value("昨日番剧")
     val command_bangumitomorrow by value("明日番剧")

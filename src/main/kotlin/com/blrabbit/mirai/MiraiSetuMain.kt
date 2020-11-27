@@ -8,10 +8,10 @@ import io.ktor.client.request.*
 import io.ktor.util.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.subscribeGroupMessages
-import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.utils.info
 import net.mamoe.mirai.utils.warning
 
@@ -35,10 +35,11 @@ object MiraiSetuMain : KotlinPlugin(
 ) {
     @KtorExperimentalAPI
     override fun onEnable() {
+        SetSetuKey.register() //注册指令
+        SetMasterID.register() //注册指令
         MySetting.reload() //初始化设置数据
         Mydata.reload()    //初始化配置数据
         Command.reload()   //初始化插件指令
-        Language.reload()
         logger.info { "色图插件加载完成，版本：$VERSION" }
         logger.info(MySetting.APIKEY)
         if (MySetting.APIKEY == "0") {
@@ -52,32 +53,19 @@ object MiraiSetuMain : KotlinPlugin(
                 reply(Getillust(it))
 
             }*/
-            case("舔我") {
-                val msg: String = HttpClient(CIO).use { client ->
-                    client.get("https://chp.shadiao.app/api.php")
-                }
-                if (!Language.tianwo.contains(msg))
-                    Language.tianwo.add(msg)
-                reply(At(sender) + " " + msg)
-            }
-            case("骂我") {
-                val msg: String = HttpClient(CIO).use { client ->
-                    client.get("https://nmsl.shadiao.app/api.php?level=min&lang=zh_cn")
-                }
-                if (!Language.zuan.contains(msg))
-                    Language.zuan.add(msg)
-                reply(At(sender) + " " + msg)
-            }
             //昨日番剧
             case(Command.command_bangumiyesterday) {
+                logger.info("请求昨日番剧")
                 reply(bangumi_timeline(Command.command_bangumiyesterday, 5))
             }
             //今日番剧
             case(Command.command_bangumitoday) {
+                logger.info("请求今日番剧")
                 reply(bangumi_timeline(Command.command_bangumitoday, 6))
             }
             //明日番剧
             case(Command.command_bangumitomorrow) {
+                logger.info("请求明日番剧")
                 reply(bangumi_timeline(Command.command_bangumitomorrow, 7))
             }
             //色图时间
@@ -86,8 +74,6 @@ object MiraiSetuMain : KotlinPlugin(
                     reply("此群没有色图权限")
                     return@case
                 }
-                /* if (Mydata.R18.contains(group.id)) group.sendMessage("正在获取图片中，请稍后\n[R18模式已启用]")
-                else group.sendMessage("正在获取图片，请稍后")*/
                 try {
                     val setu: Image = Json.decodeFromString(Getsetu(Mydata.R18.contains(group.id).toShort()))
                     reply(parseSetu(setu))
@@ -106,10 +92,7 @@ object MiraiSetuMain : KotlinPlugin(
                     reply("请输入搜索的关键词")
                     return@startsWith
                 }
-                /* if (Mydata.R18.contains(group.id)) group.sendMessage("正在获取图片中，请稍后\n[R18模式已启用]")
-                else group.sendMessage("正在获取图片，请稍后")*/
                 try {
-                    //val setu = Klaxon().parse<Image>(Getsetu(Mydata.R18.contains(group.id).toShort(), it))
                     val setu: Image = Json.decodeFromString(Getsetu(Mydata.R18.contains(group.id).toShort(), it))
                     reply(parseSetu(setu))
                     setu.data?.get(0)?.let { it2 -> sendImage(it2.let { it1 -> Downsetu(it1.url) }) }
