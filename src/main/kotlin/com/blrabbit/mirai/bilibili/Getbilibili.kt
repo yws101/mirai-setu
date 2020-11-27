@@ -1,67 +1,74 @@
 package com.blrabbit.mirai.setu
 
-import com.beust.klaxon.Klaxon
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.util.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
-class BiliData(
-    val code: Int,
-    val message: String,
-    val result: List<Result>
+@Serializable
+data class BilibiliTimeline(
+    val code: Int = 0,
+    val message: String = "",
+    val result: List<Result> = emptyList()
 )
 
-class Result(
-    val date: String,
-    val date_ts: Int,
-    val day_of_week: Int,
-    val is_today: Int,
-    val seasons: List<Seasons>
+@Serializable
+data class Result(
+    val date: String = "",
+    val date_ts: Long = 0,
+    val day_of_week: Int = 0,
+    val is_today: Int = 0,
+    val seasons: List<Season> = listOf()
 )
 
-class Seasons(
-    //val cover: String,
-    val delay: Int,
+@Serializable
+data class Season(
+    val cover: String = "",
+    val delay: Int = 0,
+    val delay_id: Int = 0,
+    val delay_index: String = "",
     val delay_reason: String = "",
-    //val ep_id: Int,
-    val is_published: Int,
+    val ep_id: Int = 0,
+    val favorites: Int = 0,
+    val follow: Int = 0,
+    val is_published: Int = 0,
     val pub_index: String = "",
-    val pub_time: String,
-    //val pub_ts: Int,
-    //val season_id: Int,
-    //val season_status: Int,
-    //val square_cover: String,
-    val title: String,
-    //val url: String
+    val pub_time: String = "",
+    val pub_ts: Long = 0,
+    val season_id: Int = 0,
+    val season_status: Int = 0,
+    val square_cover: String = "",
+    val title: String = "",
+    val url: String = ""
 )
+
 @KtorExperimentalAPI
-suspend fun bangumi_timeline(title: String, i :Int): String {
+suspend fun bangumi_timeline(title: String, i: Int): String {
     var json = ""
     try {
         json = HttpClient(CIO).use { client ->
             client.get<String>("https://bangumi.bilibili.com/web_api/timeline_global")
         }
-    }catch (e:Exception){
+    } catch (e: Exception) {
         return e.toString()
     }
-    val result = Klaxon().parse<BiliData>(json)
+    val result = Json.decodeFromString<BilibiliTimeline>(json)
     var msg = "$title\n"
-    if (result != null) {
-        for (index in result.result[i].seasons) {
-            msg += "---------------\n"
-            msg += "${index.title} ${index.pub_index}\n更新时间:${index.pub_time}"
-            msg += if (index.delay == 0) {
-                if (index.is_published == 1)
-                    "(已更新)\n"
-                else
-                    "(未更新)\n"
-            } else {
-                "(${index.delay_reason})\n"
-            }
+    for (index in result.result[i].seasons) {
+        msg += "---------------\n"
+        msg += "${index.title} ${index.pub_index}\n更新时间:${index.pub_time}"
+        msg += if (index.delay == 0) {
+            if (index.is_published == 1)
+                "(已更新)\n"
+            else
+                "(未更新)\n"
+        } else {
+            "(${index.delay_reason})\n"
         }
     }
     return msg
 }
-
 

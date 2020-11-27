@@ -1,7 +1,7 @@
 package com.blrabbit.mirai.setu
 //用来从lolicon获取链接
 
-import com.beust.klaxon.Klaxon
+import com.blrabbit.mirai.APIKEY
 import com.blrabbit.mirai.MiraiSetuMain
 import com.blrabbit.mirai.Util.MySetting
 import com.blrabbit.mirai.Util.Mydata
@@ -9,10 +9,24 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.util.*
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.Serializable
 import java.io.InputStream
 
-class Data(
+@Serializable
+data class Image(
+    val code: Int,
+    val msg: String = "",
+    val quota: Int,
+    val quota_min_ttl: Int,
+    val count: Int,
+    val data: List<Data>? = null
+)
+
+@Serializable
+data class Data(
     val pid: Int,
+    val p: Int,
     val uid: Int,
     val title: String,
     val author: String,
@@ -20,52 +34,48 @@ class Data(
     val r18: Boolean,
     val width: Int,
     val height: Int,
-    val tags: List<String>)
-class Image(
-    val code: Int,
-    val msg:String ="",
-    val quota: Int,
-    val data: List<Data>)
-
-data class setu(val sinfo:String,val simage:InputStream)
+    val tags: List<String>
+)
 
 @KtorExperimentalAPI
 suspend fun Getsetu(R18: Short): String {
-    return HttpClient(CIO).use {
-        client -> client.get("http://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=${R18}")
+    return HttpClient(CIO).use { client ->
+        client.get("http://api.lolicon.app/setu?apikey=$APIKEY&r18=${R18}")
     }
 }
 
 @KtorExperimentalAPI
 suspend fun Getsetu(R18: Short, keyword: String): String {
-    return HttpClient(CIO).use {
-        client -> client.get("http://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=$R18&keyword=$keyword")
+    return HttpClient(CIO).use { client ->
+        client.get("http://api.lolicon.app/setu?apikey=$APIKEY&r18=$R18&keyword=$keyword")
     }
 }
 
 @KtorExperimentalAPI
 suspend fun Downsetu(url: String): InputStream {
-    return  HttpClient(CIO).use {
-        client -> client.get(url)
+    return HttpClient(CIO).use { client ->
+        client.get(url)
     }
 }
 
 fun parseSetu(result: Image): String {
-        if (result.code == 0) {
-            Mydata.quota = result.quota
-            if (result.data[0].tags.contains("R-18") && !MySetting.R18){
+    if (result.code == 0) {
+        Mydata.quota = result.quota
+        result.data?.get(0)?.let {
+            print(it.pid)
+            if (it.tags.contains("R-18") && !MySetting.R18) {
                 throw Exception("检测到敏感资源拒绝发送")
             }
             MiraiSetuMain.logger.info("剩余调用次数 ${result.quota}")
-            return "pid：${result.data[0].pid}\n" +
-                "title: ${result.data[0].title}\n" +
-                "author: ${result.data[0].author}\n" +
-                "url: ${result.data[0].url}\n" +
-                "tags: ${result.data[0].tags}"
+            return "pid：${it.pid}\n" +
+                "title: ${it.title}\n" +
+                "author: ${it.author}\n" +
+                "url: ${it.url}\n" +
+                "tags: ${it.tags}"
         }
-    else
-            throw Exception("${result.msg}")
-        /*return result.code.toString()*/
+        return ""
+    } else
+        throw Exception(result.msg)
 }
 
 /*
