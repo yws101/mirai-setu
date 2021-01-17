@@ -5,7 +5,7 @@ import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.contact.User
 
-object SetSetuKey : SimpleCommand(
+/*object SetSetuKey : SimpleCommand(
     MiraiSetuMain ,"setkey", "设置lolicon的APIKEY",
     description = "设置lolicon的APIKEY",
 ) {
@@ -26,4 +26,4 @@ object SetMasterID: SimpleCommand(
         MySetting.masterid = ID
         sendMessage("设置主人id成功")
     }
-}
+}*/

@@ -2,7 +2,6 @@ package com.blrabbit.mirai.setu
 
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.util.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -43,56 +42,50 @@ data class Season(
     val title: String = "",
     val url: String = ""
 )
-
-@KtorExperimentalAPI
-suspend fun bangumi_timeline(title: String, i: Int): String {
-    var json = ""
-    try {
-        json = HttpClient().use { client ->
-            client.get<String>("https://bangumi.bilibili.com/web_api/timeline_global")
-        }
-    } catch (e: Exception) {
-        return e.toString()
+/*
+* 获取非国创番剧Json
+* */
+suspend fun bangumiTimeline(): String {
+    var json = HttpClient().use { client ->
+        client.get<String>("https://bangumi.bilibili.com/web_api/timeline_global")
     }
-    val result = Json.decodeFromString<BilibiliTimeline>(json)
-    var msg = "$title\n"
-    for (index in result.result[i].seasons) {
-        msg += "---------------\n"
-        msg += "${index.title} ${index.pub_index}\n更新时间:${index.pub_time}"
-        msg += if (index.delay == 0) {
-            if (index.is_published == 1)
-                "(已更新)\n"
-            else
-                "(未更新)\n"
-        } else {
-            "(${index.delay_reason})\n"
-        }
+    return json
+}
+/*
+* 获取国创番剧Json
+* */
+suspend fun bangumiTimelineCn(): String {
+    var json = HttpClient().use { client ->
+        client.get<String>("https://bangumi.bilibili.com/web_api/timeline_cn")
     }
-    return msg
+    return json
 }
 
-suspend fun bangumi_timeline_cn(title: String, i: Int): String {
-    var json = ""
-    try {
-        json = HttpClient().use { client ->
-            client.get<String>("https://bangumi.bilibili.com/web_api/timeline_cn")
+/*
+* 解析Json
+* */
+    fun decode(Bjson: String,day: Int): String {
+        val result = Json.decodeFromString<BilibiliTimeline>(Bjson)
+        var msg = String()
+        for (index in result.result[day].seasons) {
+            msg += "---------------\n"
+            msg += "${index.title} ${index.pub_index}\n更新时间:${index.pub_time}"
+            msg += if (index.delay == 0) {
+                if (index.is_published == 1)
+                    "(已更新)\n"
+                else
+                    "(未更新)\n"
+            } else {
+                "(${index.delay_reason})\n"
+            }
         }
-    } catch (e: Exception) {
-        return e.toString()
+        return msg
     }
-    val result = Json.decodeFromString<BilibiliTimeline>(json)
-    var msg = "$title\n"
-    for (index in result.result[i].seasons) {
-        msg += "---------------\n"
-        msg += "${index.title} ${index.pub_index}\n更新时间:${index.pub_time}"
-        msg += if (index.delay == 0) {
-            if (index.is_published == 1)
-                "(已更新)\n"
-            else
-                "(未更新)\n"
-        } else {
-            "(${index.delay_reason})\n"
-        }
-    }
-    return msg
+
+suspend fun GetbangumiTimeline(title: String, day: Int): String {
+    var timeline = title + "\n"
+    timeline += decode(bangumiTimeline(),day)
+    timeline += decode(bangumiTimelineCn(),day)
+    return timeline
 }
+

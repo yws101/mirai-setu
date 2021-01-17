@@ -14,9 +14,9 @@ suspend fun main() {
     MiraiSetuMain.load()
     MiraiSetuMain.enable()
 
-    val bot = MiraiConsole.addBot(876334393, "Yangyilin3600") {
+    /*val bot = MiraiConsole.addBot(876334393, "Yangyilin3600") {
         fileBasedDeviceInfo()
-    }.alsoLogin()
+    }.alsoLogin()*/
 
     MiraiConsole.job.join()
 }
