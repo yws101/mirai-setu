@@ -96,7 +96,7 @@ suspend fun Getillust(word:String): String {
             }
         }
         else
-            mess += it.meta_single_page?.original_image_url?.replace("i.pximg.net", "i.pixiv.cat") + "\n"
+            mess += it.meta_single_page.original_image_url.replace("i.pximg.net", "i.pixiv.cat") + "\n"
     }
 
     setu.illusts[1].let { it ->
@@ -108,13 +108,9 @@ suspend fun Getillust(word:String): String {
             }
         }
         else
-            mess += it.meta_single_page?.original_image_url?.replace("i.pximg.net", "i.pixiv.cat") + "\n"
+            mess += it.meta_single_page.original_image_url.replace("i.pximg.net", "i.pixiv.cat") + "\n"
     }
     print(mess)
 
     return mess
-}
-
-suspend fun main(){
-    val setu: Pixivdata= Json.decodeFromString(Getillust("可莉"))
 }

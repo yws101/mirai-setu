@@ -1,6 +1,5 @@
 package com.blrabbit.mirai.Util
 
-import com.blrabbit.mirai.Util.Mydata.provideDelegate
 import net.mamoe.mirai.console.data.AutoSavePluginData
 import net.mamoe.mirai.console.data.value
 

@@ -1,9 +1,10 @@
-package com.blrabbit.mirai.pixiv.trace
+package com.blrabbit.mirai.bilibili
 
 import com.blrabbit.mirai.MiraiSetuMain
 import com.blrabbit.mirai.setu.Downsetu
 import io.ktor.client.*
 import io.ktor.client.request.*
+import io.ktor.util.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -47,6 +48,7 @@ data class Doc(
     val is_adult: Boolean
 )
 
+@KtorExperimentalAPI
 suspend fun serchmoe(Url: String, group: Group){
     val msg: String = HttpClient().use { client ->
         client.get("https://trace.moe/api/search?url=$Url")
