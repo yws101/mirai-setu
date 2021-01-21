@@ -10,7 +10,16 @@ import net.mamoe.mirai.event.subscribeGroupMessages
 
 fun SetuEntrance(){
     GlobalEventChannel.subscribeGroupMessages {
+
         always() {
+            if (Command.command_get.contains(message.contentToString())) {
+                val Setu = SetuImage()
+                Setu.getsetu()
+                group.sendMessage(Setu.getstr())
+                group.sendImage(Setu.downloadImage())
+            }
+
+        /*always() {
             if (Command.command_get.contains(message.contentToString())) {
                 if (!Mydata.groups.contains(group.id)) {
 
@@ -74,7 +83,6 @@ fun SetuEntrance(){
                 }
             }
         }
-
         //封印解除
         always {
             if (Command.command_on.contains(message.contentToString())) {
@@ -94,7 +102,7 @@ fun SetuEntrance(){
                     Mydata.groups.remove(group.id)
                 } else
                     group.sendMessage("你不是我的主人，我不能听从你的命令")
-            }
+            }*/
         }
     }
 }

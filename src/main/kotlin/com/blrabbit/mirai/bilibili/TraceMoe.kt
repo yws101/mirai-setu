@@ -1,7 +1,6 @@
 package com.blrabbit.mirai.bilibili
 
 import com.blrabbit.mirai.MiraiSetuMain
-import com.blrabbit.mirai.setu.Downsetu
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.util.*
@@ -67,6 +66,6 @@ suspend fun serchmoe(Url: String, group: Group){
     group.sendMessage(
             string
     )
-    group.sendImage(Downsetu("https://trace.moe/thumbnail.php?anilist_id=${moe.docs[0].anilist_id}&file=${moe.docs[0].filename}&t=${moe.docs[0].at}&token=${moe.docs[0].tokenthumb}"))
+    //group.sendImage(Downsetu("https://trace.moe/thumbnail.php?anilist_id=${moe.docs[0].anilist_id}&file=${moe.docs[0].filename}&t=${moe.docs[0].at}&token=${moe.docs[0].tokenthumb}"))
 
 }
