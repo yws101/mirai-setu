@@ -1,24 +1,38 @@
 package com.blrabbit.mirai.setu
 
 import com.blrabbit.mirai.MiraiSetuMain
-import com.blrabbit.mirai.Util.*
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
+import com.blrabbit.mirai.Util.Command
+import io.ktor.util.*
 import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
 
-fun SetuEntrance(){
+@KtorExperimentalAPI
+fun SetuEntrance() {
     GlobalEventChannel.subscribeGroupMessages {
 
         always() {
             if (Command.command_get.contains(message.contentToString())) {
-                val Setu = SetuImage()
-                Setu.getsetu()
-                group.sendMessage(Setu.getstr())
-                group.sendImage(Setu.downloadImage())
+                val setu = SetuImage()
+                setu.getsetu()
+                group.sendMessage(setu.getstr())
+                group.sendImage(setu.getlargeImage())
+                setu.close()
             }
-
+        }
+        case("错误") {
+            group.sendMessage("产生一个错误喵")
+            try {
+                val setu = SetuImage()
+                setu.throwe()
+            } catch (e: Exception) {
+                e.message?.let { it1 -> group.sendMessage(it1) }
+            }
+            group.sendMessage("错误处理模式执行")
+        }
+        case("直接报错") {
+            throw Exception("直接砸厂子")
+        }
         /*always() {
             if (Command.command_get.contains(message.contentToString())) {
                 if (!Mydata.groups.contains(group.id)) {
@@ -103,6 +117,6 @@ fun SetuEntrance(){
                 } else
                     group.sendMessage("你不是我的主人，我不能听从你的命令")
             }*/
-        }
     }
 }
+

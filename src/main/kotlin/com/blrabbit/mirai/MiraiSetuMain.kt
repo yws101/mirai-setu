@@ -9,10 +9,6 @@ import io.ktor.util.*
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.console.plugin.version
-import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.subscribeGroupMessages
-import net.mamoe.mirai.event.subscribeGroupTempMessages
-import net.mamoe.mirai.message.code.MiraiCode.deserializeMiraiCode
 import net.mamoe.mirai.utils.info
 import net.mamoe.mirai.utils.warning
 
@@ -39,13 +35,6 @@ object MiraiSetuMain : KotlinPlugin(
         if (MySetting.APIKEY == "0") {
             logger.warning { "未设置lolicon的APIKEY，已经切换为公用apikey，可能会遇到调用上限的问题。\n请到(https://api.lolicon.app/#/setu)申请APIKEY并写入配置文件中。" }
             APIKEY = MySetting.APIKEY
-        }
-        GlobalEventChannel.subscribeGroupMessages {
-            atBot {
-                message.let {
-                    logger.info(it.toString())
-                }
-            }
         }
         SetuEntrance()
         BiliBiliEntrace()

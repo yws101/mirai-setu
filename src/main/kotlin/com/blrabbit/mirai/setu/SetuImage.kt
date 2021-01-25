@@ -2,9 +2,12 @@ package com.blrabbit.mirai.setu
 
 import com.blrabbit.mirai.APIKEY
 import com.blrabbit.mirai.MiraiSetuMain
+import com.blrabbit.mirai.Util.MySetting
 import com.blrabbit.mirai.Util.Mydata
 import io.ktor.client.*
 import io.ktor.client.engine.*
+import io.ktor.client.engine.okhttp.*
+import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.util.*
 import kotlinx.serialization.decodeFromString
@@ -26,18 +29,27 @@ class SetuImage() {
     var tags: List<String> = listOf()
 
     @KtorExperimentalAPI
-    suspend fun getsetu(){
-        val setujson:String = HttpClient().use { client ->
-            client.engine.config.proxy = ProxyBuilder.socks(host = "127.0.0.1", port = 10808)
-            client.get("http://api.lolicon.app/setu?apikey=$APIKEY&size1200=true")
+    val client = HttpClient(OkHttp){
+
+        engine {
+            proxy = when(MySetting.proxyconfig){
+                0 -> null
+                1 -> ProxyBuilder.http(MySetting.httpproxy)
+                2 -> ProxyBuilder.socks(host = MySetting.sockshost,port = MySetting.socksproxy)
+                else -> null
+            }
         }
+    }
+
+    @KtorExperimentalAPI
+    suspend fun getsetu(){
+        val setujson:String = client.get("http://api.lolicon.app/setu?apikey=$APIKEY&size1200=true")
         parseSetu(setujson)
     }
 
+    @KtorExperimentalAPI
     suspend fun getsetu(keyword:String){
-        val setujson:String = HttpClient().use { client ->
-            client.get("http://api.lolicon.app/setu?apikey=$APIKEY")
-        }
+        val setujson:String = client.get("http://api.lolicon.app/setu?apikey=$APIKEY")
         parseSetu(setujson)
     }
 
@@ -63,17 +75,41 @@ class SetuImage() {
     }
 
     fun getstr(): String {
+        //TODO 修改为能够自定义返回内容的方法，参考mc的占位符
         return "pid：${pid}\n" +
             "title: ${title}\n" +
             "author: ${author}\n" +
             "url: ${url}\n" +
-            "tags: ${tags}"
+            "tags: ${tags}"+
+            url.replace("img-original","c/600x1200_90_webp/img-master").replace(".jpg","_master1200.jpg")
+
     }
 
-    suspend fun downloadImage(): InputStream{
+    @KtorExperimentalAPI
+    suspend fun getoriginalImage(): InputStream{
         return HttpClient().use { client ->
             client.get(url)
         }
     }
 
+    @KtorExperimentalAPI
+    suspend fun getlargeImage(): InputStream{
+        //
+        val urls = url.replace("img-original","c/600x1200_90_webp/img-master").replace(".jpg","_master1200.jpg")
+        try {
+            return client.get(urls)
+        }catch (e: ClientRequestException){
+            MiraiSetuMain.logger.warning("获取缩略图失败，尝试获取原始图片")
+            return client.get(url)
+        }
+    }
+    // httpclient一定要关闭，否则会一直驻留在内存中。不断创建直到内存溢出
+    @KtorExperimentalAPI
+    fun close(){
+        client.close()
+    }
+
+    fun throwe(){
+        throw Exception("这是一个错误喵")
+    }
 }
