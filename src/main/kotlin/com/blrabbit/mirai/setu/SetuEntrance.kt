@@ -13,26 +13,23 @@ fun SetuEntrance() {
 
         always() {
             if (Command.command_get.contains(message.contentToString())) {
+                    val setu = SetuImage()
+                    setu.getsetu()
+                    group.sendMessage(setu.getstr())
+                    group.sendImage(setu.getlargeImage())
+                    setu.close()
+            }
+        }
+
+        startsWith("搜色图"){
+
                 val setu = SetuImage()
-                setu.getsetu()
+                setu.getsetu(it)
                 group.sendMessage(setu.getstr())
                 group.sendImage(setu.getlargeImage())
                 setu.close()
-            }
         }
-        case("错误") {
-            group.sendMessage("产生一个错误喵")
-            try {
-                val setu = SetuImage()
-                setu.throwe()
-            } catch (e: Exception) {
-                e.message?.let { it1 -> group.sendMessage(it1) }
-            }
-            group.sendMessage("错误处理模式执行")
-        }
-        case("直接报错") {
-            throw Exception("直接砸厂子")
-        }
+
         /*always() {
             if (Command.command_get.contains(message.contentToString())) {
                 if (!Mydata.groups.contains(group.id)) {

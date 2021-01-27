@@ -1,5 +1,6 @@
 package com.blrabbit.mirai.Util
 
+import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.ReadOnlyPluginConfig
 import net.mamoe.mirai.console.data.SerializerAwareValue
 import net.mamoe.mirai.console.data.ValueDescription
@@ -14,10 +15,15 @@ object MySetting : ReadOnlyPluginConfig("setu-config") {
     val R18 by value(false)
     @ValueDescription("代理设置,0为不使用代理，1为使用http代理，2为使用socks代理")
     val proxyconfig by value(0)
-    @ValueDescription("http代理配置")
-    val httpproxy by value("http://my-proxy-server-url.com/")
-    @ValueDescription("socks代理配置")
-    val sockshost by value("127.0.0.1")
-    val socksproxy by value(4001)
-
+    val httpproxy by value(HttpProxy())
+    val socksproxy by value(SocksProxy())
+    @Serializable
+    data class SocksProxy(
+        val host: String = "127.0.0.1",
+        val port: Int = 4001
+    )
+    @Serializable
+    data class HttpProxy(
+        val proxy:String = "http://127.0.0.1:80"
+    )
 }

@@ -34,8 +34,8 @@ class SetuImage() {
         engine {
             proxy = when(MySetting.proxyconfig){
                 0 -> null
-                1 -> ProxyBuilder.http(MySetting.httpproxy)
-                2 -> ProxyBuilder.socks(host = MySetting.sockshost,port = MySetting.socksproxy)
+                1 -> ProxyBuilder.http(MySetting.httpproxy.proxy)
+                2 -> ProxyBuilder.socks(host = MySetting.socksproxy.host,port = MySetting.socksproxy.port)
                 else -> null
             }
         }
@@ -80,9 +80,7 @@ class SetuImage() {
             "title: ${title}\n" +
             "author: ${author}\n" +
             "url: ${url}\n" +
-            "tags: ${tags}"+
-            url.replace("img-original","c/600x1200_90_webp/img-master").replace(".jpg","_master1200.jpg")
-
+            "tags: ${tags}"
     }
 
     @KtorExperimentalAPI
@@ -94,22 +92,18 @@ class SetuImage() {
 
     @KtorExperimentalAPI
     suspend fun getlargeImage(): InputStream{
-        //
+        //TODO 经常失效404，尝试寻找一个更稳定的方法，临时方案在源链接访问失败的情况下访问源链接
         val urls = url.replace("img-original","c/600x1200_90_webp/img-master").replace(".jpg","_master1200.jpg")
-        try {
-            return client.get(urls)
+        return try {
+            client.get(urls)
         }catch (e: ClientRequestException){
-            MiraiSetuMain.logger.warning("获取缩略图失败，尝试获取原始图片")
-            return client.get(url)
+            //MiraiSetuMain.logger.warning("获取缩略图失败，尝试获取原始图片")
+            client.get(url)
         }
     }
     // httpclient一定要关闭，否则会一直驻留在内存中。不断创建直到内存溢出
     @KtorExperimentalAPI
     fun close(){
         client.close()
-    }
-
-    fun throwe(){
-        throw Exception("这是一个错误喵")
     }
 }
