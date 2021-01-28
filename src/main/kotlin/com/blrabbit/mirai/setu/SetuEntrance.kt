@@ -1,13 +1,10 @@
 package com.blrabbit.mirai.setu
 
-import com.blrabbit.mirai.MiraiSetuMain
 import com.blrabbit.mirai.Util.Command
 import io.ktor.util.*
 import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
-import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
-import java.io.File
 
 @KtorExperimentalAPI
 fun SetuEntrance() {
