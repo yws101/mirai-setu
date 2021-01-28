@@ -12,18 +12,18 @@ fun SetuEntrance() {
 
         always() {
             if (Command.command_get.contains(message.contentToString())) {
-                    val setu = SetuImage()
-                    setu.getsetu()
-                    group.sendMessage(setu.getstr())
-                    group.sendImage(setu.getlargeImage())
+                val setu = SetuImage()
+                setu.getsetu()
+                group.sendMessage(setu.getstr())
+                group.sendImage(setu.getlargeImage())
                 setu.sendsetu(group)
-                    setu.close()
+                setu.close()
             }
         }
 
         always {
             Command.command_search.startWith(message.contentToString()).let {
-                if (it.isNotEmpty()){
+                if (it.isNotEmpty()) {
                     val setu = SetuImage()
                     setu.getsetu(it)
                     group.sendMessage(setu.getstr())
@@ -133,8 +133,8 @@ fun SetuEntrance() {
 private fun MutableList<String>.startWith(contentToString: String): String {
     this.forEach {
 
-        if (contentToString.startsWith(it)){
-            return contentToString.replace(it,"").replace(" ","")
+        if (contentToString.startsWith(it)) {
+            return contentToString.replace(it, "").replace(" ", "")
         }
     }
     return ""
