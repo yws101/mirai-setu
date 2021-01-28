@@ -12,6 +12,7 @@ import io.ktor.client.request.*
 import io.ktor.util.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import net.mamoe.mirai.contact.Group
 import org.example.mirai.plugin.JsonData.LoliconJson
 import java.io.InputStream
 
@@ -22,7 +23,8 @@ class SetuImage() {
     var uid: Int = 0
     var title: String = ""
     var author: String= ""
-    var url: String = ""
+    var originalurl: String = ""
+    var largeurl: String = ""
     var r18: Boolean = false
     var width: Int = 0
     var height: Int = 0
@@ -49,7 +51,7 @@ class SetuImage() {
 
     @KtorExperimentalAPI
     suspend fun getsetu(keyword:String){
-        val setujson:String = client.get("http://api.lolicon.app/setu?apikey=$APIKEY")
+        val setujson:String = client.get("http://api.lolicon.app/setu?apikey=$APIKEY&keyword=${keyword}")
         parseSetu(setujson)
     }
 
@@ -64,11 +66,12 @@ class SetuImage() {
                 uid = it.uid
                 title = it.title
                 author = it.author
-                url = it.url
+                originalurl = it.url
                 r18 = it.r18
                 width = it.width
                 height = it.height
                 tags = it.tags
+                largeurl = originalurl.replace("img-original","c/600x1200_90_webp/img-master").replace(".jpg","_master1200.jpg")
             }
         } else
             throw Exception(result.code.toString() + result.msg)
@@ -79,27 +82,25 @@ class SetuImage() {
         return "pid：${pid}\n" +
             "title: ${title}\n" +
             "author: ${author}\n" +
-            "url: ${url}\n" +
+            "url: ${originalurl}\n" +
             "tags: ${tags}"
     }
 
     @KtorExperimentalAPI
     suspend fun getoriginalImage(): InputStream{
         return HttpClient().use { client ->
-            client.get(url)
+            client.get(originalurl)
         }
     }
 
     @KtorExperimentalAPI
     suspend fun getlargeImage(): InputStream{
         //TODO 经常失效404，尝试寻找一个更稳定的方法，临时方案在源链接访问失败的情况下访问源链接
-        val urls = url.replace("img-original","c/600x1200_90_webp/img-master").replace(".jpg","_master1200.jpg")
-        return try {
-            client.get(urls)
-        }catch (e: ClientRequestException){
-            //MiraiSetuMain.logger.warning("获取缩略图失败，尝试获取原始图片")
-            client.get(url)
-        }
+        return client.get(largeurl)
+    }
+
+    suspend fun sendsetu(group:Group){
+
     }
     // httpclient一定要关闭，否则会一直驻留在内存中。不断创建直到内存溢出
     @KtorExperimentalAPI

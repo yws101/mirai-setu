@@ -6,6 +6,8 @@ import io.ktor.util.*
 import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
+import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
+import java.io.File
 
 @KtorExperimentalAPI
 fun SetuEntrance() {
@@ -17,19 +19,33 @@ fun SetuEntrance() {
                     setu.getsetu()
                     group.sendMessage(setu.getstr())
                     group.sendImage(setu.getlargeImage())
+                setu.sendsetu(group)
                     setu.close()
             }
         }
 
-        startsWith("搜色图"){
-
-                val setu = SetuImage()
-                setu.getsetu(it)
-                group.sendMessage(setu.getstr())
-                group.sendImage(setu.getlargeImage())
-                setu.close()
+        always {
+            Command.command_search.startWith(message.contentToString()).let {
+                if (it.isNotEmpty()){
+                    val setu = SetuImage()
+                    setu.getsetu(it)
+                    group.sendMessage(setu.getstr())
+                    group.sendImage(setu.getlargeImage())
+                    setu.close()
+                }
+            }
         }
 
+        /*case("早"){
+            val file = File("data/Mirai-setu/out1.amr")
+            val voice = group.uploadVoice(file.toExternalResource())
+            group.sendMessage(voice)
+        }
+        case("晚安"){
+            val file = File("data/Mirai-setu/out2.amr")
+            val voice = group.uploadVoice(file.toExternalResource())
+            group.sendMessage(voice)
+        }*/
         /*always() {
             if (Command.command_get.contains(message.contentToString())) {
                 if (!Mydata.groups.contains(group.id)) {
@@ -115,5 +131,15 @@ fun SetuEntrance() {
                     group.sendMessage("你不是我的主人，我不能听从你的命令")
             }*/
     }
+}
+
+private fun MutableList<String>.startWith(contentToString: String): String {
+    this.forEach {
+
+        if (contentToString.startsWith(it)){
+            return contentToString.replace(it,"").replace(" ","")
+        }
+    }
+    return ""
 }
 
