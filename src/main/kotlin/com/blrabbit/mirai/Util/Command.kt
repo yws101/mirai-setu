@@ -19,14 +19,24 @@ object Command: ReadOnlyPluginConfig("command") {
     val command_bangumitoday by value(mutableListOf("今日番剧"))
     val command_bangumiyesterday by value(mutableListOf("昨日番剧"))
     val command_bangumitomorrow by value(mutableListOf("明日番剧"))
+
     @ValueDescription("以图搜番")
-    val command_searchbangumibyimage by value(mutableListOf("以图搜番","以图识番"))
+    val command_searchbangumibyimage by value(mutableListOf("以图搜番", "以图识番"))
+
     @Serializable
     data class Setucommand(
-        val command_get: MutableList<String> = mutableListOf("色图时间","涩图时间","涩图来","色图来"),
-        val command_search: MutableList<String> =mutableListOf("搜色图","搜涩图"),
+        val command_get: MutableList<String> = mutableListOf("色图时间", "涩图时间", "涩图来", "色图来"),
+        val command_search: MutableList<String> = mutableListOf("搜色图", "搜涩图"),
         val command_on: MutableList<String> = mutableListOf("封印解除"),
         val command_off: MutableList<String> = mutableListOf("封印")
+    )
+
+    @Serializable
+    data class BiliBilicommand(
+        val command_bangumitoday: MutableList<String> = mutableListOf("今日番剧"),
+        val command_bangumiyesterday: String = ("昨日番剧"),
+        val command_bangumitomorrow: MutableList<String> = mutableListOf("明日番剧"),
+        val command_searchbangumibyimage: MutableList<String> = mutableListOf("以图搜番", "以图识番")
     )
 
 }

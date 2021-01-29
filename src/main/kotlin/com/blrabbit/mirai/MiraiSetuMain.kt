@@ -40,4 +40,5 @@ object MiraiSetuMain : KotlinPlugin(
         BiliBiliEntrace()
         logger.info { "色图插件加载完成，版本：$version Java版本:${System.getProperty("java.version")}" }
     }
+
 }

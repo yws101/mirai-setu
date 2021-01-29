@@ -5,44 +5,43 @@ import io.ktor.util.*
 import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
+import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
+import java.io.File
 
 @KtorExperimentalAPI
 fun SetuEntrance() {
     GlobalEventChannel.subscribeGroupMessages {
-
+        //色图时间
         always() {
             if (Command.command_get.contains(message.contentToString())) {
-                val setu = SetuImage()
+                val setu = SetuImage(group)
                 setu.getsetu()
-                group.sendMessage(setu.getstr())
-                group.sendImage(setu.getlargeImage())
-                setu.sendsetu(group)
-                setu.close()
+                setu.getstr()
+                setu.sendsetu()
             }
         }
 
         always {
             Command.command_search.startWith(message.contentToString()).let {
                 if (it.isNotEmpty()) {
-                    val setu = SetuImage()
+                    val setu = SetuImage(group)
                     setu.getsetu(it)
-                    group.sendMessage(setu.getstr())
-                    group.sendImage(setu.getlargeImage())
-                    setu.close()
+                    setu.getstr()
+                    setu.sendsetu()
                 }
             }
         }
 
-        /*case("早"){
+        case("早") {
             val file = File("data/Mirai-setu/out1.amr")
             val voice = group.uploadVoice(file.toExternalResource())
             group.sendMessage(voice)
         }
-        case("晚安"){
+        case("晚安") {
             val file = File("data/Mirai-setu/out2.amr")
             val voice = group.uploadVoice(file.toExternalResource())
             group.sendMessage(voice)
-        }*/
+        }
         /*always() {
             if (Command.command_get.contains(message.contentToString())) {
                 if (!Mydata.groups.contains(group.id)) {
