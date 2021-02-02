@@ -5,6 +5,7 @@ import io.ktor.util.*
 import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
+import net.mamoe.mirai.message.nextMessage
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import java.io.File
 
@@ -20,7 +21,7 @@ fun SetuEntrance() {
                 setu.sendsetu()
             }
         }
-
+        //搜色图
         always {
             Command.command_search.startWith(message.contentToString()).let {
                 if (it.isNotEmpty()) {
@@ -28,10 +29,22 @@ fun SetuEntrance() {
                     setu.getsetu(it)
                     setu.getstr()
                     setu.sendsetu()
+                } else {
+                    group.sendMessage("请输入搜索的关键词")
+                    val msg = nextMessage()
+                    val setu = SetuImage(group)
+                    setu.getsetu(msg.contentToString())
+                    setu.getstr()
+                    setu.sendsetu()
                 }
             }
         }
 
+        case("pixiv直连") {
+            group.sendImage(getpixiv())
+        }
+
+        //TODO 玩具功能发布记得注释掉
         case("早") {
             val file = File("data/Mirai-setu/out1.amr")
             val voice = group.uploadVoice(file.toExternalResource())

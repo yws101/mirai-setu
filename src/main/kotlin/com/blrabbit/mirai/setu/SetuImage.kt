@@ -33,6 +33,12 @@ private val client = HttpClient(OkHttp) {
     }
 }
 
+@KtorExperimentalAPI
+suspend fun getpixiv(): InputStream {
+    return client.get("https://i.pximg.net/img-original/img/2021/01/17/00/30/01/87098740_p0.jpg") {
+        headers.append("referer", "https://www.pixiv.net/")
+    }
+}
 class SetuImage(val subject: Contact) {
     // 图片数据
     var pid: Int = 0
@@ -48,14 +54,14 @@ class SetuImage(val subject: Contact) {
     var tags: List<String> = listOf()
 
     @KtorExperimentalAPI
-    suspend fun getsetu(){
-        val setujson:String = client.get("http://api.lolicon.app/setu?apikey=$APIKEY&size1200=true")
+    suspend fun getsetu() {
+        val setujson: String = client.get("http://api.lolicon.app/setu?apikey=$APIKEY&size1200=true")
         parseSetu(setujson)
     }
 
     @KtorExperimentalAPI
-    suspend fun getsetu(keyword:String){
-        val setujson:String = client.get("http://api.lolicon.app/setu?apikey=$APIKEY&keyword=${keyword}")
+    suspend fun getsetu(keyword: String) {
+        val setujson: String = client.get("http://api.lolicon.app/setu?apikey=$APIKEY&keyword=${keyword}")
         parseSetu(setujson)
     }
 
@@ -75,12 +81,13 @@ class SetuImage(val subject: Contact) {
                 width = it.width
                 height = it.height
                 tags = it.tags
+                //拼装成缩略图URL
                 largeurl = originalurl.replace("img-original", "c/600x1200_90_webp/img-master")
                     .replace(".jpg", "_master1200.jpg")
             }
         } else {
-            MiraiSetuMain.logger.error { "lolicon错误代码：${result.code} 错误信息：${result.msg}" }
             subject.sendMessage("lolicon错误代码：${result.code}\n 错误信息：${result.msg}")
+            MiraiSetuMain.logger.error { "lolicon错误代码：${result.code} 错误信息：${result.msg}" }
             throw Exception("lolicon错误代码：${result.code} 错误信息：${result.msg}")
         }
     }
@@ -97,10 +104,8 @@ class SetuImage(val subject: Contact) {
     }
 
     @KtorExperimentalAPI
-    suspend fun getoriginalImage(): InputStream{
-        return HttpClient().use { client ->
-            client.get(originalurl)
-        }
+    suspend fun getoriginalImage(): InputStream {
+        return client.get(originalurl)
     }
 
     @KtorExperimentalAPI
@@ -120,7 +125,7 @@ class SetuImage(val subject: Contact) {
                 subject.sendMessage("图片获取失败，可能图片已经被原作者删除")
             }
         } catch (e: Exception) {
-            subject.sendMessage("出现错误，请到控制台查看")
+            subject.sendMessage("出现错误" + e.message?.replace(APIKEY, "/$/{APIKEY/}"))
             MiraiSetuMain.logger.error(e)
         }
     }
