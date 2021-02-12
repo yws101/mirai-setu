@@ -1,51 +1,109 @@
 package com.blrabbit.mirai.setu
 
-import com.blrabbit.mirai.Util.Command
+import com.blrabbit.mirai.Util.storge.Mydata
+import com.blrabbit.mirai.Util.checkpower
+import com.blrabbit.mirai.Util.storge.Command
 import io.ktor.util.*
-import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
 import net.mamoe.mirai.message.nextMessage
-import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
-import java.io.File
 
 @KtorExperimentalAPI
 fun SetuEntrance() {
     GlobalEventChannel.subscribeGroupMessages {
         //色图时间
-        always() {
-            if (Command.command_get.contains(message.contentToString())) {
-                val setu = SetuImage(group)
-                setu.getsetu()
-                setu.getstr()
-                setu.sendsetu()
+        always {
+
+            if (Command.setucommand.command_get.contains(message.contentToString())) {
+                if (Mydata.Grouppower[group.id] != null) {
+                    val setu = SetuImage(group)
+                    setu.getsetu()
+                    setu.getstr()
+                    setu.sendsetu()
+                } else {
+                    group.sendMessage("本群尚未开启插件,请联系管理员")
+                }
             }
         }
         //搜色图
         always {
-            Command.command_search.startWith(message.contentToString()).let {
-                if (it.isNotEmpty()) {
-                    val setu = SetuImage(group)
-                    setu.getsetu(it)
-                    setu.getstr()
-                    setu.sendsetu()
-                } else {
-                    group.sendMessage("请输入搜索的关键词")
-                    val msg = nextMessage()
-                    val setu = SetuImage(group)
-                    setu.getsetu(msg.contentToString())
-                    setu.getstr()
-                    setu.sendsetu()
+            Command.setucommand.command_search.startWith(message.contentToString()).let {
+                if (it != null) {
+                    if (Mydata.Grouppower[group.id] != null) {
+                        if (it.isNotEmpty()) {
+                            val setu = SetuImage(group)
+                            setu.getsetu(it)
+                            setu.getstr()
+                            setu.sendsetu()
+                        } else {
+                            group.sendMessage("请输入搜索的关键词")
+                            val msg = nextMessage()
+                            val setu = SetuImage(group)
+                            setu.getsetu(msg.contentToString())
+                            setu.getstr()
+                            setu.sendsetu()
+                        }
+                    } else {
+                        group.sendMessage("本群尚未开启插件,请联系管理员")
+                    }
                 }
             }
         }
 
-        case("pixiv直连") {
-            group.sendImage(getpixiv())
-        }
+        always {
+            if (Command.setucommand.command_off.contains(message.contentToString())) {
+                if (checkpower(sender)) {
+                    if (Mydata.Grouppower[group.id] == null) {
+                        group.sendMessage("本群尚未启用色图插件")
+                    } else {
+                        group.sendMessage("已经关闭了本群的色图插件")
+                        Mydata.Grouppower.remove(group.id)
+                    }
+                } else {
+                    group.sendMessage("才不听你得呢-1")
+                }
+            }
 
-        //TODO 玩具功能发布记得注释掉
-        case("早") {
+            if (Command.setucommand.command_setumode0.contains(message.contentToString())) {
+                if (checkpower(sender)) {
+                    if (Mydata.Grouppower[group.id] == 0) {
+                        group.sendMessage("本群色图已经为普通模式，无需切换")
+                    } else {
+                        group.sendMessage("切换为普通模式")
+                        Mydata.Grouppower.put(group.id, 0)
+                    }
+                } else {
+                    group.sendMessage("才不听你得呢0")
+                }
+            }
+
+            if (Command.setucommand.command_setumode1.contains(message.contentToString())) {
+                if (checkpower(sender)) {
+                    if (Mydata.Grouppower[group.id] == 1) {
+                        group.sendMessage("本群色图已经为R-18模式，无需切换")
+                    } else {
+                        group.sendMessage("切换为R-18模式")
+                        Mydata.Grouppower.put(group.id, 1)
+                    }
+                } else {
+                    group.sendMessage("才不听你得呢1")
+                }
+            }
+
+            if (Command.setucommand.command_setumode2.contains(message.contentToString())) {
+                if (checkpower(sender)) {
+                    if (Mydata.Grouppower[group.id] == 2) {
+                        group.sendMessage("本群色图已经为混合模式，无需切换")
+                    } else {
+                        group.sendMessage("切换为混合模式")
+                        Mydata.Grouppower.put(group.id, 2)
+                    }
+                } else {
+                    group.sendMessage("才不听你得呢2")
+                }
+            }
+        }
+        /*case("早") {
             val file = File("data/Mirai-setu/out1.amr")
             val voice = group.uploadVoice(file.toExternalResource())
             group.sendMessage(voice)
@@ -54,7 +112,7 @@ fun SetuEntrance() {
             val file = File("data/Mirai-setu/out2.amr")
             val voice = group.uploadVoice(file.toExternalResource())
             group.sendMessage(voice)
-        }
+        }*/
         /*always() {
             if (Command.command_get.contains(message.contentToString())) {
                 if (!Mydata.groups.contains(group.id)) {
@@ -142,13 +200,12 @@ fun SetuEntrance() {
     }
 }
 
-private fun MutableList<String>.startWith(contentToString: String): String {
+private fun MutableList<String>.startWith(contentToString: String): String? {
     this.forEach {
-
         if (contentToString.startsWith(it)) {
             return contentToString.replace(it, "").replace(" ", "")
         }
     }
-    return ""
+    return null
 }
 

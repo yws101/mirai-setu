@@ -1,8 +1,8 @@
 package com.blrabbit.mirai.bilibili
 
 import com.blrabbit.mirai.MiraiSetuMain
-import com.blrabbit.mirai.Util.Command
 import com.blrabbit.mirai.Util.startsWith
+import com.blrabbit.mirai.Util.storge.Command
 import com.blrabbit.mirai.setu.GetbangumiTimeline
 import io.ktor.util.*
 import net.mamoe.mirai.contact.Group
@@ -16,7 +16,7 @@ fun BiliBiliEntrace() {
     GlobalEventChannel.subscribeMessages {
         //昨日番剧
         always {
-            if (Command.command_bangumiyesterday.contains(message.contentToString())) {
+            if (Command.bilibilicommand.command_bangumiyesterday.contains(message.contentToString())) {
                 try {
                     MiraiSetuMain.logger.info("请求昨日番剧")
                     subject.sendMessage(GetbangumiTimeline(message.contentToString(), 5))
@@ -28,7 +28,7 @@ fun BiliBiliEntrace() {
         }
         //今日番剧
         always {
-            if (Command.command_bangumitoday.contains(message.contentToString())) {
+            if (Command.bilibilicommand.command_bangumitoday.contains(message.contentToString())) {
                 try {
 
                     subject.sendMessage(GetbangumiTimeline(message.contentToString(), 6))
@@ -40,7 +40,7 @@ fun BiliBiliEntrace() {
         }
         //明日番剧
         always {
-            if (Command.command_bangumitomorrow.contains(message.contentToString())) {
+            if (Command.bilibilicommand.command_bangumitomorrow.contains(message.contentToString())) {
                 try {
                     MiraiSetuMain.logger.info("请求明日番剧")
                     subject.sendMessage(GetbangumiTimeline(message.contentToString(), 7))
@@ -52,7 +52,7 @@ fun BiliBiliEntrace() {
         }
         //番剧搜索
         always {
-            if (message.contentToString().startsWith(Command.command_searchbangumibyimage)) {
+            if (message.contentToString().startsWith(Command.bilibilicommand.command_searchbangumibyimage)) {
                 if (it.isEmpty())
                     subject.sendMessage("搜索信息空")
                 subject.sendMessage("测试功能，可能存在不稳定")

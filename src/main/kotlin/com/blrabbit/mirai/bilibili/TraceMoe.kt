@@ -55,16 +55,14 @@ suspend fun serchmoe(Url: String, group: Group){
     val moe = Json {
         isLenient = true
     }.decodeFromString<Moe>(msg)
-    var string = ""
+    var str = ""
     moe.docs.forEach {
-        string += "番剧名: ${it.title_native}(${it.title_romaji})\n" +
+        str += "番剧名: ${it.title_native}(${it.title_romaji})\n" +
             "中文名: ${it.title_chinese}\n" +
             "相似度: ${it.similarity}\n" +
             "位置: ${it.episode} ${moe.docs[0].at / 60}\n------------------"
     }
-    group.sendMessage(
-            string
-    )
+    group.sendMessage(str)
     //group.sendImage(Downsetu("https://trace.moe/thumbnail.php?anilist_id=${moe.docs[0].anilist_id}&file=${moe.docs[0].filename}&t=${moe.docs[0].at}&token=${moe.docs[0].tokenthumb}"))
 
 }
