@@ -97,6 +97,12 @@ class SetuImage(val subject: Contact) {
             MiraiSetuMain.logger.error { "lolicon错误代码：${result.code} 错误信息：${result.msg}" }
             throw Exception("lolicon错误代码：${result.code} 错误信息：${result.msg}")
         }*/
+        fun parsecode(message: String): String {
+            return message
+                .replace("%code%", result.code.toString())
+                .replace("%msg%", result.msg)
+        }
+
         when (result.code) {
             0 -> {
                 Mydata.quota = result.quota
@@ -119,20 +125,26 @@ class SetuImage(val subject: Contact) {
             }
             // API错误
             401 -> {
-
+                subject.sendMessage(parsecode(Message.Lolicode401))
+                MiraiSetuMain.logger.error { "lolicon错误代码：${result.code} 错误信息：${result.msg}" }
+                throw Exception("lolicon错误代码：${result.code} 错误信息：${result.msg}")
             }
             // 色图搜索404
             404 -> {
-
+                subject.sendMessage(parsecode(Message.lolicode404))
+                MiraiSetuMain.logger.error { "lolicon错误代码：${result.code} 错误信息：${result.msg}" }
+                throw Exception("lolicon错误代码：${result.code} 错误信息：${result.msg}")
             }
             // 调用到达上限
             429 -> {
-
+                subject.sendMessage(parsecode(Message.lolicode429))
+                MiraiSetuMain.logger.error { "lolicon错误代码：${result.code} 错误信息：${result.msg}" }
+                throw Exception("lolicon错误代码：${result.code} 错误信息：${result.msg}")
             }
             // -1和403 错误等一系列未知错误
             else -> {
-                subject.sendMessage("lolicon错误代码：${result.code}\n 错误信息：${result.msg}")
-                MiraiSetuMain.logger.error { "lolicon错误代码：${result.code} 错误信息：${result.msg}" }
+                subject.sendMessage(parsecode(Message.lolicodeelse))
+                MiraiSetuMain.logger.error { "发生此错误请到github反馈错误 lolicon错误代码：${result.code} 错误信息：${result.msg}" }
                 throw Exception("lolicon错误代码：${result.code} 错误信息：${result.msg}")
             }
         }
