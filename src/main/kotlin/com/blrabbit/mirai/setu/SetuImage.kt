@@ -59,19 +59,31 @@ class SetuImage(val subject: Contact) {
 
     @KtorExperimentalAPI
     suspend fun getsetu() {
-        val setujson: String =
-            client.get("http://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=${Mydata.Grouppower[subject.id]}")
-        parseSetu(setujson)
+        try {
+            val setujson: String =
+                client.get("http://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=${Mydata.Grouppower[subject.id]}")
+            parseSetu(setujson)
+        } catch (e: Exception) {
+            subject.sendMessage("出现错误\n" + e.message?.replace(MySetting.APIKEY, "/$/{APIKEY/}"))
+            MiraiSetuMain.logger.error(e)
+            throw e
+        }
     }
 
     @KtorExperimentalAPI
     suspend fun getsetu(keyword: String) {
-        val setujson: String =
-            client.get("http://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&keyword=${keyword}&r18=${Mydata.Grouppower[subject.id]}\"")
-        parseSetu(setujson)
+        try {
+            val setujson: String =
+                client.get("http://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&keyword=${keyword}&r18=${Mydata.Grouppower[subject.id]}\"")
+            parseSetu(setujson)
+        } catch (e: Exception) {
+            subject.sendMessage("出现错误\n" + e.message?.replace(MySetting.APIKEY, "/$/{APIKEY/}"))
+            MiraiSetuMain.logger.error(e)
+            throw e
+        }
     }
 
-    private suspend fun parseSetu(setujson: String) {
+    private fun parseSetu(setujson: String) {
         val result: LoliconJson = Json.decodeFromString(setujson)
         fun parsecode(message: String): String {
             return message
@@ -101,27 +113,23 @@ class SetuImage(val subject: Contact) {
             }
             // API错误
             401 -> {
-                subject.sendMessage(parsecode(Message.Lolicode401))
                 MiraiSetuMain.logger.error { "lolicon错误代码：${result.code} 错误信息：${result.msg}" }
-                throw Exception("lolicon错误代码：${result.code} 错误信息：${result.msg}")
+                throw Exception(parsecode(Message.Lolicode401))
             }
             // 色图搜索404
             404 -> {
-                subject.sendMessage(parsecode(Message.lolicode404))
                 MiraiSetuMain.logger.error { "lolicon错误代码：${result.code} 错误信息：${result.msg}" }
-                throw Exception("lolicon错误代码：${result.code} 错误信息：${result.msg}")
+                throw Exception(parsecode(Message.lolicode404))
             }
             // 调用到达上限
             429 -> {
-                subject.sendMessage(parsecode(Message.lolicode429))
                 MiraiSetuMain.logger.error { "lolicon错误代码：${result.code} 错误信息：${result.msg}" }
-                throw Exception("lolicon错误代码：${result.code} 错误信息：${result.msg}")
+                throw Exception(parsecode(Message.lolicode429))
             }
             // -1和403 错误等一系列未知错误
             else -> {
-                subject.sendMessage(parsecode(Message.lolicodeelse))
                 MiraiSetuMain.logger.error { "发生此错误请到github反馈错误 lolicon错误代码：${result.code} 错误信息：${result.msg}" }
-                throw Exception("lolicon错误代码：${result.code} 错误信息：${result.msg}")
+                throw Exception(parsecode(Message.lolicodeelse))
             }
         }
     }
@@ -170,6 +178,7 @@ class SetuImage(val subject: Contact) {
         } catch (e: Exception) {
             subject.sendMessage("出现错误" + e.message?.replace(MySetting.APIKEY, "/$/{APIKEY/}"))
             MiraiSetuMain.logger.error(e)
+            throw e
         }
     }
 
