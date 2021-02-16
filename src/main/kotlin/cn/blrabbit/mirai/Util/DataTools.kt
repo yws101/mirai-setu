@@ -1,4 +1,4 @@
-package com.blrabbit.mirai.Util
+package cn.blrabbit.mirai.Util
 
 //数组判断
 fun String.startsWith(list: MutableList<String>): Boolean {

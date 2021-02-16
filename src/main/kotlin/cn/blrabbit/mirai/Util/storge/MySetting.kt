@@ -1,4 +1,4 @@
-package com.blrabbit.mirai.Util.storge
+package cn.blrabbit.mirai.Util.storge
 
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.ReadOnlyPluginConfig

@@ -1,6 +1,6 @@
-package com.blrabbit.mirai.bilibili
+package cn.blrabbit.mirai.bilibili
 
-import com.blrabbit.mirai.MiraiSetuMain
+import cn.blrabbit.mirai.MiraiSetuMain
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.util.*

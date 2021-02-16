@@ -1,12 +1,12 @@
-package com.blrabbit.mirai
+package cn.blrabbit.mirai
 
-import com.blrabbit.mirai.Util.storge.Command
-import com.blrabbit.mirai.Util.storge.Message
-import com.blrabbit.mirai.Util.storge.MySetting
-import com.blrabbit.mirai.Util.storge.Mydata
-import com.blrabbit.mirai.bilibili.BiliBiliEntrace
-import com.blrabbit.mirai.setu.SetuEntrance
-import com.blrabbit.mirai.setu.closeClient
+import cn.blrabbit.mirai.Util.storge.Command
+import cn.blrabbit.mirai.Util.storge.Message
+import cn.blrabbit.mirai.Util.storge.MySetting
+import cn.blrabbit.mirai.Util.storge.Mydata
+import cn.blrabbit.mirai.bilibili.BiliBiliEntrace
+import cn.blrabbit.mirai.setu.SetuEntrance
+import cn.blrabbit.mirai.setu.closeClient
 import io.ktor.util.*
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
@@ -37,7 +37,7 @@ object MiraiSetuMain : KotlinPlugin(
         Command.reload()   //初始化插件指令
         Message.reload()   //初始化自定义回复
         if (MySetting.APIKEY == "365007185fc06c84ac62e6") {
-            logger.warning { "未设置lolicon的APIKEY，已经切换为公用apikey，可能会遇到调用上限的问题。\n请到(https://api.lolicon.app/#/setu)申请APIKEY并写入配置文件中。" }
+            logger.warning { "未设置lolicon的APIKEY，已经切换为公用apikey，可能会遇到调用上限的问题。\n请到(https://api.lolicon.app/#/setu)按照提示申请APIKEY并写入配置文件中。" }
         }
         SetuEntrance()
         BiliBiliEntrace()

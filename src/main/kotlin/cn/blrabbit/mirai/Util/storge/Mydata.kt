@@ -1,4 +1,4 @@
-package com.blrabbit.mirai.Util.storge
+package cn.blrabbit.mirai.Util.storge
 
 import net.mamoe.mirai.console.data.AutoSavePluginData
 import net.mamoe.mirai.console.data.value

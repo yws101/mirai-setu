@@ -1,8 +1,8 @@
-package com.blrabbit.mirai.bilibili
+package cn.blrabbit.mirai.bilibili
 
-import com.blrabbit.mirai.MiraiSetuMain
-import com.blrabbit.mirai.Util.startsWith
-import com.blrabbit.mirai.Util.storge.Command
+import cn.blrabbit.mirai.MiraiSetuMain
+import cn.blrabbit.mirai.Util.startsWith
+import cn.blrabbit.mirai.Util.storge.Command
 import com.blrabbit.mirai.setu.GetbangumiTimeline
 import io.ktor.util.*
 import net.mamoe.mirai.contact.Group

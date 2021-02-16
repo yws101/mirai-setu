@@ -2,12 +2,11 @@ plugins {
     val kotlinVersion = "1.4.21"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
-
-    id("net.mamoe.mirai-console") version "2.2.1" // mirai-console version
+    id("net.mamoe.mirai-console") version "2.4.0" // mirai-console version
 }
 
 mirai {
-    coreVersion = "2.2.1" // mirai-core version
+    coreVersion = "2.4.0" // mirai-core version
 }
 
 group = "com.blrabbit"

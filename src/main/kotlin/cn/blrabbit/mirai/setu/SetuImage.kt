@@ -1,9 +1,9 @@
-package com.blrabbit.mirai.setu
+package cn.blrabbit.mirai.setu
 
-import com.blrabbit.mirai.MiraiSetuMain
-import com.blrabbit.mirai.Util.storge.Message
-import com.blrabbit.mirai.Util.storge.MySetting
-import com.blrabbit.mirai.Util.storge.Mydata
+import cn.blrabbit.mirai.MiraiSetuMain
+import cn.blrabbit.mirai.Util.storge.Message
+import cn.blrabbit.mirai.Util.storge.MySetting
+import cn.blrabbit.mirai.Util.storge.Mydata
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.okhttp.*

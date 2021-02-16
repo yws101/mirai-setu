@@ -1,9 +1,8 @@
-package com.blrabbit.mirai.Util.storge
+package cn.blrabbit.mirai.Util.storge
 
 import net.mamoe.mirai.console.data.ReadOnlyPluginConfig
 import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
-import org.example.mirai.plugin.JsonData.LoliconJson
 
 object Message : ReadOnlyPluginConfig("Message") {
     @ValueDescription("发送信息的格式，pid(图片pid) p(图片号) uid(作者uid) title(题目) author(作者) originalurl(原始url) r18(是否为r18) width(宽度) height(高度) tags(标签) largeurl(大号缩略图ps.无法保证100%有效)")
