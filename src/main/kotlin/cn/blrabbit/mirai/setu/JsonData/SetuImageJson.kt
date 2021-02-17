@@ -2,6 +2,7 @@ package org.example.mirai.plugin.JsonData
 
 import kotlinx.serialization.Serializable
 
+//色图json数据
 @Serializable
 data class SetuImageJson(
     val pid: Int,

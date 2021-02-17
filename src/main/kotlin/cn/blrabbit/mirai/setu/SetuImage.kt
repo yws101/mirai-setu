@@ -108,6 +108,7 @@ class SetuImage(val subject: Contact) {
                     tags = it.tags
                     //拼装成缩略图URL
                     largeurl = originalurl.replace("img-original", "c/600x1200_90_webp/img-master")
+                        .replace(".png", ".jpg")
                         .replace(".jpg", "_master1200.jpg")
                 }
             }
@@ -155,13 +156,16 @@ class SetuImage(val subject: Contact) {
 
     @KtorExperimentalAPI
     suspend fun getoriginalImage(): InputStream {
-        return client.get(originalurl)
+        return client.get(originalurl.replace("i.pixiv.cat", MySetting.domainproxy)) {
+            headers.append("referer", "https://www.pixiv.net/")
+        }
     }
 
     @KtorExperimentalAPI
     suspend fun getlargeImage(): InputStream {
-        //TODO 经常失效404，尝试寻找一个更稳定的方法
-        return client.get(largeurl)
+        return client.get(largeurl.replace("i.pixiv.cat", MySetting.domainproxy)) {
+            headers.append("referer", "https://www.pixiv.net/")
+        }
     }
 
     @KtorExperimentalAPI
