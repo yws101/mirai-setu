@@ -14,6 +14,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.contact.Contact.Companion.sendImage
+import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.utils.error
 import org.example.mirai.plugin.JsonData.LoliconJson
 import java.io.InputStream
@@ -43,7 +44,7 @@ suspend fun getpixiv(): InputStream {
         headers.append("referer", "https://www.pixiv.net/")
     }
 }*/
-class SetuImage(val subject: Contact) {
+class SetuImage(val subject: Group) {
     // 图片数据
     var pid: Int = 0
     var p: Int = 0
@@ -170,19 +171,30 @@ class SetuImage(val subject: Contact) {
 
     @KtorExperimentalAPI
     suspend fun sendsetu() {
-        try {
-            subject.sendImage(getlargeImage())
-        } catch (e: ClientRequestException) {
+        if (MySetting.useoriginalImage) {
             try {
-                //sleep(1000) //似乎经常错误，停顿一下？没搞明白
                 subject.sendImage(getoriginalImage())
             } catch (e: ClientRequestException) {
                 subject.sendMessage(Message.image404)
+            } catch (e: Exception) {
+                subject.sendMessage("出现错误" + e.message?.replace(MySetting.APIKEY, "/$/{APIKEY/}"))
+                MiraiSetuMain.logger.error(e)
+                throw e
             }
-        } catch (e: Exception) {
-            subject.sendMessage("出现错误" + e.message?.replace(MySetting.APIKEY, "/$/{APIKEY/}"))
-            MiraiSetuMain.logger.error(e)
-            throw e
+        } else {
+            try {
+                subject.sendImage(getlargeImage())
+            } catch (e: ClientRequestException) {
+                try {
+                    subject.sendImage(getoriginalImage())
+                } catch (e: ClientRequestException) {
+                    subject.sendMessage(Message.image404)
+                }
+            } catch (e: Exception) {
+                subject.sendMessage("出现错误" + e.message?.replace(MySetting.APIKEY, "/$/{APIKEY/}"))
+                MiraiSetuMain.logger.error(e)
+                throw e
+            }
         }
     }
 

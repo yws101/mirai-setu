@@ -27,6 +27,9 @@ object MySetting : ReadOnlyPluginConfig("setu-config") {
         val proxy: String = "http://127.0.0.1:80"
     )
 
-    @ValueDescription("反向代理的域名，修改为i.pximg.net可以直连")
+    @ValueDescription("反向代理的域名，修改为i.pximg.net可以直连(使用直连稳定性很不错，但是需要上网问题)")
     val domainproxy by value("i.pixiv.cat")
+
+    @ValueDescription("是否使用原图发送。（已知bug，不使用原图发送可以提高发送速度，但是在pc上无法显示图片，手机上无法直接转发）")
+    val useoriginalImage by value(false)
 }
