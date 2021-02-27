@@ -12,11 +12,10 @@ import io.ktor.client.request.*
 import io.ktor.util.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.utils.error
-import org.example.mirai.plugin.JsonData.LoliconJson
+import cn.blrabbit.mirai.setu.jsondata.LoliconJson
 import java.io.InputStream
 
 @KtorExperimentalAPI

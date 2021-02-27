@@ -9,9 +9,9 @@ object Command : ReadOnlyPluginConfig("command") {
     @ValueDescription("色图的一些指令")
     val setucommand by value(Setucommand())
 
-    @ValueDescription("bilibili等一些其他功能的指令")
+    /*@ValueDescription("bilibili等一些其他功能的指令")
     val bilibilicommand by value(BiliBilicommand())
-
+*/
     @Serializable
     data class Setucommand(
         val command_get: MutableList<String> = mutableListOf("色图时间", "涩图时间", "涩图来", "色图来"),
@@ -22,12 +22,12 @@ object Command : ReadOnlyPluginConfig("command") {
         val command_setumode2: MutableList<String> = mutableListOf("混合模式")
     )
 
-    @Serializable
+    /*@Serializable
     data class BiliBilicommand(
         val command_bangumitoday: MutableList<String> = mutableListOf("今日番剧"),
         val command_bangumiyesterday: MutableList<String> = mutableListOf("今日番剧"),
         val command_bangumitomorrow: MutableList<String> = mutableListOf("明日番剧"),
         val command_searchbangumibyimage: MutableList<String> = mutableListOf("以图搜番", "以图识番")
-    )
+    )*/
 
 }
