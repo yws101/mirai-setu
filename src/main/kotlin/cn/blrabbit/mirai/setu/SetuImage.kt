@@ -16,6 +16,7 @@ import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.utils.error
 import cn.blrabbit.mirai.setu.jsondata.LoliconJson
+import okhttp3.internal.addHeaderLenient
 import java.io.InputStream
 
 @KtorExperimentalAPI
@@ -135,6 +136,7 @@ class SetuImage(val subject: Group) {
         }
     }
 
+    // 解析字符串
     private fun parsemessage(message: String): String {
         return message
             .replace("%pid%", pid.toString())
@@ -150,6 +152,7 @@ class SetuImage(val subject: Group) {
             .replace("%largeurl", largeurl)
     }
 
+    // 发送信息（起的啥破方法名字）
     suspend fun getstr() {
         subject.sendMessage(parsemessage(Message.SetuReply))
     }
@@ -157,6 +160,7 @@ class SetuImage(val subject: Group) {
     @KtorExperimentalAPI
     suspend fun getoriginalImage(): InputStream {
         return client.get(originalurl.replace("i.pixiv.cat", MySetting.domainproxy)) {
+            // todo 研究研究为什么会出现上传电脑不显示的问题
             headers.append("referer", "https://www.pixiv.net/")
         }
     }
@@ -164,6 +168,7 @@ class SetuImage(val subject: Group) {
     @KtorExperimentalAPI
     suspend fun getlargeImage(): InputStream {
         return client.get(largeurl.replace("i.pixiv.cat", MySetting.domainproxy)) {
+            // todo 增加本地缓存，读取本地的缓存文件减少重复获取
             headers.append("referer", "https://www.pixiv.net/")
         }
     }
@@ -173,9 +178,11 @@ class SetuImage(val subject: Group) {
         if (MySetting.useoriginalImage) {
             try {
                 subject.sendImage(getoriginalImage())
+                // todo 捕获群上传失败的错误信息返回发送失败的信息（涩图被腾讯拦截）
             } catch (e: ClientRequestException) {
                 subject.sendMessage(Message.image404)
             } catch (e: Exception) {
+                // 隐藏apikey发送到群里去
                 subject.sendMessage("出现错误" + e.message?.replace(MySetting.APIKEY, "/$/{APIKEY/}"))
                 MiraiSetuMain.logger.error(e)
                 throw e
