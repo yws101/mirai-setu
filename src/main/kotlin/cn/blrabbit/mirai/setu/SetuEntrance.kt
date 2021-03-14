@@ -14,7 +14,6 @@ fun SetuEntrance() {
     GlobalEventChannel.subscribeGroupMessages {
         //色图时间
         always {
-
             if (Command.setucommand.command_get.contains(message.contentToString())) {
                 if (Mydata.Grouppower[group.id] != null) {
                     val setu = SetuImage(group)
@@ -50,8 +49,9 @@ fun SetuEntrance() {
                 }
             }
         }
-
+        // 涩图插件开关控制
         always {
+            // 关闭涩图插件
             if (Command.setucommand.command_off.contains(message.contentToString())) {
                 if (checkpower(sender)) {
                     if (Mydata.Grouppower[group.id] == null) {
@@ -64,7 +64,7 @@ fun SetuEntrance() {
                     group.sendMessage(Message.setunopermission)
                 }
             }
-
+            // 设置为普通模式
             if (Command.setucommand.command_setumode0.contains(message.contentToString())) {
                 if (checkpower(sender)) {
                     if (Mydata.Grouppower[group.id] == 0) {
@@ -77,7 +77,7 @@ fun SetuEntrance() {
                     group.sendMessage(Message.setunopermission)
                 }
             }
-
+            // 设置为R-18模式
             if (Command.setucommand.command_setumode1.contains(message.contentToString())) {
                 if (checkpower(sender)) {
                     if (Mydata.Grouppower[group.id] == 1) {
@@ -90,7 +90,7 @@ fun SetuEntrance() {
                     group.sendMessage(Message.setunopermission)
                 }
             }
-
+            // 设置为混合模式
             if (Command.setucommand.command_setumode2.contains(message.contentToString())) {
                 if (checkpower(sender)) {
                     if (Mydata.Grouppower[group.id] == 2) {
@@ -115,4 +115,3 @@ private fun MutableList<String>.startWith(contentToString: String): String? {
     }
     return null
 }
-
