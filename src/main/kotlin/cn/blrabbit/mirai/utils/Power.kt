@@ -1,6 +1,6 @@
-package cn.blrabbit.mirai.Util
+package cn.blrabbit.mirai.utils
 
-import cn.blrabbit.mirai.Util.storge.MySetting
+import cn.blrabbit.mirai.utils.storge.MySetting
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.isOperator
 

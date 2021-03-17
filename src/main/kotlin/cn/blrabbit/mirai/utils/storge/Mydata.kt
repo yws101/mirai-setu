@@ -1,9 +1,9 @@
-package cn.blrabbit.mirai.Util.storge
+package cn.blrabbit.mirai.utils.storge
 
 import net.mamoe.mirai.console.data.AutoSavePluginData
 import net.mamoe.mirai.console.data.value
 
-object Mydata: AutoSavePluginData("setu-data") {
+object Mydata : AutoSavePluginData("setu-data") {
     // 记录剩余的涩图请求量
     var quota by value(-1)
 

@@ -1,9 +1,9 @@
 package cn.blrabbit.mirai.setu
 
-import cn.blrabbit.mirai.Util.storge.Mydata
-import cn.blrabbit.mirai.Util.checkpower
-import cn.blrabbit.mirai.Util.storge.Command
-import cn.blrabbit.mirai.Util.storge.Message
+import cn.blrabbit.mirai.utils.storge.Mydata
+import cn.blrabbit.mirai.utils.checkpower
+import cn.blrabbit.mirai.utils.storge.Command
+import cn.blrabbit.mirai.utils.storge.Message
 import io.ktor.util.*
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages

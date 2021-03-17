@@ -1,4 +1,4 @@
-package cn.blrabbit.mirai.Util.storge
+package cn.blrabbit.mirai.utils.storge
 
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.ReadOnlyPluginConfig
@@ -8,10 +8,11 @@ import net.mamoe.mirai.console.data.value
 object MySetting : ReadOnlyPluginConfig("setu-config") {
     @ValueDescription("设置此插件主人的id。")
     val masterid by value(mutableListOf<Long>(123456))
+
     @ValueDescription("设置lolicon的APIKEY，可以不设置，但是每天调用次数会比较少。(https://api.lolicon.app/#/setu)可以获取自己的api来获取稳定的涩图请求量")
     val APIKEY by value("365007185fc06c84ac62e6")
 
-    @ValueDescription("代理设置,0为不使用代理，1为使用http代理，2为使用socks代理")
+    @ValueDescription("代理设置,0为不使用代理，1为使用http代理，2为使用socks代理\n 代理只对色图的获取")
     val proxyconfig by value(0)
     val httpproxy by value(HttpProxy())
     val socksproxy by value(SocksProxy())

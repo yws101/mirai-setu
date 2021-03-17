@@ -1,4 +1,4 @@
-package cn.blrabbit.mirai.Util.storge
+package cn.blrabbit.mirai.utils.storge
 
 import net.mamoe.mirai.console.data.ReadOnlyPluginConfig
 import net.mamoe.mirai.console.data.ValueDescription

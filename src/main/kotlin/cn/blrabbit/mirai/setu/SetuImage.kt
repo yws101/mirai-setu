@@ -1,9 +1,9 @@
 package cn.blrabbit.mirai.setu
 
 import cn.blrabbit.mirai.MiraiSetuMain
-import cn.blrabbit.mirai.Util.storge.Message
-import cn.blrabbit.mirai.Util.storge.MySetting
-import cn.blrabbit.mirai.Util.storge.Mydata
+import cn.blrabbit.mirai.utils.storge.Message
+import cn.blrabbit.mirai.utils.storge.MySetting
+import cn.blrabbit.mirai.utils.storge.Mydata
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.okhttp.*
@@ -16,25 +16,8 @@ import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.utils.error
 import cn.blrabbit.mirai.setu.jsondata.LoliconJson
-import okhttp3.internal.addHeaderLenient
 import java.io.InputStream
 
-@KtorExperimentalAPI
-private val client = HttpClient(OkHttp) {
-    engine {
-        proxy = when (MySetting.proxyconfig) {
-            0 -> null
-            1 -> ProxyBuilder.http(MySetting.httpproxy.proxy)
-            2 -> ProxyBuilder.socks(host = MySetting.socksproxy.host, port = MySetting.socksproxy.port)
-            else -> null
-        }
-    }
-}
-
-@KtorExperimentalAPI
-fun closeClient() {
-    client.close()
-}
 
 //直连pixiv的示例
 /*
@@ -57,6 +40,25 @@ class SetuImage(val subject: Group) {
     var width: Int = 0
     var height: Int = 0
     var tags: List<String> = listOf()
+
+    companion object {
+        @KtorExperimentalAPI
+        private val client = HttpClient(OkHttp) {
+            engine {
+                proxy = when (MySetting.proxyconfig) {
+                    0 -> null
+                    1 -> ProxyBuilder.http(MySetting.httpproxy.proxy)
+                    2 -> ProxyBuilder.socks(host = MySetting.socksproxy.host, port = MySetting.socksproxy.port)
+                    else -> null
+                }
+            }
+        }
+
+        @KtorExperimentalAPI
+        fun closeClient() {
+            client.close()
+        }
+    }
 
     @KtorExperimentalAPI
     suspend fun getsetu() {

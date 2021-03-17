@@ -1,5 +1,6 @@
 package cn.blrabbit.mirai
 
+import cn.blrabbit.mirai.saucenao.Saucenao
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeMessages
 import net.mamoe.mirai.message.data.Image
@@ -10,16 +11,20 @@ fun SaucenaoEntrace() {
     GlobalEventChannel.subscribeMessages {
         always {
             if (message.contentToString().startsWith("以图搜图")) {
+                val saucenao = Saucenao(subject)
                 val image = message[Image]
                 if (image == null) {
                     subject.sendMessage("没有图片的说,请在10s内发送图片")
-                    nextMessage(timeoutMillis = 1000) // 挂起协程1000毫秒
-                        .get(Image).let {
-                            subject.sendMessage(it!!.queryUrl())
-                        }
-                    subject.sendMessage("协程释放")
+                    val next = nextMessage()[Image]
+                    if (next == null) {
+                        subject.sendMessage("没有获取图片")
+                    } else {
+                        saucenao.search(next)
+                        saucenao.sendmessage()
+                    }
                 } else {
-                    subject.sendMessage(image.queryUrl())
+                    saucenao.search(image)
+                    saucenao.sendmessage()
                 }
             }
         }
