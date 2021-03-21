@@ -12,7 +12,9 @@ import kotlinx.serialization.json.Json
 import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.Image.Key.queryUrl
-import okhttp3.internal.ignoreIoExceptions
+import net.mamoe.mirai.message.data.PlainText
+import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
+import java.io.InputStream
 import java.net.URLDecoder
 import java.nio.charset.Charset
 
@@ -55,12 +57,13 @@ class Saucenao(private val subject: Contact) {
                         "output_type=2&" +
                         "api_key=5fe827fb6ef3284d73a031760cb2f7185ce1b380&" +
                         "db=999&" +
-                        "numres=2&" +
+                        "numres=1&" +
                         "url=${URLDecoder.decode(image.queryUrl(), Charset.forName("utf-8"))}"
                 )
+            MiraiSetuMain.logger.info(json)
             parsejson(json)
         } catch (e: Exception) {
-            subject.sendMessage("出现错误\n" + e.message?.replace(MySetting.LoliconAPIKEY, "/$/{APIKEY/}"))
+            subject.sendMessage("出现错误\n" + e.message?.replace(MySetting.SauceNAOAPIKEY, "/$/{APIKEY/}"))
             MiraiSetuMain.logger.error(e)
             throw e
         }
@@ -70,7 +73,7 @@ class Saucenao(private val subject: Contact) {
         val result: SaucenaoJson = Json {
             ignoreUnknownKeys = true
         }.decodeFromString(json)
-        result.result.forEach {
+        result.results.forEach {
             data.add(
                 Suacenaodata(
                     similarity = it.header.similarity,
@@ -82,7 +85,12 @@ class Saucenao(private val subject: Contact) {
         }
     }
 
+    @KtorExperimentalAPI
     suspend fun sendmessage() {
-        subject.sendMessage(data.toString())
+        val image = client.get<InputStream>(data[0].thumbnail).uploadAsImage(subject)
+        subject.sendMessage(
+            PlainText("搜图结果\n标题：${data[0].title}\n相似度：${data[0].similarity}\n源链接：${data[0].ext_urls}")
+                + image
+        )
     }
 }

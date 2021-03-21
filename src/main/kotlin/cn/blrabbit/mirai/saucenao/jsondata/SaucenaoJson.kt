@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class SaucenaoJson(
     // 返回值判断查询是否成功
     val header: Header,
-    val result: List<Result>
+    val results: List<Result>
 
 ) {
     @Serializable
@@ -28,7 +28,7 @@ data class SaucenaoJson(
         @Serializable
         data class Data(
             val ext_urls: List<String>, // 原链接地址
-            val title: String // 标题
+            val title: String = ""// 标题
         )
     }
 
