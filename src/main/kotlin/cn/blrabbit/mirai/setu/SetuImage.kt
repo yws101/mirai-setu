@@ -64,10 +64,10 @@ class SetuImage(val subject: Group) {
     suspend fun getsetu() {
         try {
             val setujson: String =
-                client.get("http://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&r18=${Mydata.Grouppower[subject.id]}")
+                client.get("http://api.lolicon.app/setu?apikey=${MySetting.LoliconAPIKEY}&r18=${Mydata.Grouppower[subject.id]}")
             parseSetu(setujson)
         } catch (e: Exception) {
-            subject.sendMessage("出现错误\n" + e.message?.replace(MySetting.APIKEY, "/$/{APIKEY/}"))
+            subject.sendMessage("出现错误\n" + e.message?.replace(MySetting.LoliconAPIKEY, "/$/{APIKEY/}"))
             MiraiSetuMain.logger.error(e)
             throw e
         }
@@ -77,10 +77,10 @@ class SetuImage(val subject: Group) {
     suspend fun getsetu(keyword: String) {
         try {
             val setujson: String =
-                client.get("http://api.lolicon.app/setu?apikey=${MySetting.APIKEY}&keyword=${keyword}&r18=${Mydata.Grouppower[subject.id]}\"")
+                client.get("http://api.lolicon.app/setu?apikey=${MySetting.LoliconAPIKEY}&keyword=${keyword}&r18=${Mydata.Grouppower[subject.id]}\"")
             parseSetu(setujson)
         } catch (e: Exception) {
-            subject.sendMessage("出现错误\n" + e.message?.replace(MySetting.APIKEY, "/$/{APIKEY/}"))
+            subject.sendMessage("出现错误\n" + e.message?.replace(MySetting.LoliconAPIKEY, "/$/{APIKEY/}"))
             MiraiSetuMain.logger.error(e)
             throw e
         }
@@ -185,7 +185,7 @@ class SetuImage(val subject: Group) {
                 subject.sendMessage(Message.image404)
             } catch (e: Exception) {
                 // 隐藏apikey发送到群里去
-                subject.sendMessage("出现错误" + e.message?.replace(MySetting.APIKEY, "/$/{APIKEY/}"))
+                subject.sendMessage("出现错误" + e.message?.replace(MySetting.LoliconAPIKEY, "/$/{APIKEY/}"))
                 MiraiSetuMain.logger.error(e)
                 throw e
             }
@@ -199,7 +199,7 @@ class SetuImage(val subject: Group) {
                     subject.sendMessage(Message.image404)
                 }
             } catch (e: Exception) {
-                subject.sendMessage("出现错误" + e.message?.replace(MySetting.APIKEY, "/$/{APIKEY/}"))
+                subject.sendMessage("出现错误" + e.message?.replace(MySetting.LoliconAPIKEY, "/$/{APIKEY/}"))
                 MiraiSetuMain.logger.error(e)
                 throw e
             }

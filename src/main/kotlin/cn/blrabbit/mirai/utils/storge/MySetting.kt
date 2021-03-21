@@ -10,7 +10,10 @@ object MySetting : ReadOnlyPluginConfig("setu-config") {
     val masterid by value(mutableListOf<Long>(123456))
 
     @ValueDescription("设置lolicon的APIKEY，可以不设置，但是每天调用次数会比较少。(https://api.lolicon.app/#/setu)可以获取自己的api来获取稳定的涩图请求量")
-    val APIKEY by value("365007185fc06c84ac62e6")
+    val LoliconAPIKEY by value("365007185fc06c84ac62e6")
+
+    @ValueDescription("设置SauceNAO的APIKEY")
+    val SauceNAOAPIKEY by value("5fe827fb6ef3284d73a031760cb2f7185ce1b380")
 
     @ValueDescription("代理设置,0为不使用代理，1为使用http代理，2为使用socks代理\n 代理只对色图的获取")
     val proxyconfig by value(0)

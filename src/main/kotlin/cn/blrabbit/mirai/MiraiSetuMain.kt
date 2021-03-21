@@ -37,7 +37,7 @@ object MiraiSetuMain : KotlinPlugin(
         Message.reload()   //初始化自定义回复
         // 指令注册
         // MySimpleCommand.register()
-        if (MySetting.APIKEY == "365007185fc06c84ac62e6") {
+        if (MySetting.LoliconAPIKEY == "365007185fc06c84ac62e6") {
             logger.warning { "未设置lolicon的APIKEY，已经切换为公用apikey，可能会遇到调用上限的问题。\n请到(https://api.lolicon.app/#/setu)按照提示申请APIKEY并写入配置文件中。" }
         }
         // todo 暂时注释掉涩图，记得改回来
