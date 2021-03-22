@@ -1,12 +1,14 @@
 package cn.blrabbit.mirai
 
 import cn.blrabbit.mirai.saucenao.Saucenao
+import io.ktor.util.*
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeMessages
 import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.Image.Key.queryUrl
 import net.mamoe.mirai.message.nextMessage
 
+@KtorExperimentalAPI
 fun SaucenaoEntrace() {
     GlobalEventChannel.subscribeMessages {
         always {

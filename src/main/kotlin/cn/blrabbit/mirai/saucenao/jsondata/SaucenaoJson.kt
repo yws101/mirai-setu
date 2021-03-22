@@ -87,6 +87,4 @@ data class SaucenaoJson(
         val created_at: String? = null,
         val ext_urls: List<String> = emptyList()
     )
-
-
 }

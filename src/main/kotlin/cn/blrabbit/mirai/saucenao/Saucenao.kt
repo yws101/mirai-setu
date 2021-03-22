@@ -2,6 +2,7 @@ package cn.blrabbit.mirai.saucenao
 
 import cn.blrabbit.mirai.MiraiSetuMain
 import cn.blrabbit.mirai.saucenao.jsondata.SaucenaoJson
+import cn.blrabbit.mirai.utils.storge.Message
 import cn.blrabbit.mirai.utils.storge.MySetting
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
@@ -20,14 +21,8 @@ import java.nio.charset.Charset
 
 class Saucenao(private val subject: Contact) {
 
-    data class Suacenaodata(
-        var similarity: String, // 相似度
-        var thumbnail: String, // 图片获取链接
-        var ext_urls: List<String>, // 图片源链接
-        var title: String // 图片标题
-    )
-
-    var data: MutableList<Suacenaodata> = mutableListOf()
+    var result: SaucenaoJson.Result? = null
+    val db: String = "5" //数据库
 
     companion object {
         @KtorExperimentalAPI
@@ -56,7 +51,7 @@ class Saucenao(private val subject: Contact) {
                     "https://saucenao.com/search.php?" +
                         "output_type=2&" +
                         "api_key=5fe827fb6ef3284d73a031760cb2f7185ce1b380&" +
-                        "db=999&" +
+                        "db=$db&" +
                         "numres=1&" +
                         "url=${URLDecoder.decode(image.queryUrl(), Charset.forName("utf-8"))}"
                 )
@@ -70,27 +65,52 @@ class Saucenao(private val subject: Contact) {
     }
 
     private fun parsejson(json: String) {
-        val result: SaucenaoJson = Json {
+        val res: SaucenaoJson = Json {
             ignoreUnknownKeys = true
+            isLenient = true
         }.decodeFromString(json)
-        result.results.forEach {
-            data.add(
-                Suacenaodata(
-                    similarity = it.header.similarity,
-                    thumbnail = it.header.thumbnail,
-                    ext_urls = it.data.ext_urls,
-                    title = it.data.title
-                )
-            )
-        }
+        result = res.results[0]
     }
 
     @KtorExperimentalAPI
     suspend fun sendmessage() {
-        val image = client.get<InputStream>(data[0].thumbnail).uploadAsImage(subject)
-        subject.sendMessage(
-            PlainText("搜图结果\n标题：${data[0].title}\n相似度：${data[0].similarity}\n源链接：${data[0].ext_urls}")
-                + image
-        )
+        val image = client.get<InputStream>(result!!.header.thumbnail).uploadAsImage(subject)
+        val msg = when (result!!.header.index_id) {
+            // Index #5: Pixiv Images
+            5 -> {
+                "来源：Pixiv Images\n" +
+                    "题目：${result!!.data.title}\n" +
+                    "相似度：${result!!.header.similarity}\n" +
+                    "pixib id：${result!!.data.pixiv_id}\n" +
+                    "作者：${result!!.data.member_name}\n" +
+                    "作者id：${result!!.data.member_id}\n" +
+                    "源链接：${result!!.data.ext_urls}"
+            }
+            // Index #21: Anime
+            21 -> {
+                "来源：Anime\n" +
+                    "动画名：${result!!.data.source}\n" +
+                    "相似度：${result!!.header.similarity}\n" +
+                    "anidb_id：${result!!.data.pixiv_id}\n" +
+                    "年代：${result!!.data.year}\n" +
+                    "集数：${result!!.data.part}\n" +
+                    "源链接：${result!!.data.ext_urls}"
+            }
+            // Index #34: deviantArt
+            34 -> {
+                "来源：deviantArt\n" +
+                    "题目：${result!!.data.title}\n" +
+                    "相似度：${result!!.header.similarity}\n" +
+                    "图片id：${result!!.data.da_id}\n" +
+                    "作者：${result!!.data.author_name}\n" +
+                    "作者链接：${result!!.data.author_url}\n" +
+                    "源链接：${result!!.data.ext_urls}"
+            }
+            40 -> {
+                "来源：FurAffinity\n"
+            }
+            else -> "暂时无法解析的参数，数据库：${result!!.header.index_name}\n 请把开发者揪出来给他看看结果"
+        }
+        subject.sendMessage(PlainText(msg) + image)
     }
 }
