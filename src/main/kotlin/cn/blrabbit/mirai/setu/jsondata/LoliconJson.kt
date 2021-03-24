@@ -24,4 +24,4 @@ data class LoliconJson(
         val height: Int,
         val tags: List<String>
     )
-}
+} 

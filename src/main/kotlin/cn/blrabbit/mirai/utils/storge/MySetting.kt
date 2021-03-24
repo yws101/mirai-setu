@@ -15,6 +15,9 @@ object MySetting : ReadOnlyPluginConfig("setu-config") {
     @ValueDescription("设置SauceNAO的APIKEY")
     val SauceNAOAPIKEY by value("5fe827fb6ef3284d73a031760cb2f7185ce1b380")
 
+    /*@ValueDescription("设置SauceNAO的数据库")
+    val SauceNAODB by value(5)*/
+
     @ValueDescription("代理设置,0为不使用代理，1为使用http代理，2为使用socks代理\n 代理只对色图的获取")
     val proxyconfig by value(0)
     val httpproxy by value(HttpProxy())

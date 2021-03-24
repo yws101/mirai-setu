@@ -1,6 +1,7 @@
 package cn.blrabbit.mirai
 
 import cn.blrabbit.mirai.saucenao.Saucenao
+import cn.blrabbit.mirai.setu.SetuEntrance
 import cn.blrabbit.mirai.setu.SetuImage
 import cn.blrabbit.mirai.utils.storge.Command
 import cn.blrabbit.mirai.utils.storge.Message
@@ -40,17 +41,9 @@ object MiraiSetuMain : KotlinPlugin(
         if (MySetting.LoliconAPIKEY == "365007185fc06c84ac62e6") {
             logger.warning { "未设置lolicon的APIKEY，已经切换为公用apikey，可能会遇到调用上限的问题。\n请到(https://api.lolicon.app/#/setu)按照提示申请APIKEY并写入配置文件中。" }
         }
-        // todo 暂时注释掉涩图，记得改回来
-        // SetuEntrance()
+        SetuEntrance()
         SaucenaoEntrace()
 
-        GlobalEventChannel.subscribeMessages {
-            case("协程测试") {
-                subject.sendMessage("开始测试")
-                nextMessage(1000)
-                subject.sendMessage("测试结束")
-            }
-        }
         logger.info { "色图插件加载完成，版本：$version" }
 
     }

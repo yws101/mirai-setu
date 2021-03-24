@@ -1,6 +1,7 @@
 package cn.blrabbit.mirai
 
 import cn.blrabbit.mirai.saucenao.Saucenao
+import cn.blrabbit.mirai.utils.storge.Command
 import io.ktor.util.*
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeMessages
@@ -12,7 +13,7 @@ import net.mamoe.mirai.message.nextMessage
 fun SaucenaoEntrace() {
     GlobalEventChannel.subscribeMessages {
         always {
-            if (message.contentToString().startsWith("以图搜图")) {
+            if (message.contentToString().startsWith(Command.command_saucennao)) {
                 val saucenao = Saucenao(subject)
                 val image = message[Image]
                 if (image == null) {
@@ -31,4 +32,12 @@ fun SaucenaoEntrace() {
             }
         }
     }
+}
+
+private fun String.startsWith(commandSaucennao: MutableList<String>): Boolean {
+    commandSaucennao.forEach {
+        if (this.startsWith(it))
+            return true
+    }
+    return false
 }

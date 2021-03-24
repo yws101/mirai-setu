@@ -2,7 +2,6 @@ package cn.blrabbit.mirai.saucenao
 
 import cn.blrabbit.mirai.MiraiSetuMain
 import cn.blrabbit.mirai.saucenao.jsondata.SaucenaoJson
-import cn.blrabbit.mirai.utils.storge.Message
 import cn.blrabbit.mirai.utils.storge.MySetting
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
@@ -22,7 +21,7 @@ import java.nio.charset.Charset
 class Saucenao(private val subject: Contact) {
 
     var result: SaucenaoJson.Result? = null
-    val db: String = "5" //数据库
+    private val db: String = "5" //数据库
 
     companion object {
         @KtorExperimentalAPI
@@ -50,7 +49,7 @@ class Saucenao(private val subject: Contact) {
                 client.get(
                     "https://saucenao.com/search.php?" +
                         "output_type=2&" +
-                        "api_key=5fe827fb6ef3284d73a031760cb2f7185ce1b380&" +
+                        "api_key=${MySetting.SauceNAOAPIKEY}&" +
                         "db=$db&" +
                         "numres=1&" +
                         "url=${URLDecoder.decode(image.queryUrl(), Charset.forName("utf-8"))}"
@@ -81,7 +80,7 @@ class Saucenao(private val subject: Contact) {
                 "来源：Pixiv Images\n" +
                     "题目：${result!!.data.title}\n" +
                     "相似度：${result!!.header.similarity}\n" +
-                    "pixib id：${result!!.data.pixiv_id}\n" +
+                    "pixiv id：${result!!.data.pixiv_id}\n" +
                     "作者：${result!!.data.member_name}\n" +
                     "作者id：${result!!.data.member_id}\n" +
                     "源链接：${result!!.data.ext_urls}"
