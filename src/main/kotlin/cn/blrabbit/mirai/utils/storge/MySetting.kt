@@ -44,5 +44,5 @@ object MySetting : ReadOnlyPluginConfig("setu-config") {
     val useoriginalImage by value(false)
 
     @ValueDescription("设置涩图的自动撤回时间\n单位毫秒,-1为不撤回")
-    val seturecall by value(-1)
+    val seturecall: Long by value(-1L)
 }

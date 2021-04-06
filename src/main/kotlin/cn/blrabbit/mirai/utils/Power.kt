@@ -1,5 +1,6 @@
 package cn.blrabbit.mirai.utils
 
+import cn.blrabbit.mirai.MiraiSetuMain
 import cn.blrabbit.mirai.utils.storge.MySetting
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.isOperator
@@ -16,7 +17,10 @@ fun checkpower(sender: Member): Boolean {
                 return true
             return sender.isOperator()
         }
-        else -> return false
+        else -> {
+            MiraiSetuMain.logger.warning("权限设置信息错误，请检查权限模式配置")
+            return false
+        }
     }
     return false
 }

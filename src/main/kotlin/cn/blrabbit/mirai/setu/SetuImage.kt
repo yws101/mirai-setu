@@ -16,6 +16,7 @@ import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.utils.error
 import cn.blrabbit.mirai.setu.jsondata.LoliconJson
+import net.mamoe.mirai.message.MessageReceipt
 import java.io.InputStream
 
 
@@ -29,17 +30,20 @@ suspend fun getpixiv(): InputStream {
 }*/
 class SetuImage(val subject: Group) {
     // 图片数据
-    var pid: Int = 0
-    var p: Int = 0
-    var uid: Int = 0
-    var title: String = ""
-    var author: String = ""
-    var originalurl: String = ""
-    var largeurl: String = ""
-    var r18: Boolean = false
-    var width: Int = 0
-    var height: Int = 0
-    var tags: List<String> = listOf()
+    private var pid: Int = 0
+    private var p: Int = 0
+    private var uid: Int = 0
+    private var title: String = ""
+    private var author: String = ""
+    private var originalurl: String = ""
+    private var largeurl: String = ""
+    private var r18: Boolean = false
+    private var width: Int = 0
+    private var height: Int = 0
+    private var tags: List<String> = listOf()
+
+    private lateinit var imagemsg: MessageReceipt<Group>
+    private lateinit var setuinfomsg: MessageReceipt<Group>
 
     companion object {
         @KtorExperimentalAPI
@@ -155,8 +159,8 @@ class SetuImage(val subject: Group) {
     }
 
     // 发送信息（起的啥破方法名字）
-    suspend fun getstr() {
-        subject.sendMessage(parsemessage(Message.SetuReply))
+    suspend fun sendsetuinfo() {
+        setuinfomsg = subject.sendMessage(parsemessage(Message.SetuReply))
     }
 
     @KtorExperimentalAPI
@@ -179,7 +183,7 @@ class SetuImage(val subject: Group) {
     suspend fun sendsetu() {
         if (MySetting.useoriginalImage) {
             try {
-                subject.sendImage(getoriginalImage())
+                imagemsg = subject.sendImage(getoriginalImage())
                 // todo 捕获群上传失败的错误信息返回发送失败的信息（涩图被腾讯拦截）
             } catch (e: ClientRequestException) {
                 subject.sendMessage(Message.image404)
@@ -191,10 +195,10 @@ class SetuImage(val subject: Group) {
             }
         } else {
             try {
-                subject.sendImage(getlargeImage())
+                imagemsg = subject.sendImage(getlargeImage())
             } catch (e: ClientRequestException) {
                 try {
-                    subject.sendImage(getoriginalImage())
+                    imagemsg = subject.sendImage(getoriginalImage())
                 } catch (e: ClientRequestException) {
                     subject.sendMessage(Message.image404)
                 }
@@ -206,4 +210,16 @@ class SetuImage(val subject: Group) {
         }
     }
 
+    fun recall(millis: Long) {
+        if (millis > 0) {
+            try {
+                imagemsg.recallIn(millis = millis)
+            } catch (e: Exception) {
+            }
+            try {
+                setuinfomsg.recallIn(millis = millis)
+            } catch (e: Exception) {
+            }
+        }
+    }
 }

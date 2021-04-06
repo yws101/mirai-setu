@@ -4,6 +4,7 @@ import cn.blrabbit.mirai.utils.storge.Mydata
 import cn.blrabbit.mirai.utils.checkpower
 import cn.blrabbit.mirai.utils.storge.Command
 import cn.blrabbit.mirai.utils.storge.Message
+import cn.blrabbit.mirai.utils.storge.MySetting
 import io.ktor.util.*
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
@@ -21,8 +22,9 @@ fun SetuEntrance() {
                 if (Mydata.Grouppower[group.id] != null) {
                     val setu = SetuImage(group)
                     setu.getsetu()
-                    setu.getstr()
+                    setu.sendsetuinfo()
                     setu.sendsetu()
+                    setu.recall(MySetting.seturecall)
                 } else {
                     group.sendMessage(Message.setumodeoff)
                 }
@@ -36,15 +38,17 @@ fun SetuEntrance() {
                         if (it.isNotEmpty()) {
                             val setu = SetuImage(group)
                             setu.getsetu(it)
-                            setu.getstr()
+                            setu.sendsetuinfo()
                             setu.sendsetu()
+                            setu.recall(MySetting.seturecall)
                         } else {
                             group.sendMessage(Message.setusearchkey)
                             val msg = nextMessage()
                             val setu = SetuImage(group)
                             setu.getsetu(msg.contentToString())
-                            setu.getstr()
+                            setu.sendsetuinfo()
                             setu.sendsetu()
+                            setu.recall(MySetting.seturecall)
                         }
                     } else {
                         group.sendMessage(Message.setumodeoff)
