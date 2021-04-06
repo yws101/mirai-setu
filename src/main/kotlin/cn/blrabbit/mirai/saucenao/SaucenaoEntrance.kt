@@ -6,7 +6,8 @@ import io.ktor.util.*
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeMessages
 import net.mamoe.mirai.message.data.Image
-import net.mamoe.mirai.message.data.Image.Key.queryUrl
+import net.mamoe.mirai.message.data.MessageSource.Key.quote
+import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.message.nextMessage
 
 @KtorExperimentalAPI
@@ -33,6 +34,7 @@ fun SaucenaoEntrace() {
         }
     }
 }
+
 
 private fun String.startsWith(commandSaucennao: MutableList<String>): Boolean {
     commandSaucennao.forEach {

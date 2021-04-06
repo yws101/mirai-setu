@@ -12,6 +12,9 @@ import net.mamoe.mirai.message.nextMessage
 @KtorExperimentalAPI
 fun SetuEntrance() {
     GlobalEventChannel.subscribeGroupMessages {
+        case("好耶") {
+
+        }
         //色图时间
         always {
             if (Command.command_get.contains(message.contentToString())) {
@@ -49,6 +52,8 @@ fun SetuEntrance() {
                 }
             }
         }
+
+
         // 涩图插件开关控制
         always {
             // 关闭涩图插件
