@@ -21,7 +21,7 @@ import java.nio.charset.Charset
 class Saucenao(private val subject: Contact) {
 
     var result: SaucenaoJson.Result? = null
-    private val db: String = "5" //数据库
+/*    private val db: String = "5" //数据库*/
 
     companion object {
         @KtorExperimentalAPI
@@ -50,7 +50,7 @@ class Saucenao(private val subject: Contact) {
                     "https://saucenao.com/search.php?" +
                         "output_type=2&" +
                         "api_key=${MySetting.SauceNAOAPIKEY}&" +
-                        "db=$db&" +
+                        "db=${MySetting.SauceNAODB}&" +
                         "numres=1&" +
                         "url=${URLDecoder.decode(image.queryUrl(), Charset.forName("utf-8"))}"
                 )
