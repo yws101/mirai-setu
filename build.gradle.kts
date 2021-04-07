@@ -10,7 +10,7 @@ mirai {
 }
 
 group = "com.blrabbit"
-version = "1.1.0-dev"
+version = "1.1.0"
 
 repositories {
     mavenLocal()
