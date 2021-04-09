@@ -1,4 +1,4 @@
-package cn.blrabbit.mirai.setu
+package cn.blrabbit.mirai.lolicon
 
 import cn.blrabbit.mirai.utils.storge.Mydata
 import cn.blrabbit.mirai.utils.checkpower

@@ -11,7 +11,6 @@ mirai 是一个在全平台下运行，提供 QQ Android 协议支持的高效�
 <p><a href = "http://www.kyotoanimation.co.jp/">京都动画</a>作品<a href = "https://zh.moegirl.org.cn/zh-hans/%E5%A2%83%E7%95%8C%E7%9A%84%E5%BD%BC%E6%96%B9">《境界的彼方》</a>的<a href = "https://zh.moegirl.org.cn/zh-hans/%E6%A0%97%E5%B1%B1%E6%9C%AA%E6%9D%A5">栗山未来(Kuriyama <b>mirai</b>)</a></p>
 <p><a href = "https://www.crypton.co.jp/">CRYPTON</a>以<a href = "https://www.crypton.co.jp/miku_eng">初音未来</a>为代表的创作与活动<a href = "https://magicalmirai.com/2019/index_en.html">(Magical <b>mirai</b>)</a></p>
 图标以及形象由画师<a href = "https://github.com/DazeCake">DazeCake</a>绘制
-</div>
 
 # mirai-setu
 
@@ -31,7 +30,7 @@ mirai 是一个在全平台下运行，提供 QQ Android 协议支持的高效�
    - 插件兼容mirai-console2.0及以上版本。
    - mirai-console需要java环境，建议使用java11以及以上的版本运行。
 2. 插件下载
-   - 前往本项目的[releases](https://github.com/meaningtree/mirai-setu/releases)下载插件
+   - 前往本项目的[releases](https://github.com/meaningtree/mirai-setu/releases) 下载插件
 3. 插件运行
    - 将本放入mirai-console的plugins的文件夹然后运行mirai-console。
 4. 关于lollicon的注意事项
@@ -73,6 +72,6 @@ mirai 是一个在全平台下运行，提供 QQ Android 协议支持的高效�
 - [ ] 适配ascii2d搜图功能
 - [ ] 提供图片缓存到本地的功能
 - [ ] 提供GUI界面修改配置的功能
-- [ ] 绕过sni审查实现直连pixiv
+- [ ] 绕过sni审查实现直连pixiv 有什么新奇的想法和建议也可以在issue留言给我
 
-- 有什么新奇的想法和建议也可以在issue留言给我
+

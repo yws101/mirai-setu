@@ -9,7 +9,7 @@ mirai {
     coreVersion = "2.5.1" // mirai-core version
 }
 
-group = "com.blrabbit"
+group = "cn.blrabbit"
 version = "1.1.0"
 
 repositories {

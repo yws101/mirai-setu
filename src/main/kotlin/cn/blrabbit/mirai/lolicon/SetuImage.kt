@@ -1,4 +1,4 @@
-package cn.blrabbit.mirai.setu
+package cn.blrabbit.mirai.lolicon
 
 import cn.blrabbit.mirai.MiraiSetuMain
 import cn.blrabbit.mirai.utils.storge.Message
@@ -15,7 +15,7 @@ import kotlinx.serialization.json.Json
 import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.utils.error
-import cn.blrabbit.mirai.setu.jsondata.LoliconJson
+import cn.blrabbit.mirai.lolicon.jsondata.LoliconJson
 import net.mamoe.mirai.message.MessageReceipt
 import java.io.InputStream
 

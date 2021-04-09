@@ -1,8 +1,10 @@
 package cn.blrabbit.mirai
 
+import cn.blrabbit.mirai.fantasyzone.Fantasyzone
+import cn.blrabbit.mirai.fantasyzone.FantasyzoneEntrace
 import cn.blrabbit.mirai.saucenao.Saucenao
-import cn.blrabbit.mirai.setu.SetuEntrance
-import cn.blrabbit.mirai.setu.SetuImage
+import cn.blrabbit.mirai.lolicon.SetuEntrance
+import cn.blrabbit.mirai.lolicon.SetuImage
 import cn.blrabbit.mirai.utils.storge.Command
 import cn.blrabbit.mirai.utils.storge.Message
 import cn.blrabbit.mirai.utils.storge.MySetting
@@ -11,9 +13,6 @@ import io.ktor.util.*
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.console.plugin.version
-import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.subscribeMessages
-import net.mamoe.mirai.message.nextMessage
 import net.mamoe.mirai.utils.info
 import net.mamoe.mirai.utils.warning
 
@@ -43,6 +42,7 @@ object MiraiSetuMain : KotlinPlugin(
         }
         SetuEntrance()
         SaucenaoEntrace()
+        FantasyzoneEntrace()
 
         logger.info { "色图插件加载完成，版本：$version" }
 
@@ -53,6 +53,7 @@ object MiraiSetuMain : KotlinPlugin(
         // 关闭ktor客户端，防止堵塞线程无法关闭
         SetuImage.closeClient()
         Saucenao.closeClient()
+        Fantasyzone.closeClient()
         logger.info { "色图插件已关闭，牛年快乐" }
     }
 }

@@ -1,4 +1,4 @@
-package cn.blrabbit.mirai.setu.jsondata
+package cn.blrabbit.mirai.lolicon.jsondata
 
 import kotlinx.serialization.Serializable
 
@@ -24,4 +24,4 @@ data class LoliconJson(
         val height: Int,
         val tags: List<String>
     )
-} 
+}
