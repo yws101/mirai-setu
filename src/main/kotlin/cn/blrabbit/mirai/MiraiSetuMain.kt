@@ -18,7 +18,7 @@ import net.mamoe.mirai.utils.warning
 
 object Version {
     const val ID = "com.blrabbit.mirai-setu"
-    const val PLUGINVERSION = "1.1.0"
+    const val PLUGINVERSION = "1.1.1-dev"
     const val NAME = "Mirai-setu"
 }
 

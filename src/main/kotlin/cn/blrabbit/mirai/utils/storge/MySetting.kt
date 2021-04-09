@@ -6,7 +6,7 @@ import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
 
 object MySetting : ReadOnlyPluginConfig("setu-config") {
-    @ValueDescription("插件权限控制设置\n1为只有插件主人可以进行配置，2为群管理员也可以配置")
+    @ValueDescription("插件权限控制设置\n0为所有人都可以控制,1为只有插件主人可以进行配置，2为群管理员也可以配置")
     val mastermode by value(1)
 
     @ValueDescription("设置此插件主人的id。")

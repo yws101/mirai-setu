@@ -8,6 +8,9 @@ import net.mamoe.mirai.contact.isOperator
 // 权限判断（获取以后会搞上更好的方法？）
 fun checkpower(sender: Member): Boolean {
     when (MySetting.mastermode) {
+        0 -> {
+            return true
+        }
         1 -> {
             if (MySetting.masterid.contains(sender.id))
                 return true
