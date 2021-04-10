@@ -74,4 +74,10 @@ mirai 是一个在全平台下运行，提供 QQ Android 协议支持的高效�
 - [ ] 提供GUI界面修改配置的功能
 - [ ] 绕过sni审查实现直连pixiv 有什么新奇的想法和建议也可以在issue留言给我
 
+## 鸣谢
 
+感谢Mirai团队
+
+感谢lolicon提供的图片库
+
+感谢fantasyzone提供的图片库
