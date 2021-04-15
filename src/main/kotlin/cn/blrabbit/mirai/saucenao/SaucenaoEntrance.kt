@@ -8,6 +8,7 @@ import net.mamoe.mirai.event.subscribeMessages
 import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import net.mamoe.mirai.message.data.PlainText
+import net.mamoe.mirai.message.data.time
 import net.mamoe.mirai.message.nextMessage
 
 @KtorExperimentalAPI
@@ -18,18 +19,23 @@ fun SaucenaoEntrace() {
                 val saucenao = Saucenao(subject)
                 val image = message[Image]
                 if (image == null) {
-                    subject.sendMessage("没有图片的说,请在10s内发送图片")
-                    val next = nextMessage()[Image]
-                    if (next == null) {
-                        subject.sendMessage("没有获取图片")
-                    } else {
-                        saucenao.search(next)
-                        saucenao.sendmessage()
+                    subject.sendMessage("没有图片的说,请在60s内发送图片")
+                    val nextmsg = nextMessage()
+                    //判断发送的时间
+                    if (nextmsg.time - time < 60) {
+                        val nextimage = nextmsg[Image]
+                        if (nextimage == null) {
+                            subject.sendMessage("没有获取图片")
+                        } else {
+                            saucenao.search(nextimage)
+                            saucenao.sendmessage()
+                        }
                     }
                 } else {
                     saucenao.search(image)
                     saucenao.sendmessage()
                 }
+
             }
         }
     }
