@@ -22,9 +22,7 @@ fun SetuEntrance() {
                 if (Mydata.Grouppower[group.id] != null) {
                     val setu = SetuImage(group)
                     setu.getsetu()
-                    setu.sendsetuinfo()
-                    setu.sendsetu()
-                    setu.recall(MySetting.seturecall)
+                    setu.sendmessage()
                 } else {
                     group.sendMessage(Message.setumodeoff)
                 }
@@ -38,17 +36,13 @@ fun SetuEntrance() {
                         if (it.isNotEmpty()) {
                             val setu = SetuImage(group)
                             setu.getsetu(it)
-                            setu.sendsetuinfo()
-                            setu.sendsetu()
-                            setu.recall(MySetting.seturecall)
+                            setu.sendmessage()
                         } else {
                             group.sendMessage(Message.setusearchkey)
                             val msg = nextMessage()
                             val setu = SetuImage(group)
                             setu.getsetu(msg.contentToString())
-                            setu.sendsetuinfo()
-                            setu.sendsetu()
-                            setu.recall(MySetting.seturecall)
+                            setu.sendmessage()
                         }
                     } else {
                         group.sendMessage(Message.setumodeoff)

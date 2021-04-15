@@ -158,11 +158,6 @@ class SetuImage(val subject: Group) {
             .replace("%largeurl", largeurl)
     }
 
-    // 发送信息（起的啥破方法名字）
-    suspend fun sendsetuinfo() {
-        setuinfomsg = subject.sendMessage(parsemessage(Message.SetuReply))
-    }
-
     @KtorExperimentalAPI
     suspend fun getoriginalImage(): InputStream {
         return client.get(originalurl.replace("i.pixiv.cat", MySetting.domainproxy)) {
@@ -179,8 +174,12 @@ class SetuImage(val subject: Group) {
         }
     }
 
+
     @KtorExperimentalAPI
-    suspend fun sendsetu() {
+    suspend fun sendmessage() {
+        // 发送信息
+        setuinfomsg = subject.sendMessage(parsemessage(Message.SetuReply))
+        // 发送setu
         if (MySetting.useoriginalImage) {
             try {
                 imagemsg = subject.sendImage(getoriginalImage())
@@ -208,18 +207,17 @@ class SetuImage(val subject: Group) {
                 throw e
             }
         }
-    }
-
-    fun recall(millis: Long) {
-        if (millis > 0) {
+        // 撤回图片
+        if (MySetting.seturecall > 0) {
             try {
-                imagemsg.recallIn(millis = millis)
+                imagemsg.recallIn(millis = MySetting.seturecall)
             } catch (e: Exception) {
             }
             try {
-                setuinfomsg.recallIn(millis = millis)
+                setuinfomsg.recallIn(millis = MySetting.seturecall)
             } catch (e: Exception) {
             }
         }
     }
+
 }
