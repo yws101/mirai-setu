@@ -2,14 +2,16 @@ package cn.blrabbit.mirai
 
 import cn.blrabbit.mirai.fantasyzone.Fantasyzone
 import cn.blrabbit.mirai.fantasyzone.FantasyzoneEntrace
-import cn.blrabbit.mirai.saucenao.Saucenao
 import cn.blrabbit.mirai.lolicon.SetuEntrance
 import cn.blrabbit.mirai.lolicon.SetuImage
+import cn.blrabbit.mirai.saucenao.Saucenao
+import cn.blrabbit.mirai.utils.checkupdate
 import cn.blrabbit.mirai.utils.storge.Command
 import cn.blrabbit.mirai.utils.storge.Message
 import cn.blrabbit.mirai.utils.storge.MySetting
 import cn.blrabbit.mirai.utils.storge.Mydata
 import io.ktor.util.*
+import kotlinx.coroutines.async
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.console.plugin.version
@@ -29,8 +31,13 @@ object MiraiSetuMain : KotlinPlugin(
         version = Version.PLUGINVERSION
     )
 ) {
+
     @KtorExperimentalAPI
     override fun onEnable() {
+        // 自动检查更新
+        async {
+            checkupdate(version.toString())
+        }
         MySetting.reload() //初始化设置数据
         Mydata.reload()    //初始化配置数据
         Command.reload()   //初始化插件指令
@@ -44,7 +51,7 @@ object MiraiSetuMain : KotlinPlugin(
         SaucenaoEntrace()
         FantasyzoneEntrace()
 
-        logger.info { "色图插件加载完成，版本：$version" }
+        // logger.info { "色图插件加载完成，版本：$version" }
 
     }
 
