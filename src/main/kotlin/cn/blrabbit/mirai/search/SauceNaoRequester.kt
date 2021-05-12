@@ -1,10 +1,8 @@
-package cn.blrabbit.mirai.saucenao
+package cn.blrabbit.mirai.search
 
-import cn.blrabbit.mirai.MiraiSetuMain
-import cn.blrabbit.mirai.saucenao.jsondata.SaucenaoJson
-import cn.blrabbit.mirai.utils.storge.MySetting
-import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
+import cn.blrabbit.mirai.KtorUtils
+import cn.blrabbit.mirai.PluginMain
+import cn.blrabbit.mirai.config.SettingsConfig
 import io.ktor.client.request.*
 import io.ktor.util.*
 import kotlinx.serialization.decodeFromString
@@ -18,53 +16,33 @@ import java.io.InputStream
 import java.net.URLDecoder
 import java.nio.charset.Charset
 
-class Saucenao(private val subject: Contact) {
+class SauceNaoRequester(private val subject: Contact) {
 
-    var result: SaucenaoJson.Result? = null
-/*    private val db: String = "5" //数据库*/
-
-    companion object {
-        @KtorExperimentalAPI
-        private val client = HttpClient(OkHttp) {
-            // 似乎还不是很需要代理，测试联通网速度很快。
-            /* engine {
-                 proxy = when (MySetting.proxyconfig) {
-                     0 -> null
-                     1 -> ProxyBuilder.http(MySetting.httpproxy.proxy)
-                     2 -> ProxyBuilder.socks(host = MySetting.socksproxy.host, port = MySetting.socksproxy.port)
-                     else -> null
-                 }*/
-        }
-
-        @KtorExperimentalAPI
-        fun closeClient() {
-            client.close()
-        }
-    }
+    private var result: SauceNaoResponse.Result? = null
 
     @KtorExperimentalAPI
     suspend fun search(image: Image) {
         try {
             val json: String =
-                client.get(
+                KtorUtils.normalClient.get(
                     "https://saucenao.com/search.php?" +
                         "output_type=2&" +
-                        "api_key=${MySetting.SauceNAOAPIKEY}&" +
-                        "db=${MySetting.SauceNAODB}&" +
+                        "api_key=${SettingsConfig.sauceNaoApiKey}&" +
+                        "db=${SettingsConfig.sauceNaoDataBaseMode}&" +
                         "numres=1&" +
                         "url=${URLDecoder.decode(image.queryUrl(), Charset.forName("utf-8"))}"
                 )
-            MiraiSetuMain.logger.info(json)
-            parsejson(json)
+            PluginMain.logger.info(json)
+            parseJson(json)
         } catch (e: Exception) {
-            subject.sendMessage("出现错误\n" + e.message?.replace(MySetting.SauceNAOAPIKEY, "/$/{APIKEY/}"))
-            MiraiSetuMain.logger.error(e)
+            subject.sendMessage("出现错误\n" + e.message?.replace(SettingsConfig.sauceNaoApiKey, "/$/{APIKEY/}"))
+            PluginMain.logger.error(e)
             throw e
         }
     }
 
-    private fun parsejson(json: String) {
-        val res: SaucenaoJson = Json {
+    private fun parseJson(json: String) {
+        val res: SauceNaoResponse = Json {
             ignoreUnknownKeys = true
             isLenient = true
         }.decodeFromString(json)
@@ -72,8 +50,8 @@ class Saucenao(private val subject: Contact) {
     }
 
     @KtorExperimentalAPI
-    suspend fun sendmessage() {
-        val image = client.get<InputStream>(result!!.header.thumbnail).uploadAsImage(subject)
+    suspend fun sendResult() {
+        val image = KtorUtils.normalClient.get<InputStream>(result!!.header.thumbnail).uploadAsImage(subject)
         val msg = when (result!!.header.index_id) {
             // Index #5: Pixiv Images
             5 -> {
