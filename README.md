@@ -81,3 +81,5 @@ mirai 是一个在全平台下运行, 提供 QQ Android 协议支持的高效率
 感谢lolicon提供的图片库
 
 感谢fantasyzone提供的图片库
+
+感谢 [利姆露酱](https://github.com/RimuruChan) 提供的帮助
