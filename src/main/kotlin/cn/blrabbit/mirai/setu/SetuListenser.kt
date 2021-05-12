@@ -3,6 +3,7 @@ package cn.blrabbit.mirai.setu
 import cn.blrabbit.mirai.PluginMain.checkPermission
 import cn.blrabbit.mirai.config.CommandConfig
 import cn.blrabbit.mirai.config.MessageConfig
+import cn.blrabbit.mirai.config.SettingsConfig
 import cn.blrabbit.mirai.data.SetuData
 import io.ktor.util.*
 import net.mamoe.mirai.event.GlobalEventChannel
@@ -13,35 +14,59 @@ import net.mamoe.mirai.message.nextMessage
 @KtorExperimentalAPI
 fun setuListenerRegister() {
     GlobalEventChannel.subscribeGroupMessages {
+
         //色图时间
         always {
             if (CommandConfig.get.contains(message.contentToString())) {
                 if (SetuData.groupPolicy[group.id] != null) {
-                    val setu = LoliconRequester(group)
-                    group.sendMessage(message.quote() + "Fetching setu...")
-                    setu.requestSetu()
-                    setu.sendSetu()
+                    when (SettingsConfig.requestApi) {
+                        "FantasyZoneApi" -> {
+                            val setu = FantasyZoneRequester(group, source)
+                            group.sendMessage(message.quote() + "Fetching setu...")
+                            if (setu.requestSetu())
+                                setu.sendSetu()
+                        }
+                        "LoliconApi" -> {
+                            val setu = LoliconRequester(group, source)
+                            group.sendMessage(message.quote() + "Fetching setu...")
+                            if (setu.requestSetu())
+                                setu.sendSetu()
+                        }
+                        else -> {
+                            group.sendMessage(message.quote() + "requestApi 配置错误")
+                        }
+                    }
                 } else {
                     group.sendMessage(message.quote() + MessageConfig.setuModeOff)
                 }
             }
         }
+
         //搜色图
         always {
             CommandConfig.search.startWith(message.contentToString()).let {
                 if (it != null) {
                     if (SetuData.groupPolicy[group.id] != null) {
-                        if (it.isNotEmpty()) {
-                            group.sendMessage(message.quote() + "Fetching setu '$it' ...")
-                            val setu = LoliconRequester(group)
-                            setu.requestSetu(it)
-                            setu.sendSetu()
-                        } else {
+                        val msg = it.ifEmpty {
                             group.sendMessage(message.quote() + MessageConfig.setuSearchKeyNotSet)
-                            val msg = nextMessage()
-                            val setu = LoliconRequester(group)
-                            setu.requestSetu(msg.contentToString())
-                            setu.sendSetu()
+                            nextMessage().contentToString()
+                        }
+                        when (SettingsConfig.searchApi) {
+                            "FantasyZoneApi" -> {
+                                val setu = FantasyZoneRequester(group, source)
+                                group.sendMessage(message.quote() + "Fetching setu...")
+                                if (setu.requestSetu(msg))
+                                    setu.sendSetu()
+                            }
+                            "LoliconApi" -> {
+                                val setu = LoliconRequester(group, source)
+                                group.sendMessage(message.quote() + "Fetching setu...")
+                                if (setu.requestSetu(msg))
+                                    setu.sendSetu()
+                            }
+                            else -> {
+                                group.sendMessage(message.quote() + "requestApi 配置错误")
+                            }
                         }
                     } else {
                         group.sendMessage(message.quote() + MessageConfig.setuModeOff)
@@ -49,7 +74,6 @@ fun setuListenerRegister() {
                 }
             }
         }
-
 
         // 涩图插件开关控制
         always {

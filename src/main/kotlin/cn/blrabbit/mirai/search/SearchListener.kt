@@ -9,7 +9,7 @@ import net.mamoe.mirai.message.data.time
 import net.mamoe.mirai.message.nextMessage
 
 @KtorExperimentalAPI
-fun sauceNaoRegister() {
+fun searchListenerRegister() {
     GlobalEventChannel.subscribeMessages {
         always {
             if (message.contentToString().startsWith(CommandConfig.searchByImage)) {

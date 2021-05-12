@@ -4,8 +4,7 @@ import cn.blrabbit.mirai.config.CommandConfig
 import cn.blrabbit.mirai.config.MessageConfig
 import cn.blrabbit.mirai.config.SettingsConfig
 import cn.blrabbit.mirai.data.SetuData
-import cn.blrabbit.mirai.manga.fantasyZoneRegister
-import cn.blrabbit.mirai.search.sauceNaoRegister
+import cn.blrabbit.mirai.search.searchListenerRegister
 import cn.blrabbit.mirai.setu.setuListenerRegister
 import io.ktor.util.*
 import net.mamoe.mirai.console.permission.Permission
@@ -15,6 +14,7 @@ import net.mamoe.mirai.console.permission.PermissionService.Companion.hasPermiss
 import net.mamoe.mirai.console.permission.PermitteeId.Companion.permitteeId
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
+import net.mamoe.mirai.console.plugin.name
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.isOperator
 
@@ -22,7 +22,7 @@ object PluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "cn.blrabbit.mirai",
         name = "mirai-setu",
-        version = "2.0-SNAPSHOT"
+        version = "1.5"
     )
 ) {
 
@@ -35,17 +35,16 @@ object PluginMain : KotlinPlugin(
         CommandConfig.reload()   //初始化插件指令
         MessageConfig.reload()   //初始化自定义回复
         adminPermission = PermissionService.INSTANCE.register(
-            PermissionId("setu", "admin"),
+            PermissionId(name, "admin"),
             "Admin Permission"
         )
         setuListenerRegister()
-        sauceNaoRegister()
-        fantasyZoneRegister()
+        searchListenerRegister()
     }
 
     @KtorExperimentalAPI
     override fun onDisable() {
-        // 关闭ktor客户端，防止堵塞线程无法关闭
+        // 关闭ktor客户端, 防止堵塞线程无法关闭
         KtorUtils.closeClient()
     }
 
@@ -68,7 +67,7 @@ object PluginMain : KotlinPlugin(
                 return sender.permitteeId.hasPermission(adminPermission)
             }
             else -> {
-                PluginMain.logger.warning("权限设置信息错误，请检查权限模式配置")
+                PluginMain.logger.warning("权限设置信息错误, 请检查权限模式配置")
                 return false
             }
         }
