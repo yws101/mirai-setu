@@ -13,49 +13,62 @@ import kotlinx.serialization.json.Json
 import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.message.MessageReceipt
+import net.mamoe.mirai.message.data.MessageSource
+import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import net.mamoe.mirai.utils.error
 import java.io.InputStream
 
-
-//直连pixiv的示例
-/*
-@KtorExperimentalAPI
-suspend fun getPixiv(): InputStream {
-    return client.get("https://i.pximg.net/img-original/img/2021/01/17/00/30/01/87098740_p0.jpg") {
-        headers.append("referer", "https://www.pixiv.net/")
-    }
-}*/
-class LoliconRequester(private val subject: Group) {
+class LoliconRequester(private val subject: Group, private val source: MessageSource) {
     // 图片数据
     private lateinit var imageResponse: LoliconResponse.SetuImageInfo
-    private var largeUrl: String = ""
 
+    @Throws(Throwable::class)
     @KtorExperimentalAPI
-    suspend fun requestSetu() {
+    suspend fun requestSetu(): Boolean {
         try {
             val response: String =
-                KtorUtils.proxyClient.get("http://api.lolicon.app/setu?apikey=${SettingsConfig.loliconApiKey}&r18=${SetuData.groupPolicy[subject.id]}")
+                KtorUtils.proxyClient.get(
+                    "http://api.lolicon.app/setu?apikey=${
+                        SettingsConfig.loliconApiKey
+                    }&r18=${
+                        SetuData.groupPolicy[subject.id]
+                    }"
+                )
             parseSetu(response)
-        } catch (e: Exception) {
-            subject.sendMessage("出现错误\n" + e.message?.replace(SettingsConfig.loliconApiKey, "/$/{APIKEY/}"))
-            PluginMain.logger.error(e)
+        } catch (e: RemoteApiException) {
+            subject.sendMessage(source.quote() + "出现错误: ${e.message}")
+            return false
+        } catch (e: Throwable) {
+            subject.sendMessage(source.quote() + "出现错误, 请联系管理员检查后台或重试")
             throw e
         }
+        return true
     }
 
+    @Throws(Throwable::class)
     @KtorExperimentalAPI
-    suspend fun requestSetu(keyword: String) {
+    suspend fun requestSetu(keyword: String): Boolean {
         try {
             val setuResponse: String =
-                KtorUtils.proxyClient.get("http://api.lolicon.app/setu?apikey=${SettingsConfig.loliconApiKey}&keyword=${keyword}&r18=${SetuData.groupPolicy[subject.id]}\"")
+                KtorUtils.proxyClient.get(
+                    "http://api.lolicon.app/setu?apikey=${
+                        SettingsConfig.loliconApiKey
+                    }&keyword=${keyword}&r18=${
+                        SetuData.groupPolicy[subject.id]
+                    }"
+                )
             parseSetu(setuResponse)
-        } catch (e: Exception) {
-            subject.sendMessage("出现错误\n" + e.message?.replace(SettingsConfig.loliconApiKey, "/$/{APIKEY/}"))
-            PluginMain.logger.error(e)
+        } catch (e: RemoteApiException) {
+            subject.sendMessage(source.quote() + "出现错误: ${e.message}")
+            return false
+        } catch (e: Throwable) {
+            subject.sendMessage(source.quote() + "出现未知错误, 请联系管理员检查后台或重试")
             throw e
         }
+        return true
     }
 
+    @Throws(Throwable::class)
     private fun parseSetu(rawJson: String) {
         val loliconResponse: LoliconResponse = Json.decodeFromString(rawJson)
         fun parseErrCode(message: String): String {
@@ -68,34 +81,29 @@ class LoliconRequester(private val subject: Group) {
             0 -> {
                 SetuData.quota = loliconResponse.quota
                 loliconResponse.data?.get(0)?.let {
-                    PluginMain.logger.info("剩余调用次数 ${loliconResponse.quota}")
-                    //拼装成缩略图URL
+                    PluginMain.logger.info("LoliconApi 剩余调用次数 ${loliconResponse.quota}")
                     imageResponse = it
-                    largeUrl = imageResponse.url
-                        .replace("img-original", "c/600x1200_90_webp/img-master")
-                        .replace(".png", ".jpg")
-                        .replace(".jpg", "_master1200.jpg")
                 }
             }
             // API错误
             401 -> {
                 PluginMain.logger.error { "lolicon 错误代码：${loliconResponse.code} 错误信息：${loliconResponse.msg}" }
-                throw Exception(parseErrCode(MessageConfig.setuFailureCode401))
+                throw RemoteApiException(parseErrCode(MessageConfig.setuFailureCode401))
             }
             // 色图搜索404
             404 -> {
                 PluginMain.logger.error { "lolicon 错误代码：${loliconResponse.code} 错误信息：${loliconResponse.msg}" }
-                throw Exception(parseErrCode(MessageConfig.setuFailureCode404))
+                throw RemoteApiException(parseErrCode(MessageConfig.setuFailureCode404))
             }
             // 调用到达上限
             429 -> {
                 PluginMain.logger.error { "lolicon 错误代码：${loliconResponse.code} 错误信息：${loliconResponse.msg}" }
-                throw Exception(parseErrCode(MessageConfig.setuFailureCode429))
+                throw RemoteApiException(parseErrCode(MessageConfig.setuFailureCode429))
             }
             // -1和403 错误等一系列未知错误
             else -> {
                 PluginMain.logger.error { "发生此错误请到github反馈错误 lolicon错误代码：${loliconResponse.code} 错误信息：${loliconResponse.msg}" }
-                throw Exception(parseErrCode(MessageConfig.setuFailureCodeElse))
+                throw RemoteApiException(parseErrCode(MessageConfig.setuFailureCodeElse))
             }
         }
     }
@@ -108,73 +116,45 @@ class LoliconRequester(private val subject: Group) {
             .replace("%uid%", imageResponse.uid.toString())
             .replace("%title%", imageResponse.title)
             .replace("%author%", imageResponse.author)
-            .replace("%original_url%", imageResponse.url)
+            .replace("%url%", imageResponse.url)
             .replace("%r18%", imageResponse.r18.toString())
             .replace("%width%", imageResponse.width.toString())
             .replace("%height%", imageResponse.height.toString())
             .replace("%tags%", imageResponse.tags.toString())
-            .replace("%large_url", largeUrl)
     }
 
     @KtorExperimentalAPI
-    suspend fun getOriginalImage(): InputStream {
-        return KtorUtils.proxyClient.get(imageResponse.url.replace("i.pixiv.cat", SettingsConfig.domainProxy)) {
-            // todo 研究研究为什么会出现上传电脑不显示的问题
+    suspend fun getImage(): InputStream =
+        KtorUtils.proxyClient.get(imageResponse.url.replace("i.pixiv.cat", SettingsConfig.domainProxy)) {
             headers.append("referer", "https://www.pixiv.net/")
         }
-    }
 
-    @KtorExperimentalAPI
-    suspend fun getLargeImage(): InputStream {
-        return KtorUtils.proxyClient.get(largeUrl.replace("i.pixiv.cat", SettingsConfig.domainProxy)) {
-            // todo 增加本地缓存，读取本地的缓存文件减少重复获取
-            headers.append("referer", "https://www.pixiv.net/")
-        }
-    }
-
-
+    @Throws(Throwable::class)
     @KtorExperimentalAPI
     suspend fun sendSetu() {
         // 发送信息
-        val setuInfoMsg = subject.sendMessage(parseMessage(MessageConfig.setuReply))
+        val setuInfoMsg = subject.sendMessage(source.quote() + parseMessage(MessageConfig.setuReply))
         var setuImageMsg: MessageReceipt<Group>? = null
         // 发送setu
-        if (SettingsConfig.useOriginalImage) {
-            try {
-                setuImageMsg = subject.sendImage(getOriginalImage())
-                // todo 捕获群上传失败的错误信息返回发送失败的信息（涩图被腾讯拦截）
-            } catch (e: ClientRequestException) {
-                subject.sendMessage(MessageConfig.setuImage404)
-            } catch (e: Exception) {
-                // 隐藏apikey发送到群里去
-                subject.sendMessage("出现错误" + e.message?.replace(SettingsConfig.loliconApiKey, "/$/{APIKEY/}"))
-                PluginMain.logger.error(e)
-                throw e
-            }
-        } else {
-            try {
-                setuImageMsg = subject.sendImage(getLargeImage())
-            } catch (e: ClientRequestException) {
+        try {
+            setuImageMsg = subject.sendImage(getImage())
+            // todo 捕获群上传失败的错误信息返回发送失败的信息（涩图被腾讯拦截）
+        } catch (e: ClientRequestException) {
+            subject.sendMessage(MessageConfig.setuImage404)
+        } catch (e: Throwable) {
+            subject.sendMessage(source.quote() + "出现错误, 请联系管理员检查后台或重试")
+            throw e
+        } finally {
+            // 撤回图片
+            if (SettingsConfig.autoRecallTime > 0) {
                 try {
-                    setuImageMsg = subject.sendImage(getOriginalImage())
-                } catch (e: ClientRequestException) {
-                    subject.sendMessage(MessageConfig.setuImage404)
+                    setuImageMsg?.recallIn(millis = SettingsConfig.autoRecallTime)
+                } catch (e: Exception) {
                 }
-            } catch (e: Exception) {
-                subject.sendMessage("出现错误" + e.message?.replace(SettingsConfig.loliconApiKey, "/$/{APIKEY/}"))
-                PluginMain.logger.error(e)
-                throw e
-            }
-        }
-        // 撤回图片
-        if (SettingsConfig.autoRecallTime > 0) {
-            try {
-                setuImageMsg?.recallIn(millis = SettingsConfig.autoRecallTime)
-            } catch (e: Exception) {
-            }
-            try {
-                setuInfoMsg.recallIn(millis = SettingsConfig.autoRecallTime)
-            } catch (e: Exception) {
+                try {
+                    setuInfoMsg.recallIn(millis = SettingsConfig.autoRecallTime)
+                } catch (e: Exception) {
+                }
             }
         }
     }

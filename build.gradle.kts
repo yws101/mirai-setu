@@ -6,7 +6,11 @@ plugins {
 }
 
 group = "cn.blrabbit"
-version = "1.2"
+version = "1.5"
+
+dependencies {
+    implementation("com.alibaba:fastjson:1.2.73")
+}
 
 repositories {
     mavenLocal()

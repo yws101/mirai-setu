@@ -86,7 +86,7 @@ class SauceNaoRequester(private val subject: Contact) {
             40 -> {
                 "来源：FurAffinity\n"
             }
-            else -> "暂时无法解析的参数，数据库：${result!!.header.index_name}\n 请把开发者揪出来给他看看结果"
+            else -> "暂时无法解析的参数, 数据库：${result!!.header.index_name}\n 请把开发者揪出来给他看看结果"
         }
         subject.sendMessage(PlainText(msg) + image)
     }
