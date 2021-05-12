@@ -1,6 +1,6 @@
 package org.example.mirai.plugin
 
-import cn.blrabbit.mirai.MiraiSetuMain
+import cn.blrabbit.mirai.PluginMain
 import net.mamoe.mirai.console.MiraiConsole
 import net.mamoe.mirai.console.plugin.PluginManager.INSTANCE.enable
 import net.mamoe.mirai.console.plugin.PluginManager.INSTANCE.load
@@ -12,10 +12,10 @@ import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 suspend fun main() {
     MiraiConsoleTerminalLoader.startAsDaemon()
 
-    MiraiSetuMain.load()
-    MiraiSetuMain.enable()
+    PluginMain.load()
+    PluginMain.enable()
 
-    /*val bot = MiraiConsole.addBot(876334393, "Yangyilin3600") {
+    /*val bot = MiraiConsole.addBot(-, "-") {
         fileBasedDeviceInfo()
     }.alsoLogin()*/
 

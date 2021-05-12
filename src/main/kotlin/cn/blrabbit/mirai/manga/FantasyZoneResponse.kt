@@ -1,9 +1,9 @@
-package cn.blrabbit.mirai.fantasyzone.jsondata
+package cn.blrabbit.mirai.manga
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FantasyZoneJson(
+data class FantasyZoneResponse(
     val description: String,
     val height: String,
     val id: String,

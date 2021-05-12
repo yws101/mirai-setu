@@ -1,13 +1,13 @@
-package cn.blrabbit.mirai.fantasyzone
+package cn.blrabbit.mirai.manga
 
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeMessages
 
-fun FantasyzoneEntrace() {
+fun fantasyZoneRegister() {
     GlobalEventChannel.subscribeMessages {
         case("动漫图片") {
-            val normal = Fantasyzone(subject)
-            normal.sendnormal()
+            val normal = FantasyZoneRequester(subject)
+            normal.sendNormal()
         }
     }
 }

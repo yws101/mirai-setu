@@ -1,18 +1,18 @@
-package cn.blrabbit.mirai.lolicon.jsondata
+package cn.blrabbit.mirai.setu
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoliconJson(
+data class LoliconResponse(
     val code: Int,
     val msg: String = "",
     val quota: Int,
     val quota_min_ttl: Int,
     val count: Int,
-    val data: List<SetuImageJson>? = null
+    val data: List<SetuImageInfo>? = null
 ) {
     @Serializable
-    data class SetuImageJson(
+    data class SetuImageInfo(
         val pid: Int,
         val p: Int,
         val uid: Int,

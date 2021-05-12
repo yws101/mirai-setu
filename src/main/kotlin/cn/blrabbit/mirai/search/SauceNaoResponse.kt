@@ -1,10 +1,10 @@
-package cn.blrabbit.mirai.saucenao.jsondata
+package cn.blrabbit.mirai.search
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SaucenaoJson(
+data class SauceNaoResponse(
     // 返回值判断查询是否成功
     val header: Header,
     val results: List<Result>
