@@ -1,12 +1,15 @@
 package cn.blrabbit.mirai
 
+import cn.blrabbit.mirai.KtorUtils.normalClient
 import cn.blrabbit.mirai.config.CommandConfig
 import cn.blrabbit.mirai.config.MessageConfig
 import cn.blrabbit.mirai.config.SettingsConfig
 import cn.blrabbit.mirai.data.SetuData
 import cn.blrabbit.mirai.search.searchListenerRegister
 import cn.blrabbit.mirai.setu.setuListenerRegister
+import io.ktor.client.request.*
 import io.ktor.util.*
+import kotlinx.coroutines.async
 import net.mamoe.mirai.console.permission.Permission
 import net.mamoe.mirai.console.permission.PermissionId
 import net.mamoe.mirai.console.permission.PermissionService
@@ -15,6 +18,7 @@ import net.mamoe.mirai.console.permission.PermitteeId.Companion.permitteeId
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.console.plugin.name
+import net.mamoe.mirai.console.plugin.version
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.isOperator
 
@@ -30,6 +34,11 @@ object PluginMain : KotlinPlugin(
 
     @KtorExperimentalAPI
     override fun onEnable() {
+
+        async {
+            checkupdate()
+        }
+
         SettingsConfig.reload() //初始化设置数据
         SetuData.reload()    //初始化配置数据
         CommandConfig.reload()   //初始化插件指令
@@ -73,4 +82,16 @@ object PluginMain : KotlinPlugin(
         }
         return false
     }
+
+    suspend fun checkupdate() {
+        val newversion: String =
+            normalClient.get("https://cdn.jsdelivr.net/gh/bloodyrabbit/mirai-setu@main/doc/Version.txt")
+
+        // git给文件加了一个回车我能怎么办呢
+        if (newversion.equals(version.toString() + "\n"))
+            logger.info("色图插件当前版本:$version")
+        else
+            logger.warning("色图插件当前版本：$version，检查到新版本：$newversion 请到 https://github.com/bloodyrabbit/mirai-setu/releases 更新")
+    }
+
 }
