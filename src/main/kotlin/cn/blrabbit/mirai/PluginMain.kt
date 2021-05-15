@@ -73,8 +73,7 @@ object PluginMain : KotlinPlugin(
                 return sender.isOperator()
             }
             3 -> {
-                return (sender.permitteeId.hasPermission(adminPermission) ||
-                    sender.group.permitteeId.hasPermission(adminPermission))
+                return sender.permitteeId.hasPermission(adminPermission)
             }
             else -> {
                 PluginMain.logger.warning("权限设置信息错误, 请检查权限模式配置")
