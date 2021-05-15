@@ -9,7 +9,7 @@ import cn.blrabbit.mirai.search.searchListenerRegister
 import cn.blrabbit.mirai.setu.setuListenerRegister
 import io.ktor.client.request.*
 import io.ktor.util.*
-import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import net.mamoe.mirai.console.permission.Permission
 import net.mamoe.mirai.console.permission.PermissionId
 import net.mamoe.mirai.console.permission.PermissionService
@@ -35,7 +35,7 @@ object PluginMain : KotlinPlugin(
     @KtorExperimentalAPI
     override fun onEnable() {
 
-        async {
+        launch {
             checkupdate()
         }
 
@@ -73,7 +73,8 @@ object PluginMain : KotlinPlugin(
                 return sender.isOperator()
             }
             3 -> {
-                return sender.permitteeId.hasPermission(adminPermission)
+                return (sender.permitteeId.hasPermission(adminPermission) ||
+                    sender.group.permitteeId.hasPermission(adminPermission))
             }
             else -> {
                 PluginMain.logger.warning("权限设置信息错误, 请检查权限模式配置")
@@ -91,7 +92,7 @@ object PluginMain : KotlinPlugin(
         if (newversion.equals(version.toString() + "\n"))
             logger.info("色图插件当前版本:$version")
         else
-            logger.warning("色图插件当前版本：$version，检查到新版本：$newversion 请到 https://github.com/bloodyrabbit/mirai-setu/releases 更新")
+            logger.warning("色图插件当前版本：$version，检查到新版本：${newversion}请到 https://github.com/bloodyrabbit/mirai-setu/releases 更新")
     }
 
 }
