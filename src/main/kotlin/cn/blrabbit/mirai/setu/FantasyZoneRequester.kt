@@ -4,7 +4,6 @@ import cn.blrabbit.mirai.KtorUtils
 import cn.blrabbit.mirai.config.MessageConfig
 import cn.blrabbit.mirai.config.SettingsConfig
 import cn.blrabbit.mirai.data.SetuData
-import com.alibaba.fastjson.JSON
 import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.util.*
@@ -42,7 +41,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
                 )
             )
         } catch (e: Throwable) {
-            subject.sendMessage(source.quote() + "出现未知错误, 请联系管理员检查后台或重试")
+            subject.sendMessage(source.quote() + "出现未知错误, 请联系管理员检查后台或重试\n${e.message}")
             throw e
         }
         return true
@@ -63,7 +62,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
             }
 
         } catch (e: Throwable) {
-            subject.sendMessage(source.quote() + "出现未知错误, 请联系管理员检查后台或重试")
+            subject.sendMessage(source.quote() + "出现未知错误, 请联系管理员检查后台或重试\n${e.message}")
             throw e
         }
         return true
@@ -82,7 +81,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
         } catch (e: ClientRequestException) {
             subject.sendMessage(MessageConfig.setuImage404)
         } catch (e: Throwable) {
-            subject.sendMessage(source.quote() + "出现错误, 请联系管理员检查后台或重试")
+            subject.sendMessage(source.quote() + "出现错误, 请联系管理员检查后台或重试\n${e.message}")
             throw e
         } finally {
             // 撤回图片
