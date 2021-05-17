@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FantasyZoneResponse(
     val id: String?,
+    val code: Int?,
     val description: String?,
     val userId: String?,
     val userName: String?,

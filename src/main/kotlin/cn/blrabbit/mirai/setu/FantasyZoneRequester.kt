@@ -54,13 +54,14 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
         try {
             val jsonResponse: String =
                 KtorUtils.proxyClient.get("https://api.fantasyzone.cc/tu/search.php?search=${search}")  //TODO 适配直接取图
-            if (JSON.parseObject(jsonResponse)["code"] != null) {
+
+            imageResponse = Json.decodeFromString(jsonResponse)
+
+            if (imageResponse.code != null) {
                 subject.sendMessage(source.quote() + "未搜索到图片")
                 return false
             }
-            imageResponse = Json.decodeFromString(
-                jsonResponse
-            )
+
         } catch (e: Throwable) {
             subject.sendMessage(source.quote() + "出现未知错误, 请联系管理员检查后台或重试")
             throw e
