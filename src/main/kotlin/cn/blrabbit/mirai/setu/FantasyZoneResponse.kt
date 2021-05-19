@@ -4,14 +4,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FantasyZoneResponse(
-    val id: String?,
-    val code: Int?,
-    val description: String?,
-    val userId: String?,
-    val userName: String?,
-    val title: String?,
-    val tags: List<String>?,
-    val width: String?,
-    val height: String?,
-    val url: String
+    val id: String? = "null",
+    val code: Int? = 200,
+    val description: String? = "null",
+    val userId: String? = "null",
+    val userName: String= "null",
+    val title: String= "null",
+    val tags: List<String> = listOf("null"),
+    val width: String? = "null",
+    val height: String? = "null",
+    val url: String = "null"
 )
