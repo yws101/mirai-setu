@@ -30,7 +30,7 @@ class SauceNaoRequester(private val subject: Contact) {
                         "api_key=${SettingsConfig.sauceNaoApiKey}&" +
                         "db=${SettingsConfig.sauceNaoDataBaseMode}&" +
                         "numres=1&" +
-                        "url=${URLDecoder.decode(image.queryUrl(), Charset.forName("utf-8"))}"
+                        "url=${URLDecoder.decode(image.queryUrl(),"utf-8")}"
                 )
             PluginMain.logger.info(json)
             parseJson(json)
