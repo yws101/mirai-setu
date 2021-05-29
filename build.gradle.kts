@@ -14,7 +14,7 @@ dependencies {
 
 repositories {
     mavenLocal()
+    maven("https://maven.aliyun.com/repository/public")
     mavenCentral()
-    jcenter()
     maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
