@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "cn.blrabbit"
-version = "1.2.0"
+version = "1.2.1"
 
 dependencies {
      // implementation("com.alibaba:fastjson:1.2.73")
