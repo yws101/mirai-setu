@@ -25,7 +25,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
     @KtorExperimentalAPI
     suspend fun requestSetu(): Boolean {
         try {
-            imageResponse = Json.decodeFromString(
+            imageResponse = Json{coerceInputValues = true}.decodeFromString(
                 KtorUtils.proxyClient.get(
                     "https://api.fantasyzone.cc/tu?type=json&class=${
                         SettingsConfig.fantasyZoneType.replace("random",
@@ -104,14 +104,14 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
     private fun parseMessage(message: String): String {
         return message
             .replace("%url%", imageResponse.url)
-            .replace("%pid%", imageResponse.id.toString())
+            .replace("%pid%", imageResponse.id)
             .replace("%p%", null.toString())
-            .replace("%uid%", imageResponse.userId.toString())
+            .replace("%uid%", imageResponse.userId)
             .replace("%author%", imageResponse.userName)
             .replace("%title%", imageResponse.title)
             .replace("%url%", imageResponse.toString())
-            .replace("%width%", imageResponse.width.toString())
-            .replace("%height%", imageResponse.height.toString())
+            .replace("%width%", imageResponse.width)
+            .replace("%height%", imageResponse.height)
             .replace("%tags%", imageResponse.tags.toString())
     }
 
