@@ -41,7 +41,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
                 )
             )
         } catch (e: Throwable) {
-            subject.sendMessage(source.quote() + "出现未知错误, 请联系管理员检查后台或重试\n${e.message}")
+            subject.sendMessage(source.quote() + "出现错误, 请联系管理员检查后台或重试\n${e.message}")
             throw e
         }
         return true
@@ -58,13 +58,13 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
                 coerceInputValues = true
             }.decodeFromString(jsonResponse)
 
-            if (imageResponse.code != null) {
+            if (imageResponse.code == 404) {
                 subject.sendMessage(source.quote() + "未搜索到图片")
                 return false
             }
 
         } catch (e: Throwable) {
-            subject.sendMessage(source.quote() + "出现未知错误, 请联系管理员检查后台或重试\n${e.message}")
+            subject.sendMessage(source.quote() + "出现错误, 请联系管理员检查后台或重试\n${e.message}")
             throw e
         }
         return true
