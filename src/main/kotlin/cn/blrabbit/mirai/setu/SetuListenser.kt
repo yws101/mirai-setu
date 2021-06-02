@@ -133,6 +133,7 @@ fun setuListenerRegister() {
     }
 }
 
+// 判断词组开头是否包含，不包含返回null
 private fun MutableList<String>.startWith(contentToString: String): String? {
     this.forEach {
         if (contentToString.startsWith(it)) {
