@@ -1,8 +1,8 @@
-package cn.blrabbit.mirai.search
+package moe.ruabbit.mirai.search
 
-import cn.blrabbit.mirai.KtorUtils
-import cn.blrabbit.mirai.PluginMain
-import cn.blrabbit.mirai.config.SettingsConfig
+import moe.ruabbit.mirai.KtorUtils
+import moe.ruabbit.mirai.PluginMain
+import moe.ruabbit.mirai.config.SettingsConfig
 import io.ktor.client.request.*
 import io.ktor.util.*
 import kotlinx.serialization.decodeFromString

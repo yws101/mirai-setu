@@ -1,4 +1,4 @@
-package cn.blrabbit.mirai.setu
+package moe.ruabbit.mirai.setu
 
 import kotlinx.serialization.Serializable
 

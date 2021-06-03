@@ -1,4 +1,4 @@
-package cn.blrabbit.mirai.data
+package moe.ruabbit.mirai.data
 
 import net.mamoe.mirai.console.data.AutoSavePluginData
 import net.mamoe.mirai.console.data.value

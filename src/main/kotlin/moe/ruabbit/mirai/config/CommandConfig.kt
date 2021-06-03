@@ -1,4 +1,4 @@
-package cn.blrabbit.mirai.config
+package moe.ruabbit.mirai.config
 
 import net.mamoe.mirai.console.data.ReadOnlyPluginConfig
 import net.mamoe.mirai.console.data.ValueDescription

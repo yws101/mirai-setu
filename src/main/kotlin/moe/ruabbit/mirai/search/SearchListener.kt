@@ -1,6 +1,6 @@
-package cn.blrabbit.mirai.search
+package moe.ruabbit.mirai.search
 
-import cn.blrabbit.mirai.config.CommandConfig
+import moe.ruabbit.mirai.config.CommandConfig
 import io.ktor.util.*
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeMessages

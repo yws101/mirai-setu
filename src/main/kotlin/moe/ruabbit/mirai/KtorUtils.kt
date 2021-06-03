@@ -1,6 +1,6 @@
-package cn.blrabbit.mirai
+package moe.ruabbit.mirai
 
-import cn.blrabbit.mirai.config.SettingsConfig
+import moe.ruabbit.mirai.config.SettingsConfig
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.okhttp.*

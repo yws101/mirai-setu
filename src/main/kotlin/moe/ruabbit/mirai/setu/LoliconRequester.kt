@@ -1,10 +1,10 @@
-package cn.blrabbit.mirai.setu
+package moe.ruabbit.mirai.setu
 
-import cn.blrabbit.mirai.KtorUtils
-import cn.blrabbit.mirai.PluginMain
-import cn.blrabbit.mirai.config.MessageConfig
-import cn.blrabbit.mirai.config.SettingsConfig
-import cn.blrabbit.mirai.data.SetuData
+import moe.ruabbit.mirai.KtorUtils
+import moe.ruabbit.mirai.PluginMain
+import moe.ruabbit.mirai.config.MessageConfig
+import moe.ruabbit.mirai.config.SettingsConfig
+import moe.ruabbit.mirai.data.SetuData
 import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.util.*

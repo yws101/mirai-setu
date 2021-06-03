@@ -1,12 +1,12 @@
-package cn.blrabbit.mirai
+package moe.ruabbit.mirai
 
-import cn.blrabbit.mirai.KtorUtils.normalClient
-import cn.blrabbit.mirai.config.CommandConfig
-import cn.blrabbit.mirai.config.MessageConfig
-import cn.blrabbit.mirai.config.SettingsConfig
-import cn.blrabbit.mirai.data.SetuData
-import cn.blrabbit.mirai.search.searchListenerRegister
-import cn.blrabbit.mirai.setu.setuListenerRegister
+import moe.ruabbit.mirai.KtorUtils.normalClient
+import moe.ruabbit.mirai.config.CommandConfig
+import moe.ruabbit.mirai.config.MessageConfig
+import moe.ruabbit.mirai.config.SettingsConfig
+import moe.ruabbit.mirai.data.SetuData
+import moe.ruabbit.mirai.search.searchListenerRegister
+import moe.ruabbit.mirai.setu.setuListenerRegister
 import io.ktor.client.request.*
 import io.ktor.util.*
 import kotlinx.coroutines.launch

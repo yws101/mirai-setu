@@ -1,5 +1,5 @@
 plugins {
-    val kotlinVersion = "1.5.0"
+    val kotlinVersion = "1.5.10"
     val miraiVersion = "2.6.5"
 
     kotlin("jvm") version kotlinVersion
@@ -7,7 +7,7 @@ plugins {
     id("net.mamoe.mirai-console") version miraiVersion // mirai-console version
 }
 
-group = "cn.blrabbit"
+group = "moe.ruabbit"
 version = "1.2.1"
 
 dependencies {

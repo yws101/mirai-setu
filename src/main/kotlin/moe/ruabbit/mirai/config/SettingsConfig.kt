@@ -1,4 +1,4 @@
-package cn.blrabbit.mirai.config
+package moe.ruabbit.mirai.config
 
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.ReadOnlyPluginConfig

@@ -1,4 +1,4 @@
-package cn.blrabbit.mirai.search
+package moe.ruabbit.mirai.search
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

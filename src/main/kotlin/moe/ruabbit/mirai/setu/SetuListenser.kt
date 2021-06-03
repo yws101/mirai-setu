@@ -1,10 +1,10 @@
-package cn.blrabbit.mirai.setu
+package moe.ruabbit.mirai.setu
 
-import cn.blrabbit.mirai.PluginMain.checkPermission
-import cn.blrabbit.mirai.config.CommandConfig
-import cn.blrabbit.mirai.config.MessageConfig
-import cn.blrabbit.mirai.config.SettingsConfig
-import cn.blrabbit.mirai.data.SetuData
+import moe.ruabbit.mirai.PluginMain.checkPermission
+import moe.ruabbit.mirai.config.CommandConfig
+import moe.ruabbit.mirai.config.MessageConfig
+import moe.ruabbit.mirai.config.SettingsConfig
+import moe.ruabbit.mirai.data.SetuData
 import io.ktor.util.*
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
