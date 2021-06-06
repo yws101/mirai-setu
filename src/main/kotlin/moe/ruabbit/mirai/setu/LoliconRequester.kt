@@ -28,9 +28,7 @@ class LoliconRequester(private val subject: Group, private val source: MessageSo
         try {
             val response: String =
                 KtorUtils.proxyClient.get(
-                    "http://api.lolicon.app/setu?apikey=${
-                        SettingsConfig.loliconApiKey
-                    }&r18=${
+                    "http://api.lolicon.app/setu?r18=${
                         SetuData.groupPolicy[subject.id]
                     }"
                 )
@@ -51,9 +49,7 @@ class LoliconRequester(private val subject: Group, private val source: MessageSo
         try {
             val setuResponse: String =
                 KtorUtils.proxyClient.get(
-                    "http://api.lolicon.app/setu?apikey=${
-                        SettingsConfig.loliconApiKey
-                    }&keyword=${keyword}&r18=${
+                    "http://api.lolicon.app/setu?keyword=${keyword}&r18=${
                         SetuData.groupPolicy[subject.id]
                     }"
                 )
@@ -79,26 +75,14 @@ class LoliconRequester(private val subject: Group, private val source: MessageSo
 
         when (loliconResponse.code) {
             0 -> {
-                SetuData.quota = loliconResponse.quota
                 loliconResponse.data?.get(0)?.let {
-                    PluginMain.logger.info("LoliconApi 剩余调用次数 ${loliconResponse.quota}")
                     imageResponse = it
                 }
-            }
-            // API错误
-            401 -> {
-                PluginMain.logger.error { "lolicon 错误代码：${loliconResponse.code} 错误信息：${loliconResponse.msg}" }
-                throw RemoteApiException(parseErrCode(MessageConfig.setuFailureCode401))
             }
             // 色图搜索404
             404 -> {
                 PluginMain.logger.error { "lolicon 错误代码：${loliconResponse.code} 错误信息：${loliconResponse.msg}" }
                 throw RemoteApiException(parseErrCode(MessageConfig.setuFailureCode404))
-            }
-            // 调用到达上限
-            429 -> {
-                PluginMain.logger.error { "lolicon 错误代码：${loliconResponse.code} 错误信息：${loliconResponse.msg}" }
-                throw RemoteApiException(parseErrCode(MessageConfig.setuFailureCode429))
             }
             // -1和403 错误等一系列未知错误
             else -> {

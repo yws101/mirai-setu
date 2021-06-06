@@ -25,6 +25,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
     @KtorExperimentalAPI
     suspend fun requestSetu(): Boolean {
         try {
+            // TODO 增加不使用代理的配置
             imageResponse = Json{coerceInputValues = true}.decodeFromString(
                 KtorUtils.proxyClient.get(
                     "https://api.fantasyzone.cc/tu?type=json&class=${

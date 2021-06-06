@@ -49,8 +49,8 @@ object SettingsConfig : ReadOnlyPluginConfig("Settings") {
     )
     val fantasyZoneType by value("random")
 
-    @ValueDescription("设置lolicon的APIKEY, 可以不设置, 但是每天调用次数会比较少。(https://api.lolicon.app/#/setu)可以获取自己的api来获取稳定的涩图请求量")
-    val loliconApiKey by value("365007185fc06c84ac62e6")
+/*    @ValueDescription("设置lolicon的APIKEY, 可以不设置, 但是每天调用次数会比较少。(https://api.lolicon.app/#/setu)可以获取自己的api来获取稳定的涩图请求量")
+    val loliconApiKey by value("365007185fc06c84ac62e6")*/
 
     @ValueDescription("设置SauceNAO的APIKEY, 可以不设置, 如果大量使用请自行申请APIkey避免遇到403问题")
     val sauceNaoApiKey by value("5fe827fb6ef3284d73a031760cb2f7185ce1b380")
