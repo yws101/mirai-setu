@@ -26,7 +26,7 @@ object PluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "cn.blrabbit.mirai",
         name = "mirai-setu",
-        version = "1.2.1"
+        version = "1.2.2"
     )
 ) {
 
