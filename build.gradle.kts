@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "moe.ruabbit"
-version = "1.2.1"
+version = "1.2.2"
 
 dependencies {
      // implementation("com.alibaba:fastjson:1.2.73")
