@@ -81,6 +81,8 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
         try {
             setuImageMsg = subject.sendImage(getImage())
             // todo 捕获群上传失败的错误信息返回发送失败的信息（涩图被腾讯拦截）
+        }catch (e:IllegalStateException){
+            subject.sendMessage(source.quote() + "图片上传失败，可能被腾讯拦截")
         } catch (e: ClientRequestException) {
             subject.sendMessage(MessageConfig.setuImage404)
         } catch (e: Throwable) {
