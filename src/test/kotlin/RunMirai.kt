@@ -1,3 +1,5 @@
+package org.example.mirai.plugin
+
 import moe.ruabbit.mirai.PluginMain
 import net.mamoe.mirai.alsoLogin
 import net.mamoe.mirai.console.MiraiConsole
