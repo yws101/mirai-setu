@@ -1,15 +1,15 @@
 package moe.ruabbit.mirai.setu
 
-import moe.ruabbit.mirai.KtorUtils
-import moe.ruabbit.mirai.PluginMain
-import moe.ruabbit.mirai.config.MessageConfig
-import moe.ruabbit.mirai.config.SettingsConfig
-import moe.ruabbit.mirai.data.SetuData
 import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.util.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import moe.ruabbit.mirai.KtorUtils
+import moe.ruabbit.mirai.PluginMain
+import moe.ruabbit.mirai.config.MessageConfig
+import moe.ruabbit.mirai.config.SettingsConfig
+import moe.ruabbit.mirai.data.SetuData
 import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.message.MessageReceipt
@@ -123,7 +123,7 @@ class LoliconRequester(private val subject: Group, private val source: MessageSo
         try {
             setuImageMsg = subject.sendImage(getImage())
             // todo 捕获群上传失败的错误信息返回发送失败的信息（涩图被腾讯拦截）
-        } catch (e:IllegalStateException){
+        } catch (e: IllegalStateException) {
             subject.sendMessage(source.quote() + "图片上传失败，可能被腾讯拦截")
         } catch (e: ClientRequestException) {
             subject.sendMessage(MessageConfig.setuImage404)
