@@ -45,10 +45,12 @@ object PluginMain : KotlinPlugin(
         MessageConfig.reload()   //初始化自定义回复
         adminPermission = PermissionService.INSTANCE.register(
             PermissionId(name, "admin"),
-            "Admin Permission"
+            "管理员权限"
         )
         setuListenerRegister()
         searchListenerRegister()
+
+
     }
 
     @KtorExperimentalAPI
