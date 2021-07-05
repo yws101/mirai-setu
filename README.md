@@ -11,6 +11,8 @@ mirai 是一个在全平台下运行, 提供 QQ Android 协议支持的高效率
 图标以及形象由画师<a href = "https://github.com/DazeCake">DazeCake</a>绘制
 </div>
 
+# 作者在努力考研复习中，可能没那么多的精力继续维护此项目，半停更状态中
+
 # mirai-setu
 
 一个使用[loliconAPI](https://api.lolicon.app/#/setu) 的[mirai-console](https://github.com/mamoe/mirai-console) 的色图插件
