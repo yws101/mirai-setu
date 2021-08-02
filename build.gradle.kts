@@ -11,12 +11,15 @@ group = "moe.ruabbit"
 version = "1.2.2"
 
 dependencies {
-     // implementation("com.alibaba:fastjson:1.2.73")
+    // 其实用依赖来实现一些功能代码更简练，但编译出来的jar可就不小了
+    // implementation("com.alibaba:fastjson:1.2.73")
+    // implementation("io.ktor:ktor-client-serialization:1.5.4")
 }
 
 repositories {
-    mavenLocal()
+    // mavenLocal()
+    maven("https://repo.huaweicloud.com/repository/maven/")
     maven("https://maven.aliyun.com/repository/public")
-    mavenCentral()
-    maven("https://dl.bintray.com/kotlin/kotlin-eap")
+    // mavenCentral()
+    // maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
