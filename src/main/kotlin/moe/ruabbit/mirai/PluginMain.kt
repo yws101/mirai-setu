@@ -22,22 +22,22 @@ import net.mamoe.mirai.console.plugin.version
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.isOperator
 
+/**
+ * 插件入口，注册指令和加载本地文件数据以及加载对应功能的接口数据
+ */
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "cn.blrabbit.mirai",
         name = "mirai-setu",
-        version = "1.2.2"
+        version = "1.3-dev"
     )
 ) {
 
     private lateinit var adminPermission: Permission
 
-    @KtorExperimentalAPI
     override fun onEnable() {
-
-        launch {
-            checkupdate()
-        }
+        // 使用协程检查更新
+        launch { checkupdate() }
 
         SettingsConfig.reload() //初始化设置数据
         SetuData.reload()    //初始化配置数据
@@ -49,11 +49,8 @@ object PluginMain : KotlinPlugin(
         )
         setuListenerRegister()
         searchListenerRegister()
-
-
     }
 
-    @KtorExperimentalAPI
     override fun onDisable() {
         // 关闭ktor客户端, 防止堵塞线程无法关闭
         KtorUtils.closeClient()
@@ -86,6 +83,7 @@ object PluginMain : KotlinPlugin(
     }
 
     suspend fun checkupdate() {
+        // 从CDN获取doc文件夹中的版本信息
         val newversion: String =
             normalClient.get("https://cdn.jsdelivr.net/gh/bloodyrabbit/mirai-setu@main/doc/Version.txt")
 

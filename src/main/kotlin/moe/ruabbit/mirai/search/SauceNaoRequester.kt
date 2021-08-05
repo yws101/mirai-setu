@@ -2,6 +2,7 @@ package moe.ruabbit.mirai.search
 
 import io.ktor.client.request.*
 import io.ktor.util.*
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import moe.ruabbit.mirai.KtorUtils
@@ -43,6 +44,7 @@ class SauceNaoRequester(private val subject: Contact) {
         }
     }
 
+    @ExperimentalSerializationApi
     private fun parseJson(json: String) {
         val res: SauceNaoResponse = Json {
             ignoreUnknownKeys = true
@@ -88,6 +90,7 @@ class SauceNaoRequester(private val subject: Contact) {
             40 -> {
                 "来源：FurAffinity\n"
             }
+            // 别打了，别打了，在写了再写了
             else -> "暂时无法解析的参数, 数据库：${result!!.header.index_name}\n 请把开发者揪出来给他看看结果"
         }
         subject.sendMessage(message.quote() + PlainText(msg) + image)

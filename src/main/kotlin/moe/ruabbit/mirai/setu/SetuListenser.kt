@@ -1,84 +1,56 @@
 package moe.ruabbit.mirai.setu
 
-import io.ktor.util.*
+import kotlinx.serialization.ExperimentalSerializationApi
 import moe.ruabbit.mirai.PluginMain.checkPermission
+import moe.ruabbit.mirai.PluginMain.logger
 import moe.ruabbit.mirai.config.CommandConfig
 import moe.ruabbit.mirai.config.MessageConfig
-import moe.ruabbit.mirai.config.SettingsConfig
 import moe.ruabbit.mirai.data.SetuData
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
-import net.mamoe.mirai.message.data.MessageSource.Key.quote
-import net.mamoe.mirai.message.nextMessage
+import net.mamoe.mirai.event.subscribeMessages
 
-@KtorExperimentalAPI
+/**
+ * 色图功能的入口函数
+ * @author bloody-rabbit
+ * @version 1.3 2021/8/3
+ */
+@ExperimentalSerializationApi
 fun setuListenerRegister() {
     GlobalEventChannel.subscribeGroupMessages {
-
-        //色图时间
-        always {
-            if (CommandConfig.get.contains(message.contentToString())) {
-                if (SetuData.groupPolicy[group.id] != null) {
-                    when (SettingsConfig.requestApi) {
-                        "FantasyZoneApi" -> {
-                            val setu = FantasyZoneRequester(group, source)
-                            group.sendMessage(message.quote() + "Fetching setu...")
-                            if (setu.requestSetu())
-                                setu.sendSetu()
-                        }
-                        "LoliconApi" -> {
-                            val setu = LoliconRequester(group, source)
-                            group.sendMessage(message.quote() + "Fetching setu...")
-                            if (setu.requestSetu())
-                                setu.sendSetu()
-                        }
-                        else -> {
-                            group.sendMessage(message.quote() + "requestApi 配置错误")
-                        }
+        /**
+         * 获取色图
+         */
+        CommandConfig.get.forEach { getcommand ->
+            startsWith(getcommand) {
+                try {
+                    val setu: Setu = Loliconv2Requester(subject)
+                    if (it.isBlank())
+                        setu.requestSetu(2)
+                    else {
+                        setu.requestSetu(it.toInt())
                     }
-                } else {
-                    group.sendMessage(message.quote() + MessageConfig.setuModeOff)
+                    setu.sendmessage()
+                }catch (e:NumberFormatException){
+                    group.sendMessage("获取的数量参数错误，请输入纯数字")
+                } catch (e:Exception){
+                    logger.error(e)
                 }
             }
         }
+        /**
+         * 搜索色图
+         */
+        CommandConfig.search.forEach { searchcommand ->
+            startsWith(searchcommand) {
 
-        //搜色图
-        always {
-            CommandConfig.search.startWith(message.contentToString()).let {
-                if (it != null) {
-                    if (SetuData.groupPolicy[group.id] != null) {
-                        val msg = it.ifEmpty {
-                            group.sendMessage(message.quote() + MessageConfig.setuSearchKeyNotSet)
-                            nextMessage().contentToString()
-                        }
-                        when (SettingsConfig.searchApi) {
-                            "FantasyZoneApi" -> {
-                                val setu = FantasyZoneRequester(group, source)
-                                group.sendMessage(message.quote() + "Fetching setu...")
-                                if (setu.requestSetu(msg))
-                                    setu.sendSetu()
-                            }
-                            "LoliconApi" -> {
-                                val setu = LoliconRequester(group, source)
-                                group.sendMessage(message.quote() + "Fetching setu...")
-                                if (setu.requestSetu(msg))
-                                    setu.sendSetu()
-                            }
-                            else -> {
-                                group.sendMessage(message.quote() + "requestApi 配置错误")
-                            }
-                        }
-                    } else {
-                        group.sendMessage(message.quote() + MessageConfig.setuModeOff)
-                    }
-                }
             }
         }
-
-        // 涩图插件开关控制
-        always {
-            // 关闭涩图插件
-            if (CommandConfig.off.contains(message.contentToString())) {
+        /**
+         * 关闭色图插件
+         */
+        CommandConfig.off.forEach {
+            case(it) {
                 if (checkPermission(sender)) {
                     if (SetuData.groupPolicy[group.id] == null) {
                         group.sendMessage(MessageConfig.setuOffAlready)
@@ -90,8 +62,12 @@ fun setuListenerRegister() {
                     group.sendMessage(MessageConfig.setuNoPermission)
                 }
             }
-            // 设置为普通模式
-            if (CommandConfig.setSafeMode.contains(message.contentToString())) {
+        }
+        /**
+         * 设置为普通模式
+         */
+        CommandConfig.setSafeMode.forEach {
+            case(it) {
                 if (checkPermission(sender)) {
                     if (SetuData.groupPolicy[group.id] == 0) {
                         group.sendMessage(MessageConfig.setuSafeAlready)
@@ -103,8 +79,13 @@ fun setuListenerRegister() {
                     group.sendMessage(MessageConfig.setuNoPermission)
                 }
             }
-            // 设置为R-18模式
-            if (CommandConfig.setNsfwMode.contains(message.contentToString())) {
+
+        }
+        /**
+         * 设置为R-18模式
+         */
+        CommandConfig.setNsfwMode.forEach {
+            case(it) {
                 if (checkPermission(sender)) {
                     if (SetuData.groupPolicy[group.id] == 1) {
                         group.sendMessage(MessageConfig.setuNsfwAlready)
@@ -116,8 +97,12 @@ fun setuListenerRegister() {
                     group.sendMessage(MessageConfig.setuNoPermission)
                 }
             }
-            // 设置为混合模式
-            if (CommandConfig.setBothMode.contains(message.contentToString())) {
+        }
+        /**
+         * 设置为混合模式
+         */
+        CommandConfig.setBothMode.forEach {
+            case(it) {
                 if (checkPermission(sender)) {
                     if (SetuData.groupPolicy[group.id] == 2) {
                         group.sendMessage(MessageConfig.setuBothAlready)
@@ -131,14 +116,4 @@ fun setuListenerRegister() {
             }
         }
     }
-}
-
-// 判断词组开头是否包含，不包含返回null
-private fun MutableList<String>.startWith(contentToString: String): String? {
-    this.forEach {
-        if (contentToString.startsWith(it)) {
-            return contentToString.replace(it, "").replace(" ", "")
-        }
-    }
-    return null
 }

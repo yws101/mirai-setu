@@ -5,7 +5,7 @@ import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
 
 object CommandConfig : ReadOnlyPluginConfig("Command") {
-    @ValueDescription("修改触发的指令")
+    @ValueDescription("使用功能的指令")
     val get: MutableList<String> by value(mutableListOf("色图时间", "涩图时间", "涩图来", "色图来", "来张色图"))
     val off: MutableList<String> by value(mutableListOf("关闭插件", "封印"))
     val search: MutableList<String> by value(mutableListOf("搜色图", "搜涩图"))

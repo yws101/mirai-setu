@@ -3,6 +3,7 @@ package moe.ruabbit.mirai.setu
 import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.util.*
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import moe.ruabbit.mirai.KtorUtils
@@ -16,17 +17,26 @@ import net.mamoe.mirai.message.data.MessageSource
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import java.io.InputStream
 
+private val json = Json {
+    coerceInputValues = true
+}
+
 class FantasyZoneRequester(private val subject: Group, private val source: MessageSource) {
 
     // 图片数据
     private lateinit var imageResponse: FantasyZoneResponse
 
+    private val Json = Json {
+        coerceInputValues = true
+    }
+
+    @ExperimentalSerializationApi
     @Throws(Throwable::class)
     @KtorExperimentalAPI
     suspend fun requestSetu(): Boolean {
         try {
             // TODO 增加不使用代理的配置
-            imageResponse = Json { coerceInputValues = true }.decodeFromString(
+            imageResponse = Json.decodeFromString(
                 KtorUtils.proxyClient.get(
                     "https://api.fantasyzone.cc/tu?type=json&class=${
                         SettingsConfig.fantasyZoneType.replace(
@@ -52,6 +62,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
         return true
     }
 
+    @ExperimentalSerializationApi
     @Throws(Throwable::class)
     @KtorExperimentalAPI
     suspend fun requestSetu(search: String): Boolean {
@@ -59,9 +70,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
             val jsonResponse: String =
                 KtorUtils.proxyClient.get("https://api.fantasyzone.cc/tu/search.php?search=${search}")  //TODO 适配直接取图
 
-            imageResponse = Json {
-                coerceInputValues = true
-            }.decodeFromString(jsonResponse)
+            imageResponse = Json.decodeFromString(jsonResponse)
 
             if (imageResponse.code == 404) {
                 subject.sendMessage(source.quote() + "未搜索到图片")

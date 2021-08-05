@@ -107,6 +107,7 @@ class LoliconRequester(private val subject: Group, private val source: MessageSo
             .replace("%tags%", imageResponse.tags.toString())
     }
 
+    @OptIn(InternalAPI::class)
     @KtorExperimentalAPI
     suspend fun getImage(): InputStream =
         KtorUtils.proxyClient.get(imageResponse.url.replace("i.pixiv.cat", SettingsConfig.domainProxy)) {

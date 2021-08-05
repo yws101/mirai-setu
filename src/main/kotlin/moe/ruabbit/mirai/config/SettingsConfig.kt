@@ -15,7 +15,7 @@ object SettingsConfig : ReadOnlyPluginConfig("Settings") {
         3 为拥有权限（mirai-setu:admin）者可以配置
         """
     )
-    val permitMode by value(1)
+    val permitMode by value(3)
 
     @ValueDescription("设置此插件主人的id。")
     val masterId by value(mutableListOf<Long>(123456))
