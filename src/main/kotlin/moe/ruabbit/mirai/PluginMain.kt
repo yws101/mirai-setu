@@ -25,6 +25,7 @@ import net.mamoe.mirai.contact.isOperator
 /**
  * 插件入口，注册指令和加载本地文件数据以及加载对应功能的接口数据
  */
+@InternalAPI
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "cn.blrabbit.mirai",

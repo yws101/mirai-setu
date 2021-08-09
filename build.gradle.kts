@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "moe.ruabbit"
-version = "1.2.2"
+version = "1.3-dev"
 
 dependencies {
     // 其实用依赖来实现一些功能代码更简练，但编译出来的jar可就不小了

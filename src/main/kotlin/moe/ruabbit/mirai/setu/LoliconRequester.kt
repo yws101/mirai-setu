@@ -18,6 +18,7 @@ import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import net.mamoe.mirai.utils.error
 import java.io.InputStream
 
+@InternalAPI
 class LoliconRequester(private val subject: Group, private val source: MessageSource) {
     // 图片数据
     private lateinit var imageResponse: LoliconResponse.SetuImageInfo

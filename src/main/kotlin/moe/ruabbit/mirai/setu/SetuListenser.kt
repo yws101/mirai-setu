@@ -1,5 +1,6 @@
 package moe.ruabbit.mirai.setu
 
+import io.ktor.util.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import moe.ruabbit.mirai.PluginMain.checkPermission
 import moe.ruabbit.mirai.PluginMain.logger
@@ -15,6 +16,7 @@ import net.mamoe.mirai.event.subscribeMessages
  * @author bloody-rabbit
  * @version 1.3 2021/8/3
  */
+@InternalAPI
 @ExperimentalSerializationApi
 fun setuListenerRegister() {
     GlobalEventChannel.subscribeGroupMessages {
@@ -43,7 +45,20 @@ fun setuListenerRegister() {
          */
         CommandConfig.search.forEach { searchcommand ->
             startsWith(searchcommand) {
-
+                try {
+                    val setu: Setu = Loliconv2Requester(subject)
+                    val tags = it.split(Regex("\\s+"))
+                    if (tags.isEmpty()){
+                        group.sendMessage("请输入要搜索的关键词")
+                    }else{
+                        setu.requestSetu(tags,2)
+                    }
+                    setu.sendmessage()
+                }catch (e:NumberFormatException){
+                    group.sendMessage("获取的数量参数错误，请输入纯数字")
+                } catch (e:Exception){
+                    logger.error(e)
+                }
             }
         }
         /**

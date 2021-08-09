@@ -18,6 +18,7 @@ import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import java.io.InputStream
 import java.net.URLDecoder
 
+@InternalAPI
 @Suppress("BlockingMethodInNonBlockingContext")
 class SauceNaoRequester(private val subject: Contact) {
 
