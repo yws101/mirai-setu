@@ -32,7 +32,7 @@ class Loliconv2Requester(val subject: Contact) : Setu(subject) {
     lateinit var setudata: List<Loliconv2Response.Data>
 
     /**
-     *  构造post请求的body信息
+     *  构造post请求的body信息，注意这个body并不是完整的body，详细的请求信息请参考官网的配置信息
      *  @param r18 是否获取R18模式(0.普通模式 1.R18模式 2.混合模式)
      *  @param num 获取图片的数量
      *  @param keyword 关键词搜索，单个词搜索题目，作者，以及tag
@@ -49,8 +49,9 @@ class Loliconv2Requester(val subject: Contact) : Setu(subject) {
     /**
      * 从Lolicon请求获取随机色图
      * @param num 请求的色图数量
+     * @param r18 0普通图，1r18图，2随机返回
      */
-    override suspend fun requestSetu(num: Int) {
+    override suspend fun requestSetu(num: Int, r18: Int) {
         // TODO("设置请求的数量上限")
         // 构造post请求的body
         val requsterbody = LoliconRequest(SetuData.groupPolicy[subject.id]!!, num)
@@ -62,17 +63,18 @@ class Loliconv2Requester(val subject: Contact) : Setu(subject) {
      * 从Lolilcon请求获取包含tag的色图
      * @param tags 获取的关键词
      * @param num 请求的色图数量
+     * @param r18 0普通图，1r18图，2随机返回
      */
-    override suspend fun requestSetu(tags: List<String>, num: Int) {
+    override suspend fun requestSetu(tags: List<String>, num: Int, r18: Int) {
         val requsterbody: LoliconRequest =
             if (tags.size == 1)
-                LoliconRequest(SetuData.groupPolicy[subject.id]!!, num, keyword = tags[0])
+                LoliconRequest(r18, num, keyword = tags[0])
             else
-                LoliconRequest(SetuData.groupPolicy[subject.id]!!, num, tag = tags)
+                LoliconRequest(r18, num, tag = tags)
 
         parseresponse(requsterbody)
 
-        if (setudata.isEmpty()){
+        if (setudata.isEmpty()) {
             subject.sendMessage("找到了${setudata.size}张图片")
         }
     }
@@ -87,6 +89,7 @@ class Loliconv2Requester(val subject: Contact) : Setu(subject) {
                     val imagestram: InputStream = normalClient.get {
                         url(it.urls.original.replace("i.pixiv.cat", SettingsConfig.domainProxy))
                         headers {
+                            // 直接访问pixiv添加Referrer会导致403
                             append(HttpHeaders.Referrer, "https://www.pixiv.net/")
                         }
                     }
@@ -103,7 +106,7 @@ class Loliconv2Requester(val subject: Contact) : Setu(subject) {
      * @param requsterbody post的body[LoliconRequest]
      * @throws Exception
      */
-    private suspend fun parseresponse(requsterbody: LoliconRequest){
+    private suspend fun parseresponse(requsterbody: LoliconRequest) {
         val response: HttpResponse = normalClient.post {
             url("https://api.lolicon.app/setu/v2")
             body = TextContent(Json.encodeToString(requsterbody), ContentType.Application.Json)

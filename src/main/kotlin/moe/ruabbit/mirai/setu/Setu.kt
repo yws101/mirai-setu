@@ -13,15 +13,17 @@ abstract class Setu(subject: Contact) {
     /**
      * 请求获取随机色图
      * @param num 请求的色图数量
+     * @param r18 0普通图，1r18图，2随机返回
      */
-    abstract suspend fun requestSetu(num: Int)
+    abstract suspend fun requestSetu(num: Int, r18: Int)
 
     /**
      * 请求获取包含tag的色图
      * @param tags 获取的关键词
      * @param num 请求的色图数量
+     * @param r18 0普通图，1r18图，2随机返回
      */
-    abstract suspend fun requestSetu(tags: List<String>, num: Int)
+    abstract suspend fun requestSetu(tags: List<String>, num: Int, r18: Int)
 
     /**
      * 发送图片以及对应的介绍信息

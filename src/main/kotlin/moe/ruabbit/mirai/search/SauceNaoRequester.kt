@@ -30,11 +30,11 @@ class SauceNaoRequester(private val subject: Contact) {
             val json: String =
                 KtorUtils.normalClient.get(
                     "https://saucenao.com/search.php?" +
-                        "output_type=2&" +
-                        "api_key=${SettingsConfig.sauceNaoApiKey}&" +
-                        "db=${SettingsConfig.sauceNaoDataBaseMode}&" +
-                        "numres=1&" +
-                        "url=${URLDecoder.decode(image.queryUrl(), "utf-8")}"
+                            "output_type=2&" +
+                            "api_key=${SettingsConfig.sauceNaoApiKey}&" +
+                            "db=${SettingsConfig.sauceNaoDataBaseMode}&" +
+                            "numres=1&" +
+                            "url=${URLDecoder.decode(image.queryUrl(), "utf-8")}"
                 )
             PluginMain.logger.info(json)
             parseJson(json)
@@ -61,32 +61,32 @@ class SauceNaoRequester(private val subject: Contact) {
             // Index #5: Pixiv Images
             5 -> {
                 "来源：Pixiv Images\n" +
-                    "题目：${result!!.data.title}\n" +
-                    "相似度：${result!!.header.similarity}\n" +
-                    "pixiv id：${result!!.data.pixiv_id}\n" +
-                    "作者：${result!!.data.member_name}\n" +
-                    "作者id：${result!!.data.member_id}\n" +
-                    "源链接：${result!!.data.ext_urls}"
+                        "题目：${result!!.data.title}\n" +
+                        "相似度：${result!!.header.similarity}\n" +
+                        "pixiv id：${result!!.data.pixiv_id}\n" +
+                        "作者：${result!!.data.member_name}\n" +
+                        "作者id：${result!!.data.member_id}\n" +
+                        "源链接：${result!!.data.ext_urls}"
             }
             // Index #21: Anime
             21 -> {
                 "来源：Anime\n" +
-                    "动画名：${result!!.data.source}\n" +
-                    "相似度：${result!!.header.similarity}\n" +
-                    "anidb_id：${result!!.data.pixiv_id}\n" +
-                    "年代：${result!!.data.year}\n" +
-                    "集数：${result!!.data.part}\n" +
-                    "源链接：${result!!.data.ext_urls}"
+                        "动画名：${result!!.data.source}\n" +
+                        "相似度：${result!!.header.similarity}\n" +
+                        "anidb_id：${result!!.data.pixiv_id}\n" +
+                        "年代：${result!!.data.year}\n" +
+                        "集数：${result!!.data.part}\n" +
+                        "源链接：${result!!.data.ext_urls}"
             }
             // Index #34: deviantArt
             34 -> {
                 "来源：deviantArt\n" +
-                    "题目：${result!!.data.title}\n" +
-                    "相似度：${result!!.header.similarity}\n" +
-                    "图片id：${result!!.data.da_id}\n" +
-                    "作者：${result!!.data.author_name}\n" +
-                    "作者链接：${result!!.data.author_url}\n" +
-                    "源链接：${result!!.data.ext_urls}"
+                        "题目：${result!!.data.title}\n" +
+                        "相似度：${result!!.header.similarity}\n" +
+                        "图片id：${result!!.data.da_id}\n" +
+                        "作者：${result!!.data.author_name}\n" +
+                        "作者链接：${result!!.data.author_url}\n" +
+                        "源链接：${result!!.data.ext_urls}"
             }
             40 -> {
                 "来源：FurAffinity\n"

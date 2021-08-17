@@ -9,7 +9,6 @@ import moe.ruabbit.mirai.config.MessageConfig
 import moe.ruabbit.mirai.data.SetuData
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.subscribeGroupMessages
-import net.mamoe.mirai.event.subscribeMessages
 
 /**
  * 色图功能的入口函数
@@ -28,14 +27,14 @@ fun setuListenerRegister() {
                 try {
                     val setu: Setu = Loliconv2Requester(subject)
                     if (it.isBlank())
-                        setu.requestSetu(2)
+                        setu.requestSetu(2, SetuData.groupPolicy[subject.id]!!)
                     else {
-                        setu.requestSetu(it.toInt())
+                        setu.requestSetu(it.toInt(), SetuData.groupPolicy[subject.id]!!)
                     }
                     setu.sendmessage()
-                }catch (e:NumberFormatException){
+                } catch (e: NumberFormatException) {
                     group.sendMessage("获取的数量参数错误，请输入纯数字")
-                } catch (e:Exception){
+                } catch (e: Exception) {
                     logger.error(e)
                 }
             }
@@ -48,15 +47,15 @@ fun setuListenerRegister() {
                 try {
                     val setu: Setu = Loliconv2Requester(subject)
                     val tags = it.split(Regex("\\s+"))
-                    if (tags.isEmpty()){
+                    if (tags.isEmpty()) {
                         group.sendMessage("请输入要搜索的关键词")
-                    }else{
-                        setu.requestSetu(tags,2)
+                    } else {
+                        setu.requestSetu(tags, 2, SetuData.groupPolicy[subject.id]!!)
                     }
                     setu.sendmessage()
-                }catch (e:NumberFormatException){
+                } catch (e: NumberFormatException) {
                     group.sendMessage("获取的数量参数错误，请输入纯数字")
-                } catch (e:Exception){
+                } catch (e: Exception) {
                     logger.error(e)
                 }
             }

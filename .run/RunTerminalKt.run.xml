@@ -1,0 +1,12 @@
+<!--这个自动添加配置的到底怎么搞，照葫芦画了个瓢-->
+<component name="RunManager">
+    <configuration name="RunTerminalKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+        <option name="MAIN_CLASS_NAME" value="org.example.RunTerminalKt"/>
+        <module name="mirai-setu.test"/>
+        <shortenClasspath name="NONE"/>
+        <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run"/>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>
