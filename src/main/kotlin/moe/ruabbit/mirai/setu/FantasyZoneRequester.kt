@@ -18,16 +18,27 @@ import java.io.InputStream
 
 class FantasyZoneRequester(private val subject: Group, private val source: MessageSource) {
 
+    companion object {
+        const val TAG = "FantasyZoneApi"
+    }
+
     // 图片数据
     private lateinit var imageResponse: FantasyZoneResponse
+
+    private val httpClient by lazy {
+        if (SettingsConfig.proxyConfig != 0 && SettingsConfig.effectApi.enableFantasyZone) {
+            KtorUtils.proxyClient
+        } else {
+            KtorUtils.normalClient
+        }
+    }
 
     @Throws(Throwable::class)
     @KtorExperimentalAPI
     suspend fun requestSetu(): Boolean {
         try {
-            // TODO 增加不使用代理的配置
             imageResponse = Json { coerceInputValues = true }.decodeFromString(
-                KtorUtils.proxyClient.get(
+                httpClient.get(
                     "https://api.fantasyzone.cc/tu?type=json&class=${
                         SettingsConfig.fantasyZoneType.replace(
                             "random",
@@ -57,7 +68,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
     suspend fun requestSetu(search: String): Boolean {
         try {
             val jsonResponse: String =
-                KtorUtils.proxyClient.get("https://api.fantasyzone.cc/tu/search.php?search=${search}")  //TODO 适配直接取图
+                httpClient.get("https://api.fantasyzone.cc/tu/search.php?search=${search}")  //TODO 适配直接取图
 
             imageResponse = Json {
                 coerceInputValues = true
@@ -123,6 +134,6 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
     }
 
     @KtorExperimentalAPI
-    suspend fun getImage(): InputStream = KtorUtils.proxyClient.get(imageResponse.url)
+    suspend fun getImage(): InputStream = httpClient.get(imageResponse.url)
 
 }

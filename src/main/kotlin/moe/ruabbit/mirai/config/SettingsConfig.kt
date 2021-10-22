@@ -1,6 +1,9 @@
 package moe.ruabbit.mirai.config
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import moe.ruabbit.mirai.setu.FantasyZoneRequester
+import moe.ruabbit.mirai.setu.LoliconRequester
 import net.mamoe.mirai.console.data.ReadOnlyPluginConfig
 import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
@@ -27,7 +30,7 @@ object SettingsConfig : ReadOnlyPluginConfig("Settings") {
         LoliconApi      需要ApiKey        https://api.lolicon.app/#/setu
         """
     )
-    val requestApi by value("FantasyZoneApi")
+    val requestApi by value(FantasyZoneRequester.TAG)
 
     @ValueDescription(
         """
@@ -36,7 +39,7 @@ object SettingsConfig : ReadOnlyPluginConfig("Settings") {
         LoliconApi      需要ApiKey        https://api.lolicon.app/#/setu
         """
     )
-    val searchApi by value("LoliconApi")
+    val searchApi by value(LoliconRequester.TAG)
 
     @ValueDescription(
         """
@@ -69,10 +72,21 @@ object SettingsConfig : ReadOnlyPluginConfig("Settings") {
         0   不使用代理
         1   使用http代理
         2   使用socks代理
-        代理只对 LoliconApi 色图的获取生效
         """
     )
     val proxyConfig by value(0)
+
+    @ValueDescription("代理设置生效的API")
+    val effectApi by value(effectApiConfig())
+
+    @Serializable
+    data class effectApiConfig(
+        @SerialName("enable_FantasyZoneApi") val enableFantasyZone: Boolean = false,
+        @SerialName("enable_LoliconApi") val enableLolicon: Boolean = true
+    )
+
+
+
     val httpProxy by value(HttpProxy())
     val socksProxy by value(SocksProxy())
 

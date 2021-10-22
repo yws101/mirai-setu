@@ -20,13 +20,13 @@ fun setuListenerRegister() {
             if (CommandConfig.get.contains(message.contentToString())) {
                 if (SetuData.groupPolicy[group.id] != null) {
                     when (SettingsConfig.requestApi) {
-                        "FantasyZoneApi" -> {
+                        FantasyZoneRequester.TAG -> {
                             val setu = FantasyZoneRequester(group, source)
                             group.sendMessage(message.quote() + "Fetching setu...")
                             if (setu.requestSetu())
                                 setu.sendSetu()
                         }
-                        "LoliconApi" -> {
+                        LoliconRequester.TAG -> {
                             val setu = LoliconRequester(group, source)
                             group.sendMessage(message.quote() + "Fetching setu...")
                             if (setu.requestSetu())
@@ -52,13 +52,13 @@ fun setuListenerRegister() {
                             nextMessage().contentToString()
                         }
                         when (SettingsConfig.searchApi) {
-                            "FantasyZoneApi" -> {
+                            FantasyZoneRequester.TAG -> {
                                 val setu = FantasyZoneRequester(group, source)
                                 group.sendMessage(message.quote() + "Fetching setu...")
                                 if (setu.requestSetu(msg))
                                     setu.sendSetu()
                             }
-                            "LoliconApi" -> {
+                            LoliconRequester.TAG -> {
                                 val setu = LoliconRequester(group, source)
                                 group.sendMessage(message.quote() + "Fetching setu...")
                                 if (setu.requestSetu(msg))
