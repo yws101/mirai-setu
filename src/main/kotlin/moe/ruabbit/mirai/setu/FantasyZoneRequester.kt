@@ -6,6 +6,7 @@ import io.ktor.util.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import moe.ruabbit.mirai.KtorUtils
+import moe.ruabbit.mirai.PluginMain
 import moe.ruabbit.mirai.config.MessageConfig
 import moe.ruabbit.mirai.config.SettingsConfig
 import moe.ruabbit.mirai.data.SetuData
@@ -36,6 +37,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
     @Throws(Throwable::class)
     @KtorExperimentalAPI
     suspend fun requestSetu(): Boolean {
+        PluginMain.logger.info("fantasyZone r18=${SetuData.groupPolicy[subject.id]}")
         try {
             imageResponse = Json { coerceInputValues = true }.decodeFromString(
                 httpClient.get(
@@ -68,7 +70,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
     suspend fun requestSetu(search: String): Boolean {
         try {
             val jsonResponse: String =
-                httpClient.get("https://api.fantasyzone.cc/tu/search.php?search=${search}")  //TODO 适配直接取图
+                httpClient.get("https://api.fantasyzone.cc/tu/search.php?search=${search}&r18=${SetuData.groupPolicy[subject.id]}")  //TODO 适配直接取图
 
             imageResponse = Json {
                 coerceInputValues = true
@@ -120,6 +122,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
 
     // 解析字符串
     private fun parseMessage(message: String): String {
+        val r18judge = imageResponse.tags.toString().contains(Regex("[Rr].*18")).toString()
         return message
             .replace("%url%", imageResponse.url)
             .replace("%pid%", imageResponse.id)
@@ -128,6 +131,7 @@ class FantasyZoneRequester(private val subject: Group, private val source: Messa
             .replace("%author%", imageResponse.userName)
             .replace("%title%", imageResponse.title)
             .replace("%url%", imageResponse.toString())
+            .replace("%r18%", r18judge)
             .replace("%width%", imageResponse.width)
             .replace("%height%", imageResponse.height)
             .replace("%tags%", imageResponse.tags.toString())

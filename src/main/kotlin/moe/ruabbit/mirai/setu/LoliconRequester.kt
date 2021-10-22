@@ -39,6 +39,7 @@ class LoliconRequester(private val subject: Group, private val source: MessageSo
     @KtorExperimentalAPI
     suspend fun requestSetu(): Boolean {
         try {
+            PluginMain.logger.info("lolicon r18=${SetuData.groupPolicy[subject.id]}")
             val response: String =
                 httpClient.get(
                     "http://api.lolicon.app/setu?r18=${
