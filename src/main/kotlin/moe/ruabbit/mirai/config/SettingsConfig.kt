@@ -117,4 +117,7 @@ object SettingsConfig : ReadOnlyPluginConfig("Settings") {
         """
     )
     val autoRecallTime: Long by value(-1L)
+
+
+    val enableFetchingMsg by value(true)
 }
