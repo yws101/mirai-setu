@@ -7,6 +7,7 @@ import moe.ruabbit.mirai.KtorUtils.normalClient
 import moe.ruabbit.mirai.config.CommandConfig
 import moe.ruabbit.mirai.config.MessageConfig
 import moe.ruabbit.mirai.config.SettingsConfig
+import moe.ruabbit.mirai.config.registerConfigListener
 import moe.ruabbit.mirai.data.SetuData
 import moe.ruabbit.mirai.search.searchListenerRegister
 import moe.ruabbit.mirai.setu.setuListenerRegister
@@ -39,17 +40,14 @@ object PluginMain : KotlinPlugin(
             checkupdate()
         }
 
-        SettingsConfig.reload() //初始化设置数据
-        SetuData.reload()    //初始化配置数据
-        CommandConfig.reload()   //初始化插件指令
-        MessageConfig.reload()   //初始化自定义回复
+        reloadConfig()
         adminPermission = PermissionService.INSTANCE.register(
             PermissionId(name, "admin"),
             "管理员权限"
         )
         setuListenerRegister()
         searchListenerRegister()
-
+        registerConfigListener()
 
     }
 
@@ -57,6 +55,13 @@ object PluginMain : KotlinPlugin(
     override fun onDisable() {
         // 关闭ktor客户端, 防止堵塞线程无法关闭
         KtorUtils.closeClient()
+    }
+
+    fun reloadConfig() {
+        SettingsConfig.reload() //初始化设置数据
+        SetuData.reload()    //初始化配置数据
+        CommandConfig.reload()   //初始化插件指令
+        MessageConfig.reload()   //初始化自定义回复
     }
 
     // 权限判断（获取以后会搞上更好的方法？）

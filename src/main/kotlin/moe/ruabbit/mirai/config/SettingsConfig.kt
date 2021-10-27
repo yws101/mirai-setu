@@ -118,6 +118,14 @@ object SettingsConfig : ReadOnlyPluginConfig("Settings") {
     )
     val autoRecallTime: Long by value(-1L)
 
+    @ValueDescription(
+        """
+        设置群搜色图和随机色图的冷却时间
+        单位毫秒,-1为无冷却
+        当一张图片发送成功后进入cd
+        """
+    )
+    val coolDownTime: Long by value(-1L)
 
     val enableFetchingMsg by value(true)
 }

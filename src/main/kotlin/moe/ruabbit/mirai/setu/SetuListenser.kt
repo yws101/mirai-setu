@@ -19,18 +19,32 @@ fun setuListenerRegister() {
         always {
             if (CommandConfig.get.contains(message.contentToString())) {
                 if (SetuData.groupPolicy[group.id] != null) {
+                    val coolDown = SetuCoolDownManager.isCoolDown(group.id)
+                    if (coolDown > 0) {
+                        group.sendMessage(message.quote() + String.format(MessageConfig.setuCoolDownNotReady, coolDown))
+                        return@always
+                    }
+
                     when (SettingsConfig.requestApi) {
                         FantasyZoneRequester.TAG -> {
                             val setu = FantasyZoneRequester(group, source)
-                            group.sendMessage(message.quote() + "Fetching setu...")
-                            if (setu.requestSetu())
+                            if (SettingsConfig.enableFetchingMsg) {
+                                group.sendMessage(message.quote() + "Fetching setu...")
+                            }
+                            if (setu.requestSetu()){
                                 setu.sendSetu()
+                                SetuCoolDownManager.startCoolDown(group.id)
+                            }
                         }
                         LoliconRequester.TAG -> {
                             val setu = LoliconRequester(group, source)
-                            group.sendMessage(message.quote() + "Fetching setu...")
-                            if (setu.requestSetu())
+                            if (SettingsConfig.enableFetchingMsg) {
+                                group.sendMessage(message.quote() + "Fetching setu...")
+                            }
+                            if (setu.requestSetu()){
                                 setu.sendSetu()
+                                SetuCoolDownManager.startCoolDown(group.id)
+                            }
                         }
                         else -> {
                             group.sendMessage(message.quote() + "requestApi 配置错误")
@@ -47,6 +61,11 @@ fun setuListenerRegister() {
             CommandConfig.search.startWith(message.contentToString()).let {
                 if (it != null) {
                     if (SetuData.groupPolicy[group.id] != null) {
+                        val coolDown = SetuCoolDownManager.isCoolDown(group.id)
+                        if (coolDown > 0) {
+                            group.sendMessage(message.quote() + String.format(MessageConfig.setuCoolDownNotReady, coolDown))
+                            return@always
+                        }
                         val msg = it.ifEmpty {
                             group.sendMessage(message.quote() + MessageConfig.setuSearchKeyNotSet)
                             nextMessage().contentToString()
@@ -54,15 +73,25 @@ fun setuListenerRegister() {
                         when (SettingsConfig.searchApi) {
                             FantasyZoneRequester.TAG -> {
                                 val setu = FantasyZoneRequester(group, source)
-                                group.sendMessage(message.quote() + "Fetching setu...")
-                                if (setu.requestSetu(msg))
+                                if (SettingsConfig.enableFetchingMsg) {
+                                    group.sendMessage(message.quote() + "Fetching setu...")
+                                }
+                                if (setu.requestSetu(msg)){
                                     setu.sendSetu()
+                                    SetuCoolDownManager.startCoolDown(group.id)
+                                }
+
                             }
                             LoliconRequester.TAG -> {
                                 val setu = LoliconRequester(group, source)
-                                group.sendMessage(message.quote() + "Fetching setu...")
-                                if (setu.requestSetu(msg))
+                                if (SettingsConfig.enableFetchingMsg) {
+                                    group.sendMessage(message.quote() + "Fetching setu...")
+                                }
+                                if (setu.requestSetu(msg)){
                                     setu.sendSetu()
+                                    SetuCoolDownManager.startCoolDown(group.id)
+                                }
+
                             }
                             else -> {
                                 group.sendMessage(message.quote() + "requestApi 配置错误")
@@ -71,62 +100,6 @@ fun setuListenerRegister() {
                     } else {
                         group.sendMessage(message.quote() + MessageConfig.setuModeOff)
                     }
-                }
-            }
-        }
-
-        // 涩图插件开关控制
-        always {
-            // 关闭涩图插件
-            if (CommandConfig.off.contains(message.contentToString())) {
-                if (checkPermission(sender)) {
-                    if (SetuData.groupPolicy[group.id] == null) {
-                        group.sendMessage(MessageConfig.setuOffAlready)
-                    } else {
-                        group.sendMessage(MessageConfig.setuOff)
-                        SetuData.groupPolicy.remove(group.id)
-                    }
-                } else {
-                    group.sendMessage(MessageConfig.setuNoPermission)
-                }
-            }
-            // 设置为普通模式
-            if (CommandConfig.setSafeMode.contains(message.contentToString())) {
-                if (checkPermission(sender)) {
-                    if (SetuData.groupPolicy[group.id] == 0) {
-                        group.sendMessage(MessageConfig.setuSafeAlready)
-                    } else {
-                        group.sendMessage(MessageConfig.setuSafe)
-                        SetuData.groupPolicy[group.id] = 0
-                    }
-                } else {
-                    group.sendMessage(MessageConfig.setuNoPermission)
-                }
-            }
-            // 设置为R-18模式
-            if (CommandConfig.setNsfwMode.contains(message.contentToString())) {
-                if (checkPermission(sender)) {
-                    if (SetuData.groupPolicy[group.id] == 1) {
-                        group.sendMessage(MessageConfig.setuNsfwAlready)
-                    } else {
-                        group.sendMessage(MessageConfig.setuNsfw)
-                        SetuData.groupPolicy[group.id] = 1
-                    }
-                } else {
-                    group.sendMessage(MessageConfig.setuNoPermission)
-                }
-            }
-            // 设置为混合模式
-            if (CommandConfig.setBothMode.contains(message.contentToString())) {
-                if (checkPermission(sender)) {
-                    if (SetuData.groupPolicy[group.id] == 2) {
-                        group.sendMessage(MessageConfig.setuBothAlready)
-                    } else {
-                        group.sendMessage(MessageConfig.setuBoth)
-                        SetuData.groupPolicy[group.id] = 2
-                    }
-                } else {
-                    group.sendMessage(MessageConfig.setuNoPermission)
                 }
             }
         }
