@@ -14,7 +14,7 @@ object MessageConfig : ReadOnlyPluginConfig("Message") {
         title           题目
         author          作者
         url             原始url
-        r18             是否为r18
+        r18             是否为r18(仅LoliconApi有效)
         width           宽度
         height          高度
         tags            标签
@@ -63,4 +63,10 @@ object MessageConfig : ReadOnlyPluginConfig("Message") {
     @ValueDescription("设置混合模式的自动回复")
     val setuBoth by value("切换为混合模式")
     val setuBothAlready by value("本群色图已经为混合模式, 无需切换")
+
+    @ValueDescription("色图冷却尚未完成时的提醒")
+    val setuCoolDownNotReady by value("别再冲了，歇息一会儿吧，剩余冷却%d秒")
+
+    @ValueDescription("配置重载时的提醒")
+    val setuConfigReloadComplete by value("配置重载完成")
 }

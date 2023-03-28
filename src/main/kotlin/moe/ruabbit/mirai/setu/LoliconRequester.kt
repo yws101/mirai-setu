@@ -19,6 +19,19 @@ import net.mamoe.mirai.utils.error
 import java.io.InputStream
 
 class LoliconRequester(private val subject: Group, private val source: MessageSource) {
+
+    companion object {
+        const val TAG = "LoliconApi"
+    }
+
+    private val httpClient by lazy {
+        if (SettingsConfig.proxyConfig != 0 && SettingsConfig.effectApi.enableLolicon) {
+            KtorUtils.proxyClient
+        } else {
+            KtorUtils.normalClient
+        }
+    }
+
     // 图片数据
     private lateinit var imageResponse: LoliconResponse.SetuImageInfo
 
@@ -26,8 +39,9 @@ class LoliconRequester(private val subject: Group, private val source: MessageSo
     @KtorExperimentalAPI
     suspend fun requestSetu(): Boolean {
         try {
+            PluginMain.logger.info("lolicon r18=${SetuData.groupPolicy[subject.id]}")
             val response: String =
-                KtorUtils.proxyClient.get(
+                httpClient.get(
                     "http://api.lolicon.app/setu?r18=${
                         SetuData.groupPolicy[subject.id]
                     }"
@@ -48,7 +62,7 @@ class LoliconRequester(private val subject: Group, private val source: MessageSo
     suspend fun requestSetu(keyword: String): Boolean {
         try {
             val setuResponse: String =
-                KtorUtils.proxyClient.get(
+                httpClient.get(
                     "http://api.lolicon.app/setu?keyword=${keyword}&r18=${
                         SetuData.groupPolicy[subject.id]
                     }"
@@ -109,7 +123,7 @@ class LoliconRequester(private val subject: Group, private val source: MessageSo
 
     @KtorExperimentalAPI
     suspend fun getImage(): InputStream =
-        KtorUtils.proxyClient.get(imageResponse.url.replace("i.pixiv.cat", SettingsConfig.domainProxy)) {
+        httpClient.get(imageResponse.url.replace("i.pixiv.cat", SettingsConfig.domainProxy)) {
             headers.append("referer", "https://www.pixiv.net/")
         }
 
