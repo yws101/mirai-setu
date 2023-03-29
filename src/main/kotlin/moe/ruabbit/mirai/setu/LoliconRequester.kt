@@ -42,7 +42,7 @@ class LoliconRequester(private val subject: Group, private val source: MessageSo
             PluginMain.logger.info("lolicon r18=${SetuData.groupPolicy[subject.id]}")
             val response: String =
                 httpClient.get(
-                    "http://api.lolicon.app/setu?r18=${
+                    "https://sex.nyan.xyz/api/v2/img?r18=${
                         SetuData.groupPolicy[subject.id]
                     }"
                 )
@@ -63,7 +63,7 @@ class LoliconRequester(private val subject: Group, private val source: MessageSo
         try {
             val setuResponse: String =
                 httpClient.get(
-                    "http://api.lolicon.app/setu?keyword=${keyword}&r18=${
+                    "https://sex.nyan.xyz/api/v2/img?keyword=${keyword}&r18=${
                         SetuData.groupPolicy[subject.id]
                     }"
                 )
